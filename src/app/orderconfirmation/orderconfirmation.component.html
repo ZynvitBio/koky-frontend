@@ -1,0 +1,99 @@
+<div class="hero_section">
+    <div class="png_img"><img class="img-fluid" src="assets/img/leaf.png" alt="" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="herosection_content">
+                    <h2>¡Gracias por tu compra!</h2>
+                    <p class="text-white">Tu pedido para Koky ha sido procesado con éxito.</p>
+                    <a routerLink="/" class="btn border-radius-0 border-transparent">Volver a la Tienda</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cart_overview">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <h3 class="mb-3">Resumen de tu Pedido</h3>
+                <p><strong>Referencia:</strong> {{ orderReference }}</p>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr class="cartoverview_title">
+                            <th>IMAGEN</th>
+                            <th>PRODUCTO</th>
+                            <th>PRECIO</th>
+                            <th>CANTIDAD</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of purchasedItems; track item.id) {
+                            <tr>
+                                <th scope="row">
+                                    <div class="thamnail_img">
+                                        <img class="img-fluid" [src]="item.image" [alt]="item.name" />
+                                    </div>
+                                </th>
+                                <td class="align-middle">
+                                    <b>{{ item.name }}</b>
+                                    <span class="text-muted d-block" style="font-size: 0.8em;">
+                                        {{ item.contentPerUnit }}{{ item.unitAbbreviation }}
+                                    </span>
+                                </td>
+                                <td class="align-middle">${{ item.price | number }}</td>
+                                <td class="align-middle text-center">
+                                    {{ item.quantity }}
+                                </td>
+                                <td class="align-middle">${{ (item.price * item.quantity) | number }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="coupon_part mb-5">
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                <div class="order_cardTotal">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="card_total text-uppercase" colspan="2">Detalle del Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="subtotal">Subtotal:</th>
+                                <td class="text-right">${{ subtotal | number }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="discount">Envío:</th>
+                                <td class="text-right">${{ shippingCost | number }}</td>
+                            </tr>
+                            @if (discount > 0) {
+                                <tr>
+                                    <th scope="row" class="discount">Descuento:</th>
+                                    <td class="text-right">-${{ discount | number }}</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th scope="row">Total Pagado:</th>
+                                <td class="text-right total_num">${{ totalPaid | number }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chechout_btn text-right mt-3">
+                    <button (click)="printOrder()" class="btn border-radius-0 btn-dark">Imprimir Comprobante</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

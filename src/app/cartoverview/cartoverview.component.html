@@ -1,0 +1,148 @@
+ <!-- HERO SECTION PART START -->
+    <div class="hero_section">
+        <div class="png_img"><img class="img-fluid" src="assets/img/leaf.png" alt="" /></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="herosection_content">
+                        <h2>Carrito</h2>
+                        <a href="index.html" class="btn border-radius-0 border-transparent">Inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- HERO SECTION PART END -->
+
+    <!-- CART OVERVIEW PART START -->
+ <div class="cart_overview">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr class="cartoverview_title">
+                            <th>IMAGES</th>
+                            <th>PRODUCT</th>
+                            <th>PRICE</th>
+                            <th>QUANTITY</th>
+                            <th>TOTAL</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of cartItems; track item.id) {
+                            <tr>
+                                <th scope="row">
+                                    <div class="thamnail_img">
+                                        <img class="img-fluid" 
+                                             [src]="item.image" 
+                                             [alt]="item.name" />
+                                    </div>
+                                </th>
+                                <td class="align-middle">
+    <b>{{ item.name }}</b>
+    <span class="text-muted d-block" style="font-size: 0.8em;">
+        {{ item.contentPerUnit }}{{ item.unitAbbreviation }}
+    </span>
+</td>
+                                <td class="align-middle">${{ item.price | number }}</td>
+
+                                <td class="align-middle">
+                                    <div class="cart d-flex">
+                                        <div class="quantity d-flex">
+                                            <div class="left_arrow">
+                                                <button (click)="decreaseQuantity(item)" type="button">
+                                                    <i class="icofont-arrow-left"></i>
+                                                </button>
+                                            </div>
+                                            <div class="quantity_num">{{ item.quantity }}</div>
+                                            <div class="right_arrow">
+                                                <button (click)="increaseQuantity(item)" type="button">
+                                                    <i class="icofont-arrow-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">${{ (item.price * item.quantity) | number }}</td>
+                                <td class="align-middle">
+                                    <i (click)="removeItem(item.id)" 
+                                       class="icofont-close text-danger" 
+                                       style="cursor: pointer;"></i>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- CART OVERVIEW PART END -->
+
+    <!-- COUPON PART START -->
+    <div class="coupon_part">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                    <div class="serach_btn">
+                        <form (submit)="$event.preventDefault()"> <div class="search_ber">
+        <input 
+            type="text" 
+            class="form-control search_button" 
+            id="serach_button" 
+            name="couponCode" 
+            [(ngModel)]="couponCode" 
+            placeholder="Apply Coupon" 
+        />
+        <div class="coupon_btn">
+            <a href="javascript:void(0)" 
+               class="border-radius-0" 
+               (click)="applyCoupon()">
+               APLICAR CUPON
+            </a>
+        </div>
+    </div>
+
+    @if (invalidCoupon) {
+        <div class="text-danger mt-2" style="font-size: 13px; margin-left: 20px;">
+            Código no válido
+        </div>
+    }
+</form>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    <div class="order_cardTotal">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="card_total text-uppercase" colspan="2">COMPRA TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" class="subtotal">Subtotal:</th>
+                    <td class="text-right">{{ subtotal | currency:'USD':'symbol':'1.0-0' }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="discount">Discount:</th>
+                    <td class="text-right">{{ discount | currency:'USD':'symbol':'1.0-0' }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Total:</th>
+                    <td class="text-right total_num">{{ (subtotal - discount) | currency:'USD':'symbol':'1.0-0' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="chechout_btn text-right">
+        <a routerLink="/checkout" class="btn border-radius-0 border-transparent">Procesar</a>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+    <!-- COUPON PART END -->
+

@@ -1,0 +1,13 @@
+/* Esto quita el azul de los enlaces del header */
+.header_contact a.phone_no {
+    color: #ffffff !important; /* Fuerza el color blanco */
+    text-decoration: none !important; /* Quita el subrayado */
+}
+
+/* Opcional: Que se ponga verde solo cuando pases el mouse */
+.header_contact a.phone_no:hover {
+    color: #25D366 !important; /* El verde de WhatsApp */
+}
+#full-about, #product, #full-testimonial {
+  scroll-margin-top: 100px; 
+}

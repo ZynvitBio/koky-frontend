@@ -1,1 +1,71 @@
 /* You can add global styles to this file, and also import other style files */
+/* USAMOS EL ID DIRECTO PARA MÁXIMA PRIORIDAD */
+@import "intl-tel-input/build/css/intlTelInput.css";
+#txtDireccion, 
+#checkout_state, 
+#chechout_name, 
+#checkout_phonenumber, 
+#checkout_email, 
+#checkout_billing_textarea { /* <--- Añadimos el ID del textarea aquí */
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    opacity: 1 !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* ELIMINAR EL FONDO OSCURO DE LA LOCALIDAD */
+input#checkout_state[readonly] {
+    background-color: #e9ecef !important; /* Gris claro para que se vea */
+    color: #333333 !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* ESTO ES PARA EL MENÚ DE GOOGLE */
+.pac-container {
+    background-color: white !important;
+    z-index: 2000 !important;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.pac-item {
+    color: #333 !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.pac-item:hover {
+    background-color: #f0f0f0;
+}
+textarea#checkout_billing_textarea::placeholder {
+    color: #999999 !important;
+}
+
+/* Aseguramos que el foco (cuando haces clic) no cambie el color bruscamente */
+#checkout_billing_textarea:focus {
+    background-color: #ffffff !important;
+  
+    outline: none;
+    border-color: #80bdff !important;
+}
+/* 1. Forzamos al contenedor a ser un bloque de ancho completo */
+.iti {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* 2. Estiramos el input para que llene su contenedor al 100% */
+#checkout_phonenumber {
+    width: 100% !important;
+    display: block !important;
+    height: 50px !important; /* Altura exacta para igualar al campo Nombre */
+    padding-left: 95px !important; /* Espacio para que el número no toque el +57 */
+    border: 1px solid #ced4da !important; /* Color de borde estándar de tu formulario */
+    border-radius: 0 !important;
+}
+#full-about, 
+#product, 
+#full-testimonial {
+    scroll-margin-top: 180px !important; 
+    scroll-behavior: smooth; /* Esto hace que el salto sea elegante y no brusco */
+}

@@ -1,0 +1,128 @@
+/* Estilos para el control de cantidad interactivo */
+.quantity-control {
+    width: 90px; /* Ancho fijo para el contenedor de botones e input */
+    flex-shrink: 0; /* Evita que el contenedor se encoja */
+}
+
+.quantity-input {
+    width: 40px; /* Ancho más pequeño para el input */
+    text-align: center;
+    -moz-appearance: textfield; /* Para Firefox */
+    appearance: textfield; /* ¡Añadido para compatibilidad y resolver el warning! */
+    padding: 0.25rem 0.1rem; /* Reducir padding */
+    height: 30px; /* Altura fija para el input */
+    line-height: 1; /* Ajustar line-height */
+    border-radius: 0; /* Quitar bordes redondeados para que se unan a los botones */
+    border: 1px solid #ced4da; /* Borde estándar de Bootstrap */
+    color: #333 !important; /* ¡Color de texto oscuro forzado para visibilidad! */
+}
+
+/* Ocultar flechas de input type="number" en Chrome/Safari */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-btn {
+    width: 25px; /* Ancho más pequeño para los botones +/- */
+    height: 30px; /* Altura fija para los botones */
+    padding: 0; /* Eliminar padding para que el contenido quepa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em; /* Ajustar tamaño de fuente para el símbolo */
+    line-height: 1;
+    border-radius: 0; /* Quitar bordes redondeados para que se unan al input */
+}
+
+/* Alineación de bordes para los botones de cantidad */
+.quantity-btn:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.quantity-btn:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Estilo para el texto de la unidad interactiva */
+.unit-text {
+    min-width: 50px; /* Ancho mínimo para el texto de la unidad (ej. "Unidad") */
+    text-align: left; /* Alinea el texto a la izquierda dentro de su espacio */
+    margin-left: 5px; /* Pequeño espacio entre el control y la unidad */
+    display: flex; /* Asegura alineación vertical */
+    align-items: center;
+    height: 30px; /* Misma altura que los botones/input */
+}
+
+
+/* Estilos para el botón de ordenar */
+.order-button {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Para asegurar que los elementos de la lista se alineen correctamente en móviles */
+@media (max-width: 767.98px) {
+  .list-group-item .d-flex {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .list-group-item a {
+    flex: 1 1 auto;
+    min-width: 0; /* Necesario para que text-overflow funcione */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .list-group-item .d-flex > div:last-child {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .quantity-control {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .quantity-input {
+    width: 40px;
+  }
+
+  .quantity-btn {
+    width: 25px;
+  }
+
+  .unit-text {
+    white-space: nowrap;
+    margin-left: 4px;
+    font-size: 0.9em;
+    min-width: auto;
+  }
+}
+.about-background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+  margin-bottom: 5%;
+}
+.product-prev-price {
+    color: #999; /* El gris que ya tenías */
+    text-decoration: line-through; /* Esto pone la línea encima */
+    margin-right: 10px; /* Un poco de espacio con el precio nuevo */
+}
+

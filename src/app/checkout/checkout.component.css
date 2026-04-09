@@ -1,0 +1,20 @@
+/* 1. Mantenemos el control del contenedor para que ocupe todo el ancho */
+::ng-deep .iti {
+    display: block;
+    width: 100%;
+}
+
+/* 2. Ajustamos el input para que sea idéntico al de 'Nombre' */
+#checkout_phonenumber {
+    width: 100% !important;
+    height: 50px; /* Ajusta esto para que iguale la altura de los otros campos */
+    border-radius: 0; 
+    padding-left: 90px !important; /* IMPORTANTE: deja espacio para la bandera y el +57 */
+}
+
+/* 3. Como ahora todo funciona, podemos quitar el bloqueo de la lista 
+      por si algún cliente necesita cambiar el país (opcional) */
+::ng-deep .iti__country-list {
+    z-index: 1000 !important;
+    background-color: white;
+}

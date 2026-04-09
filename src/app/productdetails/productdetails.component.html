@@ -1,0 +1,190 @@
+  <!-- HERO SECTION PART START -->
+    <div class="hero_section" [style.background-image]="product?.bannerImage 
+        ? 'url(' + product.bannerImage + ')' 
+        : 'url(assets/img/product_hero_section_bg.jpg)'">
+        
+    <div class="png_img"><img class="w-100 img-fluid" src="assets/img/leaf.png" alt="leaf" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="herosection_content">
+                    <h2>{{ product?.name || 'Cargando....' }}</h2>
+                    <a href="#" class="btn border-radius-0 border-transparent">Inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- HERO SECTION PART END-->
+
+    <!-- PRODUCT DETAILS PART START -->
+<div class="product_details" *ngIf="product">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="product_img d-flex">
+                    
+                    <div class="small_img" style="flex: 0 0 100px;">
+                        <img *ngFor="let img of product.galleryImages" 
+                             class="w-100 mb-2" 
+                             [src]="img" 
+                             style="height: 100px; object-fit: cover; border: 1px solid #f1f1f1; cursor: pointer;" 
+                             alt="galería" />
+                    </div>
+
+                    <div class="big_img" style="flex: 1; margin-left: 15px;">
+                        <img [src]="product.image" 
+                             class="w-100 img-fluid" 
+                             style="height: 320px; object-fit: cover;" 
+                             [alt]="product.name" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="producudetails_content">
+                    <h3>{{ product.name }}</h3>
+                    
+                    <div class="customer_review">
+                        <ul>
+                            <li>
+                                <i class="icofont-star"></i>
+                                <i class="icofont-star"></i>
+                                <i class="icofont-star"></i>
+                                <i class="icofont-star"></i>
+                                <i class="icofont-star"></i>
+                            </li>
+                            <li><p>(0 Customer Review)</p></li>
+                        </ul>
+                    </div>
+                    <strong>{{ product.price | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
+                     <strong><del>{{product.oldPrice | currency:'COP':'symbol-narrow':'1.0-0' }} </del></strong>
+                     {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
+                    
+                    
+                    
+                    <p>{{ product.shortDescription }}</p>
+
+                    <div class="add_to_cart d-flex">
+                        <div class="quantity d-flex">
+                            <div class="left_arrow"><button type="button"><i class="icofont-arrow-left"></i></button></div>
+                            <div class="quantity_num">1</div>
+                            <div class="right_arrow"><button type="button"><i class="icofont-arrow-right"></i></button></div>
+                        </div>
+                        <a  (click)="addToCart(product)" class="btn border-transparent ml-5">Añadir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- PRODUCT DETAILS PART END -->
+
+    <!-- PRODUCT TABBER START -->
+ <div class="product_tabber" *ngIf="product">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs nav_custom" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link nav-link-custom active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">DESCRIPCIÓN</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link nav-link-custom" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false">INFORMACIÓN ADICIONAL</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link nav-link-custom" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">RESEÑAS</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                        <div class="mt-4">
+                            <p>{{ product.longDescription || 'No hay una descripción detallada para este producto.' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="information" role="tabpanel" aria-labelledby="information-tab">
+                        <div class="mt-4">
+                            <h5>Beneficios del Producto</h5>
+                            <p>{{ product.benefits || 'Ingredientes naturales de alta calidad.' }}</p>
+                            
+                            <hr>
+                            
+                            <ul class="list-unstyled">
+                                <li><strong>Código (SKU):</strong> {{ product.sku }}</li>
+                                <li><strong>Contenido:</strong> {{ product.contentPerUnit }} {{ product.unitAbbreviation }}</li>
+                                <li><strong>Medida:</strong> {{ product.unitMeasure }}</li>
+                                <li *ngIf="product.brand"><strong>Marca:</strong> {{ product.brand }}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                        <div class="mt-4">
+                            <p>Actualmente no hay reseñas para este producto.</p>
+                            <p>¡Sé el primero en compartir tu experiencia!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- PRODUCT TABBER END -->
+
+  <!-- BEST SELLER PART START -->
+<div class="full-bestSeller" *ngIf="productItems.length > 0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-left">
+                <h3 class="section-title">nuestros Productos</h3> 
+            </div>
+        </div>
+
+        <div class="row mt-5 product-slider">
+            <div *ngFor="let item of productItems" class="col-xs-12 col-md-12 col-lg-12 col-xl-12 mb-12">
+                <div class="product">
+                    <div class="product-img">
+                        <a [routerLink]="['/productdetails', item.slug]">
+                            <img class="w-100" [src]="item.image" [alt]="item.name">
+                        </a>
+                    </div>
+                    
+                    <div class="product-content">
+                        <div class="product-details position-bottom-left">
+                            <h3 class="product-name">
+                                <a [routerLink]="['/productdetails', item.slug]">{{ item.name }}</a>
+                            </h3>
+                            
+                            <span class="product-prev-price" *ngIf="item.oldPrice">
+                                <del>{{ item.oldPrice | currency:'USD':'symbol':'1.0-0' }}</del>
+                            </span>
+                            <span class="product-price">
+                                {{ item.price | currency:'USD':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+
+                        <div class="buttons">
+                            <span class="sold-out-tag position-top-right" *ngIf="item.stock === 0">Agotado</span>
+                            
+                            <button 
+                                (click)="addToCart(item)" 
+                                class="btn custom-btn position-bottom-right">
+                                Añadir
+                            </button>
+                        </div>
+
+                        <div class="icons position-center">
+                            <a [routerLink]="['/productdetails', item.slug]" class="rounded-icon">
+                                <i class="icofont-eye"></i>
+                            </a>
+                            <div class="rounded-icon"><i class="icofont-heart-alt"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- BEST SELLER PART END -->

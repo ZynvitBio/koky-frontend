@@ -1,0 +1,191 @@
+   <!-- HERO SECTION PART START -->
+    <div class="hero_section">
+        <div class="png_img"><img class="w-100 img-fluid" src="assets/img/leaf.png" alt="" /></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="herosection_content">
+                        <h2>Checkout</h2>
+                        <a href="index.html" class="btn border-radius-0 border-transparent">Inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- HERO SECTION PART END -->
+
+    <!-- ORDER PART STRAT -->
+<div class="order_part">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 order-1 order-lg-2">
+                <div class="billing_content">
+                    <div class="billing_head text-uppercase">
+                        <h2>Detalles de Envío</h2>
+                    </div>
+                    <div class="billing_form">
+                        <form action="#">
+                            <div class="form-row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                    <input type="text" class="form-control border-radius-0" id="chechout_name" name="chechout_name" placeholder="Nombre*" />
+                                </div>
+
+                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+  <input 
+    type="tel"
+    class="form-control border-radius-0"
+ 
+    id="checkout_phonenumber"
+    name="checkout_phonenumber"
+    placeholder="Teléfono / WhatsApp*" 
+  />
+
+  <div *ngIf="mensajeTelefono"
+       class="mt-1 small"
+       [ngClass]="telefonoValido ? 'text-success' : 'text-danger'">
+    {{ mensajeTelefono }}
+  </div>
+</div>
+
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+  <input 
+    type="text" 
+    class="form-control border-radius-0" 
+    
+    id="txtDireccion" 
+    name="checkout_address" 
+    placeholder="Escribe tu dirección en Bogotá (Ej: Calle 100 #...)*" 
+  />
+  <!-- Mensaje de validación de dirección -->
+  <div *ngIf="mensajeDireccion" 
+       class="mt-1 small" 
+       [ngClass]="direccionValida ? 'text-success' : 'text-danger'">
+    {{ mensajeDireccion }}
+  </div>
+</div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                    <input type="text" class="form-control border-radius-0" id="checkout_state" name="checkout_state" placeholder="Localidad (Se llenará sola)" readonly />
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                    <input type="email" class="form-control border-radius-0" id="checkout_email" name="checkout_email" placeholder="Correo electrónico (Opcional)" />
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+                                    <textarea class="form-control border-radius-0" id="checkout_billing_textarea" name="checkout_billing_textarea" rows="4" placeholder="Notas adicionales (Apto, Torre, indicaciones para el domiciliario):"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 order-2 order-lg-1 mt-5 mt-lg-0">
+                <div class="order_content">
+                    <div class="order_txt">
+                        <h2>Your Order</h2>
+                        <p>Revisa tu pedido y el costo de envío calculado antes de proceder al pago seguro.</p>
+                    </div>
+                    
+                    <div class="order_cardTotal pt-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="card_total text-uppercase" colspan="2">Compra total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="subtotal">Subtotal:</th>
+                                    <td class="text-right">{{ subtotal | currency:'USD':'symbol':'1.0-0' }}</td>
+                                </tr>
+
+                                <tr *ngIf="costoEnvio > 0">
+                                    <th class="subtotal">Envío:</th>
+                                    <td class="text-right">{{ costoEnvio | currency:'USD':'symbol':'1.0-0' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th class="discount">Discount:</th>
+                                    <td class="text-right">{{ discount | currency:'USD':'symbol':'1.0-0' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td class="text-right total_num">
+                                        {{ totalFinal | currency:'USD':'symbol':'1.0-0' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="chechout_btn text-right mt-3">
+                        <button (click)="processOrder()" class="btn border-radius-0 border-transparent w-100">
+                            PAGAR $ {{ totalFinal | number:'1.0-0' }}
+                        </button>
+                    </div>
+
+                    <div class="payment_method pt-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="payment_head text-uppercase" colspan="2">Metodo de pago</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="w-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment" id="wallets" value="wompi" checked />
+                                            <label class="form-check-label" for="wallets">Billeteras</label>
+                                        </div>
+                                    </th>
+                                    <td class="w-50 text-right">
+                                        <img src="assets/img/nequi_daviplata.png" alt="Nequi Daviplata" class="img-fluid" style="max-height: 25px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="w-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment" id="transfer" value="wompi" />
+                                            <label class="form-check-label" for="transfer">Transferencia</label>
+                                        </div>
+                                    </th>
+                                    <td class="w-50 text-right">
+                                        <img src="assets/img/pse_bancolombia.png" alt="PSE Bancolombia" class="img-fluid" style="max-height: 25px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="w-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment" id="cards" value="wompi"/>
+                                            <label class="form-check-label" for="cards">Tarjetas</label>
+                                        </div>
+                                    </th>
+                                    <td class="w-50 text-right">
+                                        <img src="assets/img/visa_master_amex.png" alt="img" class="img-fluid" style="max-height: 20px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="w-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment" id="qr" value="wompi"/>
+                                            <label class="form-check-label" for="qr">Código QR</label>
+                                        </div>
+                                    </th>
+                                    <td class="w-50 text-right">
+                                        <img src="assets/img/QR.png" alt="img" class="img-fluid" style="max-height: 25px;" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <!-- ORDER PART END -->

@@ -1,0 +1,344 @@
+<div class="full-banner" 
+     [style.background-image]="heroBackgroundImage ? 'url(' + heroBackgroundImage + ')' : 'none'">
+    <div class="container">
+       <ngx-slick-carousel 
+  #slickBanner
+  *ngIf="isBrowser && bannerSliderConfig && bannerSlides && bannerSlides.length > 0" 
+  class="row banner-slider" 
+  [config]="bannerSliderConfig">
+    <div ngxSlickItem *ngFor="let slide of bannerSlides" class="col-md-12">
+      <div class="banner-content">
+        <h1>{{ slide?.h1Prefix }} <span>{{ slide?.h1HighlightedText }}</span> {{ slide?.h1_suffix }}</h1>
+        <h3>{{ slide?.subtitle }}</h3>
+        <p>{{ slide?.description }}</p>
+        <a (click)="handleBannerClick(slide?.linkUrl || '', $event)" 
+   [href]="(slide?.linkUrl || '').startsWith('trigger:') ? 'javascript:void(0)' : (slide?.linkUrl || '#')"
+   class="btn" 
+   style="cursor: pointer;">
+    {{ slide?.linkText }} <i class="icofont-bubble-right"></i>
+</a>
+      </div>
+    </div>
+</ngx-slick-carousel>
+
+    </div>
+</div>
+<!-- BANNER PART END -->
+
+<!-- FEATURES PART START -->
+<div class="full-features">
+    <div class="container">
+        <!-- El div con la clase 'row slider' se convierte en ngx-slick-carousel.
+             Mantenemos las clases 'row' y 'slider' para preservar tus estilos. -->
+    <ngx-slick-carousel 
+  #slickFeatures
+  *ngIf="isBrowser && sliderConfig"
+  class="row slider" 
+  [config]="sliderConfig">
+    <div ngxSlickItem *ngFor="let item of featureItems" class="col-xs-12 col-md-12 col-lg-12 col-xl-12 mb-4">
+      <div class="features-box text-center" [routerLink]="['/productdetails', item.slug]" style="cursor: pointer;">
+        <div class="features-icon-border">
+          <div class="features-icon">
+            <i [class]="item.iconClass"></i>
+          </div>
+        </div>
+        <div class="features-text">
+          <h3>{{ item.title }}</h3>
+        </div>
+      </div>
+    </div>
+</ngx-slick-carousel>
+    </div><div id="full-about" style="height: 35px; margin-top: -35px;"></div>
+</div>
+<!-- FEATURES PART END -->
+<div class="about-wrapper" style="min-height: 400px; display: block; clear: both;"> 
+  <div
+    class="about-background"
+    [style.background-image]="'url(' + (aboutBackgroundImage || 'assets/img/product_hero_section_bg.jpg') + ')'"
+  >
+    <div class="full-about">
+      <div class="container">
+        <div class="row">
+          <div class="about-title">
+            <h2>{{ aboutData?.title || 'Cargando...' }}</h2>
+          </div>
+          <div class="col-md-6">
+            <div class="about-content">
+              <h3>{{ aboutData?.subtitle }}</h3>
+              <div class="about-details">
+                <p>{{ aboutData?.paragraph1 }}</p>
+                <p>{{ aboutData?.paragraph2 }}</p>
+              </div>
+              <div class="about-icon-text align-items-center">
+                <div class="abt-icon">
+                  <img [src]="aboutData?.iconImage?.url || 'assets/img/O.png'" alt="About Icon" />
+                </div>
+                <div class="abt-text">
+                  <h2>
+                    {{ aboutData?.iconTextPrefix }}
+                    <span>{{ aboutData?.iconTextHighlight }}</span>
+                    {{ aboutData?.iconTextSuffix }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- BEST SELLER PART START -->
+<div class="full-bestSeller" id="product">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3 class="section-title">Nuestros Productos "Calidad Elaborada para Ti"</h3>
+                <p class="section-subtitle">Haz tu pedido antes de las 4 p.m. para elaboración nocturna y entrega al día siguiente. Explora la variedad de opciones que preparamos diariamente, pensando en tu bienestar y el sabor que te encanta. ¡Disfruta!</p>
+            </div>
+        </div>
+
+        <!-- Esta sección ahora es una cuadrícula de productos dinámica, no un carrusel.
+             Utiliza *ngFor para iterar sobre los 'productItems' de tu componente TS. -->
+   <div class="row mt-5">
+    <div *ngFor="let product of products" class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
+        <div class="product">
+            <div class="product-img">
+                <a [routerLink]="['/productdetails', product.slug]">
+                    <img class="w-100" 
+     [src]="product.image" 
+     [alt]="product.image?.alternativeText || product.name">
+                </a>
+            </div>
+            
+            <div class="product-content">
+                <div class="product-details position-bottom-left">
+                    <h3 class="product-name">
+                        
+                        <a [routerLink]="['/productdetails', product.slug]">{{ product.name }}</a>
+                        <span style="font-size: 0.7em; opacity: 0.6; margin-left: 5px;">
+            {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
+        </span>
+                    </h3>
+                    
+                    <span *ngIf="product.oldPrice" class="product-prev-price text-decoration-line-through">
+                        {{ product.oldPrice | currency:'USD':'symbol':'1.0-0' }} 
+                    </span>
+                    <span class="product-price">
+                        {{ product.price | currency:'USD':'symbol':'1.0-0' }}
+                    </span>
+                </div>
+
+              <div class="buttons">
+    @if (product.availableToday) {
+        <span class="sold-out-tag position-top-right">
+            Disponible Hoy
+        </span>
+    }
+
+    <button 
+        (click)="addToCart(product)" 
+        class="btn custom-btn position-bottom-right">
+        Añadir
+    </button>
+</div>
+
+<div class="icons position-center">
+    <div class="rounded-icon" [routerLink]="['/productdetails', product.slug]" style="cursor: pointer;">
+        <i class="icofont-eye"></i>
+    </div>
+    <div class="rounded-icon">
+        <i class="icofont-heart-alt"></i>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BEST SELLER PART END -->
+
+<!-- OFFER PART START -->
+<div  class="post_category">
+<div class="full-offer">
+    <div class="bg-1"></div>
+    <div class="bg-2"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="offer-content">
+                    <!-- Contenido dinámico para la oferta de entrega el mismo día -->
+                    <h3>{{ sameDayProduct.name }}</h3>
+                    <h2>{{ sameDayProduct.quantity }} {{ sameDayProduct.unit }}<br> {{ sameDayProduct.deliveryMessage }}</h2>
+                    <a (click)="handleBannerClick(sameDayProduct.linkUrl || '', $event)" 
+   [href]="(sameDayProduct.linkUrl || '').startsWith('#') ? 'javascript:void(0)' : (sameDayProduct.linkUrl || '#')"
+   class="btn"
+   style="cursor: pointer;">
+    {{ sameDayProduct.linkText }} 
+    <i class="icofont-bubble-right"></i>
+</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- OFFER PART END -->
+<!-- PARTNERS PART START -->
+<div   class="row">
+    <div id="productos" class="col-md-6">
+        <ul class="list-group">
+            <!-- Usamos *ngFor para iterar sobre el array 'tofuTypesList' del componente TS -->
+            <li class="list-group-item list_icon" *ngFor="let tofuType of tofuTypesList">
+                <!-- Contenedor principal para alinear elementos a izquierda y derecha -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center w-100 tofu-row">
+                    <!-- Lado Izquierdo: Nombre del producto -->
+                    <a [href]="tofuType.link" class="text-decoration-none text-dark d-flex align-items-center">
+                       
+                        {{ tofuType.name }}
+                    </a>
+
+                    <!-- Lado Derecho: Selector de Cantidad Interactivo y su Unidad -->
+                    <div class="d-flex align-items-center">
+                        <!-- Control de cantidad con botones de +/- y input -->
+                        <div class="quantity-control d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary quantity-btn" (click)="decrementQuantity(tofuType, $event)">-</button>
+                            <!-- El input ahora muestra la cantidad seleccionada, que se inicializa con la cantidad disponible -->
+                            <input type="number" [(ngModel)]="tofuType.selectedQuantity" (change)="onQuantityChange(tofuType)"
+                                   [min]="1" [max]="tofuType.quantity" class="form-control form-control-sm quantity-input text-center">
+                            <button class="btn btn-sm btn-outline-secondary quantity-btn" (click)="incrementQuantity(tofuType, $event)">+</button>
+                        </div>
+                        <span class="unit-text ml-1">{{ tofuType.unit }}</span> <!-- Texto de la unidad con clase nueva -->
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- Botón para ordenar, del mismo tamaño que las opciones y responsivo -->
+        <button class="btn  mt-3 w-100 order-button" (click)="placeOrder()">Ordenar Seleccionados</button>
+    </div>
+    <div class="col-md-6 mt-4"> <!-- ¡Clase mt-4 añadida aquí para margen superior! -->
+        <!-- Reproductor de Video -->
+        <!-- ¡CORREGIDO: Ahora pasamos el objeto $event completo al método! -->
+        <video #videoPlayer [src]="currentVideoUrl" (ended)="onVideoEnded($event)"
+               autoplay muted class="w-100 img-fluid" style="border-radius: 8px;">
+            Tu navegador no soporta la etiqueta de video.
+        </video>
+    </div>
+</div>
+<!-- PARTNERS PART END -->
+<!-- TESTIMONIAL PART START -->
+ <br>
+<br>
+<div class="full-testimonial" id="full-testimonial">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3 class="section-title">Nuestros Clientes Felices</h3>
+                <p class="section-subtitle">Descubre las opiniones de quienes ya disfrutan de nuestros productos.</p>
+            </div>
+        </div>
+
+        <div class="form-row align-items-center mt-5">
+            <div class="col-md-4">
+              <ngx-slick-carousel 
+  #slickModalTestimonialImg
+  *ngIf="isBrowser && testimonialImgConfig"
+  class="testimonial-img text-center" 
+  [config]="testimonialImgConfig">
+    <div ngxSlickItem *ngFor="let img of testimonialImageItems" class="img">
+      <img class="w-100" [src]="img.src" [alt]="img.alt">
+    </div>
+</ngx-slick-carousel>
+            </div>
+            <div class="col-md-8">
+               <ngx-slick-carousel 
+  #slickModalTestimonialText
+  *ngIf="isBrowser && testimonialTextConfig"
+  class="testimonial-text" 
+  [config]="testimonialTextConfig">
+    <div ngxSlickItem *ngFor="let text of testimonialTextItems" class="testimonial-info">
+      <p>" {{ text.quote }}</p>
+      <h3>{{ text.author }}</h3>
+      <h4>{{ text.role }}</h4>
+    </div>
+</ngx-slick-carousel>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- TESTIMONIAL PART END -->
+
+<!-- CONTACT NOW PART END -->
+<div class="contact-now">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3 class="contact-quote">¿Necesitas pedidos al por mayor? ¡Contáctanos!</h3>
+                 <a href="https://wa.me/573019447660?text=Hola!%20Vengo%20de%20la%20web%20y%20quiero%20info%20de%20Koky%20Food%20🥦" 
+       target="_blank" 
+       class="phone_no" class="btn" >
+       Solicita tu Cotización <i class="icofont-whatsapp"></i>
+    </a>
+               
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CONTACT NOW PART END -->
+
+<div class="full-latest-news">
+    <div class="container">
+        <div class="row">
+    <div class="col-12 text-center">
+        <h3 class="section-title">Nuestras Últimas Recetas</h3>
+        <p class="section-subtitle">Descubre deliciosas ideas para transformar nuestras presentaciones de tofu en platillos irresistibles.</p>
+    </div>
+</div>
+
+
+     <div class="row mt-5">
+
+  <!-- Columna izquierda -->
+ <div class="col-md-6">
+  <div *ngFor="let recipe of leftRecipes" class="latest-news-grid">
+    <div class="news-img">
+      <img [src]="recipe.mainImage" [alt]="recipe.titulo" class="w-100">
+    </div>
+    <div class="news-content">
+      <div class="date-react">
+      
+        <span class="date">{{ recipe.createdAt | date:'dd MMM, yyyy' }}</span>
+        <span class="react"><i class="icofont-ui-love"></i> {{ recipe.likes }}</span>
+        <span class="react"><i class="icofont-speech-comments"></i> {{ recipe.comments }}</span>
+      </div>
+      <div class="news-title">
+        <a [routerLink]="['/blog', recipe.slug]"><h4>{{ recipe.titulo }}</h4></a>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Columna derecha -->
+ <div class="col-md-6">
+  <div *ngFor="let recipe of rightRecipes" class="latest-news-list d-flex">
+    <div class="news-img">
+      <img [src]="recipe.mainImage" [alt]="recipe.titulo" class="w-100">
+    </div>
+    <div class="news-content">
+      <div class="date-react">
+        
+        <span class="date">{{ recipe.createdAt | date:'dd MMM, yyyy' }}</span>
+        <span class="react"><i class="icofont-ui-love"></i> {{ recipe.likes }}</span>
+        <span class="react"><i class="icofont-speech-comments"></i> {{ recipe.comments }}</span>
+      </div>
+      <div class="news-title">
+        <a [routerLink]="['/blog', recipe.slug]"><h4>{{ recipe.titulo }}</h4></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+             
+
+               
+            </div>
+        </div>
+    </div>
+</div>

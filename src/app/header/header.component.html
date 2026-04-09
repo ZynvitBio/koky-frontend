@@ -1,0 +1,70 @@
+	<!-- HEADER PART START -->
+	<header id="full_nav">
+		<div class="header">
+			<div class="container">
+				<nav class="navbar navbar-expand-lg navbar-light">
+					<a class="navbar-brand" href="index.html">
+						<img src="assets/img/logo.png" alt="">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<i class="icofont icofont-navigation-menu"></i>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mx-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="index.html">Inicio</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="#full-about">Nosotros</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="#product">Productos</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="#full-testimonial">Testimonios</a>
+							</li>
+
+							<li >
+								<span class="nav-link" id="navbarDropdown" role="button" (click)="goToBlog()">Recetas</span>
+							
+							</li>
+						</ul>
+
+						<div class="header-content">
+							<div class="header_contact text-right">
+    <span>Whatsapp</span>
+    <a href="https://wa.me/573019447660?text=Hola!%20Vengo%20de%20la%20web%20y%20quiero%20info%20de%20Koky%20Food%20🥦" 
+       target="_blank" 
+       class="phone_no">
+       +57 301 9447660
+    </a>
+</div>
+							<div class="header_iconW">
+    <a href="https://wa.me/573019447660?text=Hola!%20Vengo%20de%20la%20web%20y%20quiero%20info%20de%20Koky%20Food%20🥦" 
+       target="_blank" 
+       style="text-decoration: none; color: inherit;">
+        <i class="icofont-brand-whatsapp"></i>
+    </a>
+</div>
+						<div class="header_icon" [routerLink]="['/cartoverview']" style="cursor: pointer;">
+    
+    <i class="icofont icofont-cart"></i>
+    
+    @if (totalItems > 0) {
+        <span class="cart_no">
+            {{ totalItems < 10 ? '0' + totalItems : totalItems }}
+        </span>
+    }
+
+</div>
+						</div>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<!-- HEADER PART END -->

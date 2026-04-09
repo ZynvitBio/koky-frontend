@@ -1,0 +1,131 @@
+<div class="hero_section"
+    style="background-image: url('assets/img/fried-tofu.jpg');">
+    
+    <div class="png_img">
+        <img class="w-100 img-fluid" src="assets/img/leaf.png" alt="" />
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="herosection_content">
+                    <h2>{{ blogHeroData?.title || 'Recetas' }}</h2>
+                    
+                    <a routerLink="/home" class="btn border-radius-0 border-transparent">Inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="blog_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="allpost_content">
+                            <div class="serach_btn">
+    <form (submit)="$event.preventDefault()"> 
+        <div class="search_ber">
+            <input 
+                type="text" 
+                class="form-control search_button" 
+                placeholder="Buscar receta..." 
+                name="searchTerm"
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()" 
+            />
+            <i class="icofont-search-1" (click)="onSearch()" style="cursor: pointer;"></i>
+        </div>
+    </form>
+</div>
+                            <div class="post_category">
+    <div class="sidebar">
+        <h4 class="border-0">Categorias</h4>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item list_icon" (click)="loadRecipes()" style="cursor:pointer">
+            <a><i class="icofont-arrow-right"></i>Todas las recetas</a>
+        </li>
+
+        <li class="list-group-item list_icon" 
+            *ngFor="let cat of categories" 
+            (click)="filterByCategory(cat.slug)" 
+            style="cursor:pointer">
+            <a>
+                <i class="icofont-arrow-right"></i>
+                {{ cat.name }} </a>
+        </li>
+    </ul>
+</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="recent_post">
+                            <div class="sidebar">
+                                <h4>Recent Post</h4>
+                            </div>
+                            <ul>
+                                <li *ngFor="let recent of recipes | slice:0:4">
+                                    <span>{{ recent.createdAt | date:'dd MMMM yyyy' }}</span>
+                                    <h4><a href="#">{{ recent.titulo }}</a></h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </div>
+            
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
+                
+                <div *ngIf="recipes.length === 0" class="text-center py-5">
+                    <h4>Cargando recetas deliciosas...</h4>
+                </div>
+
+                <div *ngFor="let receta of recipes; let i = index" class="row" [ngClass]="{'mt-5': i > 0}">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="blog">
+                            <div class="blog_img">
+                                <img [src]="getImgUrl(receta)" class="w-100 img-fluid" [alt]="receta.titulo" />
+                            </div>
+                            <div class="blog_publish d-flex justify-content-between pt-4">
+                                <div class="date">
+                                    <span><i class="icofont-ui-calendar"></i> {{ receta.createdAt | date:'dd MMMM yyyy' }}</span>
+                                </div>
+                                <div class="fav_icon">
+                                    <span><i class="icofont-clock-time"></i> {{ receta.preparationTimeMinutes }} min</span>
+                                    <span><i class="icofont-restaurant"></i> {{ receta.servings }} raciones</span>
+                                </div>
+                            </div>
+                            <div class="blog_title text-uppercase">
+                                <h4><a [routerLink]="['/blog', receta.slug]">{{ receta.titulo }} </a></h4>
+                                <p class="text-lowercase" style="font-size: 0.9rem; color: #666; margin: 15px 0;">
+                                    {{ receta.shortDescription }}
+                                </p>
+                                <a [routerLink]="['/blog', receta.slug]" class="underline">Leer Más</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5 text-center" *ngIf="recipes.length > 0">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="pages_num">
+                            <ul>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#"><i class="icofont-arrow-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

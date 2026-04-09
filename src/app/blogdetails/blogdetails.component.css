@@ -1,0 +1,199 @@
+.floating-video-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 280px; /* Un poco más ancho para legibilidad */
+    height: 500px;
+    z-index: 9999;
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 2px solid #03262C;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+}
+
+.video-header {
+    background: #000; /* Fondo negro para que el video sea el protagonista */
+    border-bottom: 1px solid #333;
+    height: 50px;
+}
+
+.close-video {
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 15px;
+    transition: color 0.3s;
+}
+
+.close-video:hover {
+    color: #79a206; /* Tu color verde de marca */
+}
+
+/* Contenedor del video para que no se vea el borde de YouTube */
+.video-body {
+    background: #000;
+    flex-grow: 1; /* Esto hace que el video ocupe todo el espacio sobrante */
+    position: relative;
+    overflow: hidden;
+}
+.video-body iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsivo: más pequeño en móviles */
+/* --- MÓVILES (Cubre iPhone, Samsung, Pixel, Huawei, etc.) --- */
+@media (max-width: 767px) {
+    .floating-video-wrapper {
+        /* Reset de posición para ocupar TODO el viewport */
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important; /* Ancho total de pantalla */
+        height: 100dvh !important; /* "Dynamic Viewport Height" para evitar problemas con la barra de Safari/Chrome */
+        border-radius: 0 !important;
+        border: none !important;
+        margin: 0 !important;
+    }
+
+    .video-header {
+        height: 70px !important; /* Más espacio para dedos en móvil */
+        padding: 0 20px !important;
+        background: #000 !important;
+    }
+
+    .close-video {
+        font-size: 35px !important; /* Fácil de cerrar */
+        font-weight: bold;
+    }
+
+    /* Ajuste para que el video no se corte en pantallas muy largas (como los Sony o nuevos Samsung) */
+    .video-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+    }
+}
+/* Contenedor principal para darle espacio */
+.video-container-sidebar {
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* El marco que sostiene la imagen y la sombra */
+.thumb-frame {
+    position: relative;
+    width: 100%; /* Ocupa el 100% del ancho del sidebar */
+    max-width: 350px; /* Evita que se deforme en pantallas gigantes */
+    
+    /* Esta es la sombra de silueta (drop-shadow) que pediste */
+   
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.thumb-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px; /* Bordes redondeados para que se vea moderno */
+}
+
+/* Efecto Hover: la miniatura crece un poco al pasar el mouse */
+.thumb-frame:hover {
+    transform: scale(1.03);
+   
+}
+
+/* Botón de Play Centrado */
+.play-btn-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   
+    color: #19c10a89;
+    width: 80px;  /* Más grande para que destaque */
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    transition: 0.3s;
+}
+
+.thumb-frame:hover .play-btn-overlay {
+    background: #d7d8d457;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+.small_img {
+    width: 80px; /* Ajusta según tu diseño */
+    flex-shrink: 0;
+}
+
+.thumbnail-wrapper img {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.thumbnail-wrapper img:hover {
+    border-color: #8cc63f; /* Tu color verde Koky */
+}
+
+.active-thumb {
+    border-color: #8cc63f !important;
+    box-shadow: 0 0 5px rgba(140, 198, 63, 0.5);
+}
+
+.main-recipe-img {
+    border-radius: 8px;
+    max-height: 500px;
+    object-fit: cover;
+}
+.close_circle {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: #8cc63f; /* El color verde de tu marca */
+    color:#03262C;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: background 0.3s;
+    border: 2px solid #03262C;
+}
+
+.close_circle:hover {
+    background: #76a935;
+    transform: scale(1.1);
+}
+
+/* Ajuste para el contenedor para que la X no flote sola */
+.modal_zoom_content {
+    position: relative;
+    display: inline-block;
+}
