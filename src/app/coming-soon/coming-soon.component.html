@@ -1,0 +1,73 @@
+@if (visible) {
+  <div class="cs-backdrop" (click.self)="close()">
+    <div class="cs-panel">
+
+      <!-- Botón cerrar -->
+      <button class="cs-close" (click)="close()" aria-label="Cerrar">✕</button>
+
+      <!-- Encabezado -->
+       <span class="cs-accent"><img src="assets/img/logo.png" class="cs-logo" style="height: 40px; width: auto;"></span>
+       <br>
+       <br>
+
+       <h1 class="cs-title">
+         ¡Conviértete en Miembro Fundador!
+      </h1>
+      <p class="cs-subtitle">
+       Regístrate hoy y obtén 1 delivery GRATIS al mes de por vida, acceso anticipado a nuevos productos y sorpresas exclusivas. 
+       ¡Cupos limitados!
+      </p>
+
+      <!-- Countdown -->
+      <div class="cs-countdown">
+        <div class="cs-unit">
+          <span class="cs-number">{{ days }}</span>
+          <span class="cs-label">DÍAS</span>
+        </div>
+        <span class="cs-sep">:</span>
+        <div class="cs-unit">
+          <span class="cs-number">{{ hours }}</span>
+          <span class="cs-label">HORAS</span>
+        </div>
+        <span class="cs-sep">:</span>
+        <div class="cs-unit">
+          <span class="cs-number">{{ minutes }}</span>
+          <span class="cs-label">MINUTOS</span>
+        </div>
+        <span class="cs-sep">:</span>
+        <div class="cs-unit">
+          <span class="cs-number cs-number--accent">{{ seconds }}</span>
+          <span class="cs-label">SEGUNDOS</span>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="cs-form">
+        <input
+          type="text"
+          class="cs-input"
+          placeholder="Tu nombre"
+          [(ngModel)]="name"
+          name="cs-name"
+        />
+        <input
+          type="tel"
+          class="cs-input"
+          placeholder="WhatsApp (ej: +57 300 000 0000)"
+          [(ngModel)]="whatsapp"
+          name="cs-whatsapp"
+        />
+        <button class="cs-btn" (click)="submit()">
+          Quiero ser Miembro Fundador
+        </button>
+      </div>
+
+      @if (message) {
+        <p class="cs-message" [class.cs-message--error]="messageType === 'error'">
+          {{ message }}
+        </p>
+      }
+
+    </div>
+  </div>
+}

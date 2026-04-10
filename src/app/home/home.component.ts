@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, ChangeDetectorRef, ApplicationRef  } from '@angular/core';
+import { Component, OnInit, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, ChangeDetectorRef, ApplicationRef, inject } from '@angular/core';
 import { SlickCarouselModule, SlickCarouselComponent } from 'ngx-slick-carousel';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import { isPlatformBrowser } from '@angular/common'; // Asegúrate de que esté
 import { Title, Meta, } from '@angular/platform-browser';
 import { NgZone } from '@angular/core';
 import { filter, take } from 'rxjs'
+import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
 
 
 
@@ -48,6 +49,7 @@ import { filter, take } from 'rxjs'
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  cs = inject(ComingSoonService);
     @ViewChild('videoPlayer') videoPlayerRef!: ElementRef<HTMLVideoElement>;
  
     @ViewChild('slickBanner') slickBanner!: SlickCarouselComponent;
@@ -510,10 +512,17 @@ handleBannerClick(url: string, event: Event): void {
     return;
   }
 
-  // 2. CASO SCROLL (Lo que te faltaba):
+  // 2. Coming Soon
+  if (url.startsWith('trigger:coming-soon')) {
+    event.preventDefault();
+    this.cs.open();
+    return;
+  }
+
+  // 3. Caso Scroll
   if (url.startsWith('#')) {
-    event.preventDefault(); // Evitamos el salto brusco del navegador
-    const targetId = url.substring(1); // Obtenemos "productos"
+    event.preventDefault();
+    const targetId = url.substring(1);
     const element = document.getElementById(targetId);
     
     if (element) {
@@ -527,7 +536,7 @@ handleBannerClick(url: string, event: Event): void {
     return;
   }
 
-  // 3. URLs externas (se manejarán por el href normal si no entran aquí)
+  // 4. URLs externas (se manejarán por el href normal)
 }
 private loadTestimonials(): void {
   this.aboutService.getTestimonials().subscribe({

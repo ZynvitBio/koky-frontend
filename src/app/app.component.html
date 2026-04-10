@@ -1,4 +1,9 @@
 
 <app-header></app-header>
 <router-outlet />
+<app-coming-soon 
+  launchDate="2026-15-09" 
+  (closed)="onClose()" 
+  (registered)="onRegister($event)" 
+/>
 <app-footer></app-footer>

@@ -1,0 +1,209 @@
+// ─── Variables ───────────────────────────────────────────────────────────────
+$accent:       #1D8007;
+$accent-dark:  #04342c;
+$white:        #ffffff;
+$text-muted:   rgba(255, 255, 255, 0.55);
+$glass-bg:     rgba(10, 18, 28, 0.72);
+$input-bg:     rgba(255, 255, 255, 0.08);
+$input-border: rgba(255, 255, 255, 0.05);
+ 
+// ─── Backdrop (cubre toda la pantalla sobre el contenido existente) ───────────
+.cs-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+ 
+  // Fondo oscuro semitransparente + blur
+  background: $glass-bg;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+ 
+// ─── Panel central ────────────────────────────────────────────────────────────
+.cs-panel {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  padding: 2.5rem 2.5rem 2rem;
+  border-radius: 16px;
+ 
+  // Panel también traslúcido
+  background: rgba(15, 25, 38, 0.269);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+ 
+  animation: csSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+ 
+@keyframes csSlideIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+ 
+// ─── Botón cerrar ─────────────────────────────────────────────────────────────
+.cs-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid $input-border;
+  background: $input-bg;
+  color: $white;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+ 
+  &:hover {
+    background: rgba(255, 255, 255, 0.041);
+  }
+}
+ 
+// ─── Textos ───────────────────────────────────────────────────────────────────
+.cs-title {
+  color: $white;
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+ 
+.cs-accent {
+  color: $accent;
+  font-weight: 700;
+}
+ 
+.cs-subtitle {
+  color: $text-muted;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+ 
+// ─── Countdown ────────────────────────────────────────────────────────────────
+.cs-countdown {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+ 
+.cs-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ 
+.cs-number {
+  color: $white;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 52px;
+  text-align: center;
+ 
+  &--accent {
+    color: $accent;
+  }
+}
+ 
+.cs-label {
+  color: $text-muted;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  margin-top: 4px;
+}
+ 
+.cs-sep {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 30px;
+  font-weight: 300;
+  margin-bottom: 14px; // alinea con los números
+}
+ 
+// ─── Formulario ───────────────────────────────────────────────────────────────
+.cs-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ 
+.cs-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  background: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: 8px;
+  color: $white;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+ 
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+ 
+  &:focus {
+    border-color: rgba($accent, 0.6);
+  }
+}
+ 
+.cs-btn {
+  width: 100%;
+  padding: 12px;
+  background: $accent;
+  border: none;
+  border-radius: 8px;
+  color: $accent-dark;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+ 
+  &:hover  { opacity: 0.88; }
+  &:active { transform: scale(0.98); }
+}
+ 
+// ─── Mensaje de estado ────────────────────────────────────────────────────────
+.cs-message {
+  margin: 0.75rem 0 0;
+  font-size: 13px;
+  color: $accent;
+ 
+  &--error {
+    color: #f0997b;
+  }
+}
+ 
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .cs-panel {
+    padding: 2rem 1.25rem 1.5rem;
+  }
+ 
+  .cs-number {
+    font-size: 28px;
+    min-width: 38px;
+  }
+ 
+  .cs-countdown {
+    gap: 10px;
+  }
+.cs-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+}
