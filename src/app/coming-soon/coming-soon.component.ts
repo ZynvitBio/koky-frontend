@@ -32,6 +32,9 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
   private zone       = inject(NgZone);
   private cdr        = inject(ChangeDetectorRef);
  
+  // ✅ Solo true en el browser — evita hydration mismatch con el video
+  isBrowser = isPlatformBrowser(this.platformId);
+ 
   visible  = true;
   days     = '00';
   hours    = '00';
@@ -46,13 +49,12 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
   private timer: ReturnType<typeof setInterval> | null = null;
  
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser) {
       // ✅ Fuera de Angular Zone → no bloquea estabilización ni hidratación
       this.zone.runOutsideAngular(() => {
         this.tick();
         this.timer = setInterval(() => {
           this.tick();
-          // Vuelve a Angular solo para pintar la vista
           this.zone.run(() => this.cdr.markForCheck());
         }, 1000);
       });
@@ -63,25 +65,25 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
     if (this.timer) clearInterval(this.timer);
   }
  
-private tick(): void {
-  const target = new Date(this.launchDate).getTime();
-  
-  // ✅ Protección contra NaN en SSR
-  if (isNaN(target)) return;
-
-  const diff = target - Date.now();
-
-  if (diff <= 0) {
-    this.days = this.hours = this.minutes = this.seconds = '00';
-    if (this.timer) clearInterval(this.timer);
-    return;
+  private tick(): void {
+    const target = new Date(this.launchDate).getTime();
+ 
+    // ✅ Protección contra NaN en SSR
+    if (isNaN(target)) return;
+ 
+    const diff = target - Date.now();
+ 
+    if (diff <= 0) {
+      this.days = this.hours = this.minutes = this.seconds = '00';
+      if (this.timer) clearInterval(this.timer);
+      return;
+    }
+ 
+    this.days    = this.pad(Math.floor(diff / 86_400_000));
+    this.hours   = this.pad(Math.floor((diff % 86_400_000) / 3_600_000));
+    this.minutes = this.pad(Math.floor((diff % 3_600_000)  / 60_000));
+    this.seconds = this.pad(Math.floor((diff % 60_000)     / 1_000));
   }
-
-  this.days    = this.pad(Math.floor(diff / 86_400_000));
-  this.hours   = this.pad(Math.floor((diff % 86_400_000) / 3_600_000));
-  this.minutes = this.pad(Math.floor((diff % 3_600_000)  / 60_000));
-  this.seconds = this.pad(Math.floor((diff % 60_000)     / 1_000));
-}
  
   private pad(n: number): string {
     return String(n).padStart(2, '0');
@@ -92,18 +94,25 @@ private tick(): void {
     this.closed.emit();
   }
  
-  submit(): void {
-    if (!this.name.trim() || !this.whatsapp.trim()) {
-      this.message     = 'Por favor completa ambos campos.';
-      this.messageType = 'error';
-      this.cdr.markForCheck();
-      return;
-    }
-    this.registered.emit({ name: this.name.trim(), whatsapp: this.whatsapp.trim() });
-    this.message     = '¡Listo! Te avisamos cuando lancemos.';
-    this.messageType = 'success';
-    this.name        = '';
-    this.whatsapp    = '';
+submit(): void {
+  if (!this.name.trim() || !this.whatsapp.trim()) {
+    this.message     = 'Por favor completa ambos campos.';
+    this.messageType = 'error';
     this.cdr.markForCheck();
+    return;
   }
+
+  this.registered.emit({ name: this.name.trim(), whatsapp: this.whatsapp.trim() });
+  this.message     = '¡Listo! Te avisamos cuando lancemos.';
+  this.messageType = 'success';
+  this.name        = '';
+  this.whatsapp    = '';
+  this.cdr.markForCheck();
+
+  // Auto-cierre a los 4 segundos
+  setTimeout(() => {
+    this.message = '';
+    this.cdr.markForCheck();
+  }, 4000);
+}
 }

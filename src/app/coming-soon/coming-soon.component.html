@@ -5,17 +5,27 @@
       <!-- Botón cerrar -->
       <button class="cs-close" (click)="close()" aria-label="Cerrar">✕</button>
 
-      <!-- Encabezado -->
-       <span class="cs-accent"><img src="assets/img/logo.png" class="cs-logo" style="height: 40px; width: auto;"></span>
-       <br>
-       <br>
+      <!-- Logo -->
+      <img src="assets/img/logo.png" class="cs-logo" alt="Koky" />
 
-       <h1 class="cs-title">
-         ¡Conviértete en Miembro Fundador!
-      </h1>
+      <!-- Video de Kira -->
+      @if (isBrowser) {
+        <div class="cs-video">
+          <video
+            controls
+            playsinline
+            preload="metadata"
+            class="cs-video__player">
+            <source src="https://storage.googleapis.com/kokyfood/kirakoky202614759.mp4" type="video/mp4">
+          </video>
+        </div>
+      }
+
+      <!-- Encabezado -->
+      <h1 class="cs-title">¡Conviértete en Miembro Fundador!</h1>
       <p class="cs-subtitle">
-       Regístrate hoy y obtén 1 delivery GRATIS al mes de por vida, acceso anticipado a nuevos productos y sorpresas exclusivas. 
-       ¡Cupos limitados!
+        Regístrate hoy y obtén 1 delivery GRATIS al mes de por vida,
+        acceso anticipado a nuevos productos y sorpresas exclusivas. ¡Cupos limitados!
       </p>
 
       <!-- Countdown -->
@@ -57,16 +67,20 @@
           [(ngModel)]="whatsapp"
           name="cs-whatsapp"
         />
+
+        <p class="cs-urgency">🔥 Solo quedan cupos limitados</p>
+
         <button class="cs-btn" (click)="submit()">
           Quiero ser Miembro Fundador
         </button>
       </div>
 
-      @if (message) {
-        <p class="cs-message" [class.cs-message--error]="messageType === 'error'">
-          {{ message }}
-        </p>
-      }
+     @if (message) {
+  <p class="cs-message" [class.cs-message--error]="messageType === 'error'">
+    {{ message }}
+    <button class="cs-message__close" (click)="message = ''">✕</button>
+  </p>
+}
 
     </div>
   </div>

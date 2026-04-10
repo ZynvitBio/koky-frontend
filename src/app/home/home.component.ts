@@ -503,11 +503,13 @@ setSeoData(): void {
     ]);
 }
 handleBannerClick(url: string, event: Event): void {
+   console.log('🔗 URL recibida:', JSON.stringify(url));
   if (!url) return;
 
   // 1. Caso Registro de Fundadores
   if (url.startsWith('trigger:founderRegistration')) {
     event.preventDefault();
+     console.log('✅ Abriendo coming soon'); // ← verifica en consola
     this.openFounderRegistration();
     return;
   }

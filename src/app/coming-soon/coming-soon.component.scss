@@ -1,50 +1,46 @@
 // ─── Variables ───────────────────────────────────────────────────────────────
-$accent:       #1D8007;
+$accent:       #39e75f;
 $accent-dark:  #04342c;
 $white:        #ffffff;
-$text-muted:   rgba(255, 255, 255, 0.55);
-$glass-bg:     rgba(10, 18, 28, 0.72);
+$text-muted:   rgba(255, 255, 255, 0.60);
+$glass-bg:     rgba(10, 18, 28, 0.75);
 $input-bg:     rgba(255, 255, 255, 0.08);
-$input-border: rgba(255, 255, 255, 0.05);
- 
-// ─── Backdrop (cubre toda la pantalla sobre el contenido existente) ───────────
+$input-border: rgba(255, 255, 255, 0.2);
+
+// ─── Backdrop ─────────────────────────────────────────────────────────────────
 .cs-backdrop {
   position: fixed;
   inset: 0;
   z-index: 9999;
- 
-  // Fondo oscuro semitransparente + blur
   background: $glass-bg;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
- 
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  overflow-y: auto;
 }
- 
-// ─── Panel central ────────────────────────────────────────────────────────────
+
+// ─── Panel ────────────────────────────────────────────────────────────────────
 .cs-panel {
   position: relative;
   width: 100%;
-  max-width: 560px;
-  padding: 2.5rem 2.5rem 2rem;
+  max-width: 520px;
+  padding: 2rem 2rem 1.5rem;
   border-radius: 16px;
- 
-  // Panel también traslúcido
-  background: rgba(15, 25, 38, 0.269);
+  background: rgba(15, 25, 38, 0.92);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.10);
- 
   animation: csSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  margin: auto;
 }
- 
+
 @keyframes csSlideIn {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
- 
+
 // ─── Botón cerrar ─────────────────────────────────────────────────────────────
 .cs-close {
   position: absolute;
@@ -57,87 +53,106 @@ $input-border: rgba(255, 255, 255, 0.05);
   background: $input-bg;
   color: $white;
   font-size: 16px;
-  line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
- 
-  &:hover {
-    background: rgba(255, 255, 255, 0.041);
+  z-index: 1;
+
+  &:hover { background: rgba(255, 255, 255, 0.15); }
+}
+
+// ─── Logo ─────────────────────────────────────────────────────────────────────
+.cs-logo {
+  height: 48px;
+  width: auto;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+// ─── Video (móvil por defecto) ────────────────────────────────────────────────
+.cs-video {
+  width: 160px;
+  aspect-ratio: 9 / 16;
+  max-height: 220px;
+  margin: 0 auto 1.25rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+
+  &__player {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 12px;
   }
 }
- 
+
 // ─── Textos ───────────────────────────────────────────────────────────────────
 .cs-title {
   color: $white;
-  font-size: 26px;
-  font-weight: 500;
-  margin: 0 0 0.5rem;
-  line-height: 1.2;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  line-height: 1.3;
 }
- 
-.cs-accent {
-  color: $accent;
-  font-weight: 700;
-}
- 
+
 .cs-subtitle {
   color: $text-muted;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
-  margin: 0 0 2rem;
+  margin: 0 0 1.25rem;
 }
- 
+
 // ─── Countdown ────────────────────────────────────────────────────────────────
 .cs-countdown {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 2rem;
+  gap: 12px;
+  margin-bottom: 1.25rem;
 }
- 
+
 .cs-unit {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
- 
+
 .cs-number {
   color: $white;
-  font-size: 38px;
+  font-size: 32px;
   font-weight: 700;
   line-height: 1;
-  min-width: 52px;
+  min-width: 44px;
   text-align: center;
- 
-  &--accent {
-    color: $accent;
-  }
+
+  &--accent { color: $accent; }
 }
- 
+
 .cs-label {
   color: $text-muted;
   font-size: 10px;
   letter-spacing: 1.2px;
   margin-top: 4px;
 }
- 
+
 .cs-sep {
   color: rgba(255, 255, 255, 0.25);
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 300;
-  margin-bottom: 14px; // alinea con los números
+  margin-bottom: 14px;
 }
- 
+
 // ─── Formulario ───────────────────────────────────────────────────────────────
 .cs-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
- 
+
 .cs-input {
   width: 100%;
   box-sizing: border-box;
@@ -149,61 +164,103 @@ $input-border: rgba(255, 255, 255, 0.05);
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
- 
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-  }
- 
-  &:focus {
-    border-color: rgba($accent, 0.6);
-  }
+
+  &::placeholder { color: rgba(255, 255, 255, 0.35); }
+  &:focus { border-color: rgba($accent, 0.6); }
 }
- 
+
+.cs-urgency {
+  color: #ffa94d;
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
 .cs-btn {
   width: 100%;
   padding: 12px;
   background: $accent;
   border: none;
   border-radius: 8px;
-  color: $accent-dark;
+  color: #0a1a0a;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s;
- 
+
   &:hover  { opacity: 0.88; }
   &:active { transform: scale(0.98); }
 }
- 
-// ─── Mensaje de estado ────────────────────────────────────────────────────────
+
+// ─── Mensaje ──────────────────────────────────────────────────────────────────
 .cs-message {
   margin: 0.75rem 0 0;
   font-size: 13px;
   color: $accent;
- 
-  &--error {
-    color: #f0997b;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &--error { color: #f0997b; }
+
+  &__close {
+    background: none;
+    border: 1px solid currentColor;
+    color: inherit;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+
+    &:hover { opacity: 1; }
   }
 }
- 
-// ─── Responsive ───────────────────────────────────────────────────────────────
-@media (max-width: 480px) {
+
+// ─── Desktop: video vertical a la DERECHA, form a la izquierda ───────────────
+@media (min-width: 600px) {
   .cs-panel {
-    padding: 2rem 1.25rem 1.5rem;
+    max-width: 760px;
+    display: grid;
+    grid-template-columns: 1fr 190px;
+    column-gap: 1.5rem;
+    align-items: start;
   }
- 
-  .cs-number {
-    font-size: 28px;
-    min-width: 38px;
+
+  .cs-logo  { grid-column: 1 / -1; }
+  .cs-close { grid-column: 1 / -1; }
+
+  .cs-video {
+    grid-column: 2;
+    grid-row: 2 / 9;
+    width: 190px;
+    aspect-ratio: 9 / 16;
+    max-height: unset;
+    margin: 0;
+    align-self: stretch;
   }
- 
-  .cs-countdown {
-    gap: 10px;
-  }
-.cs-logo {
-  height: 30px;
-  width: auto;
-  display: block;
-  margin-bottom: 0.5rem;
+
+  .cs-title,
+  .cs-subtitle,
+  .cs-countdown,
+  .cs-form,
+  .cs-urgency,
+  .cs-message { grid-column: 1; }
 }
+
+// ─── Móvil ────────────────────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .cs-panel     { padding: 1.75rem 1.25rem 1.25rem; }
+  .cs-number    { font-size: 26px; min-width: 36px; }
+  .cs-countdown { gap: 8px; }
 }

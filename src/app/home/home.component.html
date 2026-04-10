@@ -11,11 +11,11 @@
         <h1>{{ slide?.h1Prefix }} <span>{{ slide?.h1HighlightedText }}</span> {{ slide?.h1_suffix }}</h1>
         <h3>{{ slide?.subtitle }}</h3>
         <p>{{ slide?.description }}</p>
-        <a (click)="handleBannerClick(slide?.linkUrl || '', $event)" 
-   [href]="(slide?.linkUrl || '').startsWith('trigger:') ? 'javascript:void(0)' : (slide?.linkUrl || '#')"
+     <a (click)="handleBannerClick(slide?.linkUrl || '', $event)" 
+   [href]="(slide?.linkUrl || '').startsWith('trigger:') ? null : (slide?.linkUrl || '#')"
    class="btn" 
    style="cursor: pointer;">
-    {{ slide?.linkText }} <i class="icofont-bubble-right"></i>
+   {{ slide?.linkText }} <i class="icofont-bubble-right"></i>
 </a>
       </div>
     </div>

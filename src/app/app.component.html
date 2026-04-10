@@ -1,9 +1,10 @@
 
 <app-header></app-header>
 <router-outlet />
-<app-coming-soon
-  launchDate="2026-05-09T00:00:00.000Z"
-  (closed)="cs.close()"
-  (registered)="onRegister($event)"
-/>
+@if (cs.visible()) {
+  <app-coming-soon
+    launchDate="2026-05-29T00:00:00.000Z"
+    (closed)="cs.close()"
+    (registered)="onRegister($event)"
+  />}
 <app-footer></app-footer>
