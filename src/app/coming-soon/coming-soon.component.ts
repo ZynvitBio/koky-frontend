@@ -63,21 +63,25 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
     if (this.timer) clearInterval(this.timer);
   }
  
-  private tick(): void {
-    const target = new Date(this.launchDate).getTime();
-    const diff   = target - Date.now();
- 
-    if (diff <= 0) {
-      this.days = this.hours = this.minutes = this.seconds = '00';
-      if (this.timer) clearInterval(this.timer);
-      return;
-    }
- 
-    this.days    = this.pad(Math.floor(diff / 86_400_000));
-    this.hours   = this.pad(Math.floor((diff % 86_400_000) / 3_600_000));
-    this.minutes = this.pad(Math.floor((diff % 3_600_000)  / 60_000));
-    this.seconds = this.pad(Math.floor((diff % 60_000)     / 1_000));
+private tick(): void {
+  const target = new Date(this.launchDate).getTime();
+  
+  // ✅ Protección contra NaN en SSR
+  if (isNaN(target)) return;
+
+  const diff = target - Date.now();
+
+  if (diff <= 0) {
+    this.days = this.hours = this.minutes = this.seconds = '00';
+    if (this.timer) clearInterval(this.timer);
+    return;
   }
+
+  this.days    = this.pad(Math.floor(diff / 86_400_000));
+  this.hours   = this.pad(Math.floor((diff % 86_400_000) / 3_600_000));
+  this.minutes = this.pad(Math.floor((diff % 3_600_000)  / 60_000));
+  this.seconds = this.pad(Math.floor((diff % 60_000)     / 1_000));
+}
  
   private pad(n: number): string {
     return String(n).padStart(2, '0');
