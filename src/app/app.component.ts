@@ -5,7 +5,9 @@ import { FooterComponent } from './footer/footer.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { ComingSoonService } from './services/coming-soon/coming-soon.service';
 import { AuthService } from './services/auth/auth.service';
+import { NotificationService } from './services/notification/notification.service';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-root',
@@ -16,58 +18,64 @@ import Swal from 'sweetalert2';
 export class AppComponent {
   cs          = inject(ComingSoonService);
   authService = inject(AuthService);
+  notificationService = inject(NotificationService);
   title       = 'koky';
 
   onClose() {
     console.log('El usuario cerró el contador');
   }
+  async openFounderModal() {
+  const formData = await this.notificationService.showFounderRegistration();
+  if (!formData) return; // usuario canceló
 
-  onRegister(data: { name: string; whatsapp: string }) {
-    // Strapi necesita username, email y password obligatorios
-    // Usamos el whatsapp como base para generar email y password únicos
-    const registroData = {
-      username: data.name.trim(),
-      email:    `${data.whatsapp.replace(/\D/g, '')}@koky.food`,
-      password: `Koky${data.whatsapp.replace(/\D/g, '')}!`
-    };
+  this.onRegister(formData);
+}
 
-    // Mostramos loading mientras se registra
-    Swal.fire({
-      title: 'Registrando...',
-      text: 'Un momento, estamos guardando tu cupo.',
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
-    });
+onRegister(data: { name: string; whatsapp: string }) {
+  const registroData = {
+    username: data.name.trim(),
+    email:    `${data.whatsapp.replace(/\D/g, '')}@koky.food`,
+    password: `Koky${data.whatsapp.replace(/\D/g, '')}!`
+  };
 
-    this.authService.register(registroData).subscribe({
-      next: () => {
-        // Cerramos el coming-soon al registrarse exitosamente
-        this.cs.close();
+  Swal.fire({
+    title: 'Registrando...',
+    text: 'Un momento, estamos guardando tu cupo.',
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading()
+  });
 
-        Swal.fire({
-          title: '¡Bienvenido al Club, Fundador!',
-          text: 'Kira te ha registrado con éxito. Ahora, haz clic abajo para activar tus beneficios VIP por WhatsApp.',
-          icon: 'success',
-          confirmButtonText: '<i class="icofont-whatsapp"></i> Hablar con Kira',
-          confirmButtonColor: '#25D366',
-          allowOutsideClick: false
-        }).then((result) => {
-          if (result.isConfirmed) {
-            const mensaje = `¡Hola! Soy ${data.name}. Acabo de registrarme como Miembro Fundador de Koky desde la web. ¡Quiero mis beneficios! 🥦`;
-            const whatsappUrl = `https://wa.me/573007979419?text=${encodeURIComponent(mensaje)}`;
-            window.open(whatsappUrl, '_blank');
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error detallado:', err.error);
-        Swal.fire({
-          title: 'Registro Fallido',
-          text: 'Asegúrate de que tu nombre y WhatsApp no hayan sido registrados antes.',
-          icon: 'error',
-          confirmButtonColor: '#d33'
-        });
-      }
-    });
-  }
+  this.authService.register(registroData).subscribe({
+    next: () => {
+      this.cs.close();
+
+      Swal.fire({
+        title: '¡Bienvenido al Club, Fundador!',
+        text: 'Kira te ha registrado con éxito.',
+        icon: 'success',
+        confirmButtonText: '<i class="icofont-whatsapp"></i> Hablar con Kira',
+        confirmButtonColor: '#25D366',
+        allowOutsideClick: true,
+        showCloseButton: true,      // ✅ la X ahora sí funciona
+        showDenyButton: true,
+        denyButtonText: 'Cerrar',
+        denyButtonColor: '#6c757d',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const mensaje = `¡Hola! Soy ${data.name}. Acabo de registrarme como Miembro Fundador de Koky desde la web.🥦`;
+          window.open(`https://wa.me/573019447660?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error detallado:', err.error);
+      Swal.fire({
+        title: 'Registro Fallido',
+        text: 'Asegúrate de que tu nombre y WhatsApp no hayan sido registrados antes.',
+        icon: 'error',
+        confirmButtonColor: '#d33'
+      });
+    }
+  });
+}
 }

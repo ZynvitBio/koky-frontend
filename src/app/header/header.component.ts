@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { CartService } from '../services/cart/cart.service';
 import { RouterLink } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -10,19 +11,32 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
-  totalItems: number = 0;
-  constructor(private router: Router,
-              private cartService: CartService) {}
+  totalItems = 0;
+  menuOpen   = false;  // 👈 controla el menú
+
+  constructor(private router: Router, private cartService: CartService) {}
 
   ngOnInit() {
-    // Nos suscribimos al flujo del carrito
     this.cartService.cart$.subscribe(items => {
-      // Sumamos las cantidades de todos los items
       this.totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
     });
-  }            
-  goToBlog() {
-    this.router.navigate(['/blog']);
+
+    // 👈 cierra el menú en cada navegación
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => this.menuOpen = false);
   }
 
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
+
+  goToBlog() {
+    this.router.navigate(['/blog']);
+    this.closeMenu();
+  }
 }

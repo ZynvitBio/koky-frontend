@@ -6,11 +6,11 @@
 					<a class="navbar-brand" href="index.html">
 						<img src="assets/img/logo.png" alt="">
 					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<i class="icofont icofont-navigation-menu"></i>
-					</button>
+					<button class="navbar-toggler" type="button" (click)="toggleMenu()">
+  <i class="icofont icofont-navigation-menu"></i>
+</button>
 
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<div class="navbar-collapse" [class.collapse]="!menuOpen" [class.show]="menuOpen" id="navbarSupportedContent">
 						<ul class="navbar-nav mx-auto">
 							<li class="nav-item active">
 								<a class="nav-link" href="index.html">Inicio</a>
@@ -43,13 +43,7 @@
        +57 301 9447660
     </a>
 </div>
-							<div class="header_iconW">
-    <a href="https://wa.me/573019447660?text=Hola!%20Vengo%20de%20la%20web%20y%20quiero%20info%20de%20Koky%20Food%20🥦" 
-       target="_blank" 
-       style="text-decoration: none; color: inherit;">
-        <i class="icofont-brand-whatsapp"></i>
-    </a>
-</div>
+							
 						<div class="header_icon" [routerLink]="['/cartoverview']" style="cursor: pointer;">
     
     <i class="icofont icofont-cart"></i>

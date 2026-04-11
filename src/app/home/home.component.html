@@ -242,7 +242,8 @@
   #slickModalTestimonialImg
   *ngIf="isBrowser && testimonialImgConfig"
   class="testimonial-img text-center" 
-  [config]="testimonialImgConfig">
+  [config]="testimonialImgConfig"
+   (beforeChange)="onTestimonialImgChange($event)">
     <div ngxSlickItem *ngFor="let img of testimonialImageItems" class="img">
       <img class="w-100" [src]="img.src" [alt]="img.alt">
     </div>
@@ -253,7 +254,8 @@
   #slickModalTestimonialText
   *ngIf="isBrowser && testimonialTextConfig"
   class="testimonial-text" 
-  [config]="testimonialTextConfig">
+  [config]="testimonialTextConfig"
+  (beforeChange)="onTestimonialTextChange($event)">
     <div ngxSlickItem *ngFor="let text of testimonialTextItems" class="testimonial-info">
       <p>" {{ text.quote }}</p>
       <h3>{{ text.author }}</h3>

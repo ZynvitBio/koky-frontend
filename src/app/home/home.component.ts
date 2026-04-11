@@ -49,6 +49,7 @@ import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  private isSyncing = false;
   cs = inject(ComingSoonService);
     @ViewChild('videoPlayer') videoPlayerRef!: ElementRef<HTMLVideoElement>;
  
@@ -563,5 +564,24 @@ private loadTestimonials(): void {
     },
     error: (err) => console.error('Error cargando testimonios:', err)
   });
+}
+onTestimonialTextChange(event: any): void {
+  if (this.isSyncing) return;
+  this.isSyncing = true;
+  this.testimonialImgCarousel?.slickGoTo(event.nextSlide);
+  setTimeout(() => {
+    this.testimonialImgCarousel?.slickPlay();
+    this.isSyncing = false;
+  }, 1100); // mayor que speed:1000
+}
+
+onTestimonialImgChange(event: any): void {
+  if (this.isSyncing) return;
+  this.isSyncing = true;
+  this.testimonialTextCarousel?.slickGoTo(event.nextSlide);
+  setTimeout(() => {
+    this.testimonialTextCarousel?.slickPlay();
+    this.isSyncing = false;
+  }, 600); // mayor que speed:500
 }
 }
