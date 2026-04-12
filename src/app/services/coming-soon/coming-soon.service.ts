@@ -7,7 +7,6 @@ export class ComingSoonService {
   private platformId = inject(PLATFORM_ID);
   private readonly KEY = 'koky_coming_soon_closed';
 
-  // Solo muestra si NO fue cerrado antes en esta sesión
   visible = signal(this.shouldShow());
 
   private shouldShow(): boolean {
@@ -15,9 +14,7 @@ export class ComingSoonService {
     return sessionStorage.getItem(this.KEY) !== 'true';
   }
 
-  open() {
-    this.visible.set(true);
-  }
+  open() { this.visible.set(true); }
 
   close() {
     this.visible.set(false);

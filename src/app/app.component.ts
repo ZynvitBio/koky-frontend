@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
@@ -7,7 +7,7 @@ import { ComingSoonService } from './services/coming-soon/coming-soon.service';
 import { AuthService } from './services/auth/auth.service';
 import { NotificationService } from './services/notification/notification.service';
 import Swal from 'sweetalert2';
-
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,12 +15,26 @@ import Swal from 'sweetalert2';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  cs          = inject(ComingSoonService);
-  authService = inject(AuthService);
+export class AppComponent implements OnInit {
+  cs                  = inject(ComingSoonService);
+  authService         = inject(AuthService);
   notificationService = inject(NotificationService);
-  title       = 'koky';
+  private router      = inject(Router);
+  title               = 'koky';
+  isHomeRoute         = false; // 👈 propiedad reactiva
 
+  ngOnInit() {
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: any) => {
+        const path = e.urlAfterRedirects || e.url;
+        this.isHomeRoute = path === '/home' || path === '/' || path.startsWith('/home#');
+      });
+  }
+ isHome(): boolean {
+    const path = this.router.url;
+    return path === '/home' || path === '/' || path.startsWith('/home#');
+  }
   onClose() {
     console.log('El usuario cerró el contador');
   }
