@@ -22,24 +22,25 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                <div class="product_img d-flex">
-                    
-                    <div class="small_img" style="flex: 0 0 100px;">
-                        <img *ngFor="let img of product.galleryImages" 
-                             class="w-100 mb-2" 
-                             [src]="img" 
-                             style="height: 100px; object-fit: cover; border: 1px solid #f1f1f1; cursor: pointer;" 
-                             alt="galería" />
-                    </div>
+   <div class="product_img d-flex">
+  <div class="small_img" style="flex: 0 0 100px;">
+    <ng-container *ngFor="let img of getMiniaturas()">
+        <img class="w-100 mb-2" 
+             [src]="img" 
+             (click)="changeImage(img)" 
+             style="height: 100px; object-fit: cover; border: 1px solid #f1f1f1; cursor: pointer;" 
+             alt="galería" />
+    </ng-container>
+</div>
 
-                    <div class="big_img" style="flex: 1; margin-left: 15px;">
-                        <img [src]="product.image" 
-                             class="w-100 img-fluid" 
-                             style="height: 320px; object-fit: cover;" 
-                             [alt]="product.name" />
-                    </div>
-                </div>
-            </div>
+    <div class="big_img" style="flex: 1; margin-left: 15px;">
+        <img [src]="activeImage" 
+             class="w-100 img-fluid" 
+             style="height: 320px; object-fit: cover;" 
+             [alt]="product.name" />
+    </div>
+</div>
+</div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 <div class="producudetails_content">
@@ -90,7 +91,7 @@
                         <a class="nav-link nav-link-custom active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">DESCRIPCIÓN</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link nav-link-custom" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false">INFORMACIÓN ADICIONAL</a>
+                        <a class="nav-link nav-link-custom" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false">INFORMACIÓNS</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link nav-link-custom" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">RESEÑAS</a>
@@ -158,10 +159,10 @@
                             </h3>
                             
                             <span class="product-prev-price" *ngIf="item.oldPrice">
-                                <del>{{ item.oldPrice | currency:'USD':'symbol':'1.0-0' }}</del>
+                                <del>{{ item.oldPrice | currency:'COP':'symbol':'1.0-0' }}</del>
                             </span>
                             <span class="product-price">
-                                {{ item.price | currency:'USD':'symbol':'1.0-0' }}
+                                {{ item.price | currency:'COP':'symbol':'1.0-0' }}
                             </span>
                         </div>
 

@@ -124,15 +124,15 @@
             <tbody>
                 <tr>
                     <th scope="row" class="subtotal">Subtotal:</th>
-                    <td class="text-right">{{ subtotal | currency:'USD':'symbol':'1.0-0' }}</td>
+                    <td class="text-right">{{ subtotal | currency:'COP':'symbol':'1.0-0' }}</td>
                 </tr>
                 <tr>
                     <th scope="row" class="discount">Discount:</th>
-                    <td class="text-right">{{ discount | currency:'USD':'symbol':'1.0-0' }}</td>
+                    <td class="text-right">{{ discount | currency:'COP':'symbol':'1.0-0' }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Total:</th>
-                    <td class="text-right total_num">{{ (subtotal - discount) | currency:'USD':'symbol':'1.0-0' }}</td>
+                    <td class="text-right total_num">{{ (subtotal - discount) | currency:'COP':'symbol':'1.0-0' }}</td>
                 </tr>
             </tbody>
         </table>

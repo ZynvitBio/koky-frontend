@@ -99,22 +99,22 @@
                             <tbody>
                                 <tr>
                                     <th class="subtotal">Subtotal:</th>
-                                    <td class="text-right">{{ subtotal | currency:'USD':'symbol':'1.0-0' }}</td>
+                                    <td class="text-right">{{ subtotal | currency:'COP':'symbol':'1.0-0' }}</td>
                                 </tr>
 
                                 <tr *ngIf="costoEnvio > 0">
                                     <th class="subtotal">Envío:</th>
-                                    <td class="text-right">{{ costoEnvio | currency:'USD':'symbol':'1.0-0' }}</td>
+                                    <td class="text-right">{{ costoEnvio | currency:'COP':'symbol':'1.0-0' }}</td>
                                 </tr>
 
                                 <tr>
                                     <th class="discount">Discount:</th>
-                                    <td class="text-right">{{ discount | currency:'USD':'symbol':'1.0-0' }}</td>
+                                    <td class="text-right">{{ discount | currency:'COP':'symbol':'1.0-0' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total:</th>
                                     <td class="text-right total_num">
-                                        {{ totalFinal | currency:'USD':'symbol':'1.0-0' }}
+                                        {{ totalFinal | currency:'COP':'symbol':'1.0-0' }}
                                     </td>
                                 </tr>
                             </tbody>

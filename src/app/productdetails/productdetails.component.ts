@@ -19,6 +19,7 @@ declare var $: any;
 export class ProductdetailsComponent implements OnInit, AfterViewChecked {
   product: any = null; 
   productItems: any[] = [];
+  activeImage: string = '';
   private slickInicializado = false;
 
   constructor(
@@ -79,6 +80,9 @@ obtenerDetallesPorSlug(slug: string) {
       this.product = res;
 
       if (this.product) {
+        // Mantenemos la asignación de la imagen activa inicial
+        this.activeImage = this.product.image;
+
         // 1. Título: Prioridad al metaTitle de Strapi, si no, usa el name
         const finalTitle = this.product.metaTitle || `${this.product.name} | Koky Food`;
         this.titleService.setTitle(finalTitle);
@@ -98,8 +102,8 @@ obtenerDetallesPorSlug(slug: string) {
         // Nota: Asegúrate de que res.image contenga la URL (a veces Strapi requiere res.image.url)
         if (this.product.image) {
           const imageUrl = typeof this.product.image === 'string' 
-                           ? this.product.image 
-                           : (this.product.image.url || '');
+                            ? this.product.image 
+                            : (this.product.image.url || '');
           if (imageUrl) {
             this.metaService.updateTag({ property: 'og:image', content: imageUrl });
           }
@@ -192,6 +196,16 @@ private inicializarSlickNativo() {
         this.renderer.appendChild(head, link);
       }
     });
+  }
+  getMiniaturas(): string[] {
+  if (!this.product || !this.product.galleryImages) return [];
+  
+  return this.product.galleryImages
+    .filter((img: any) => img !== this.activeImage) // Quita la que está en grande
+    .slice(0, 3); // Toma solo las primeras 3 que queden
+}
+  changeImage(url: any) {
+    this.activeImage = url;
   }
 
  addToCart(product: any) {
