@@ -1,5 +1,8 @@
-<div class="full-banner" 
-     [style.background-image]="heroBackgroundImage ? 'url(' + heroBackgroundImage + ')' : 'none'">
+<div class="full-banner banner-background-scanner" 
+     style="position: relative; background: url('/assets/img/tu-fondo-marmol.jpg') no-repeat center center / cover;">
+   @if (isBrowser) {
+    <app-food-scanner style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></app-food-scanner>
+  }
     <div class="container">
        <ngx-slick-carousel 
   #slickBanner

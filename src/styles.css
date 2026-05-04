@@ -69,3 +69,4 @@ textarea#checkout_billing_textarea::placeholder {
     scroll-margin-top: 180px !important; 
     scroll-behavior: smooth; /* Esto hace que el salto sea elegante y no brusco */
 }
+

@@ -1,0 +1,33 @@
+<div class="scanner-wrapper">
+
+  <!-- HAMBURGUESA (lado derecho visible) -->
+  <div class="after-image-container"
+       [style.clip-path]="'inset(0 ' + (100 - sliderOpacity) + '% 0 0)'">
+    <img src="assets/img/tofu-marmol.png"
+         class="food-image"
+         alt="Hamburguesa Gourmet">
+  </div>
+
+  <!-- TOFU (lado izquierdo visible) -->
+  <div class="before-image-container"
+       [style.clip-path]="'inset(0 0 0 ' + sliderOpacity + '%)'">
+    <img src="assets/img/hamburguesa-marmol.png"
+         class="food-image"
+         alt="Tofu Artesanal">
+  </div>
+
+  <!-- LÍNEA DEL SLIDER -->
+  <div class="scanner-line" [style.left.%]="sliderOpacity">
+    <div class="scanner-handle">
+      <span>&#10024;</span>
+    </div>
+  </div>
+
+  <!-- INPUT (CONTROL) -->
+  <input type="range"
+         min="0"
+         max="100"
+         [(ngModel)]="sliderOpacity"
+         class="scanner-input">
+
+</div>

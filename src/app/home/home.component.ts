@@ -21,6 +21,7 @@ import { Title, Meta, } from '@angular/platform-browser';
 import { NgZone } from '@angular/core';
 import { filter, take } from 'rxjs'
 import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
+import { FoodScannerComponent } from '../food-scanner/food-scanner.component';
 
 
 
@@ -42,7 +43,8 @@ import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
     SlickCarouselModule,
     FormsModule,
     RouterLink,
-    RouterModule
+    RouterModule,
+    FoodScannerComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
@@ -181,7 +183,7 @@ featureItems = [
     { name: 'Tofu Seco', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
     { name: 'Tofu Ahumado', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
     { name: 'Tofu en Hojas', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
-    { name: 'Tofu Rollo Ahumado', link: '#', quantity: 1, unit: 'Unidad', selectedQuantity: 1 }
+    { name: 'Rollo Ahumado', link: '#', quantity: 1, unit: 'Unidad', selectedQuantity: 1 }
   ];
 
   // --- Propiedades para el Reproductor de Video ---
