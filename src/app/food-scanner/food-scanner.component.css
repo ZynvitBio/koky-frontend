@@ -95,5 +95,9 @@
     object-fit: cover;
     object-position: center bottom; /* 🔥 CLAVE */
   }
+  .scanner-input {
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 }
