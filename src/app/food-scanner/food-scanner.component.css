@@ -62,7 +62,10 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   font-size: 18px;
 }
-
+.scanner-line,
+.scanner-handle {
+  pointer-events: none;
+}
 .scanner-input {
   position: absolute;
   top: 0;
@@ -72,6 +75,10 @@
   opacity: 0;
   cursor: ew-resize;
   z-index: 20;
+
+  -webkit-appearance: none; /* 🔥 aquí */
+  appearance: none;         /* 🔥 aquí */
+   touch-action: pan-x;       /* 🔥 y este también */
 }
 @media (max-width: 768px) {
     .scanner-wrapper {
