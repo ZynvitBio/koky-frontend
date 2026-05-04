@@ -45,7 +45,19 @@ introAnimation() {
 }
 
   onMouseMove(event: any) {
-    // Opcional: si quieres que se mueva solo con el mouse sin clic
-    // Pero el input range ya maneja el click/drag por defecto.
+  const rect = event.currentTarget.getBoundingClientRect();
+
+  let clientX;
+
+  if (event.touches && event.touches.length > 0) {
+    clientX = event.touches[0].clientX;
+  } else {
+    clientX = event.clientX;
   }
+
+  const position = clientX - rect.left;
+  const percentage = (position / rect.width) * 100;
+
+  this.sliderOpacity = Math.max(0, Math.min(100, percentage));
+}
 }

@@ -1,4 +1,6 @@
-<div class="scanner-wrapper">
+<div class="scanner-wrapper"  (mousemove)="onMouseMove($event)"
+     (touchmove)="onMouseMove($event)"
+     (touchstart)="onMouseMove($event)">
 
   <!-- HAMBURGUESA (lado derecho visible) -->
   <div class="after-image-container"
