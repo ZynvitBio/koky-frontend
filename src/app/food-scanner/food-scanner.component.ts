@@ -11,6 +11,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class FoodScannerComponent implements OnInit {
   sliderOpacity: number = 50;
+  isDragging = false;
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -45,6 +46,36 @@ introAnimation() {
 }
 
   onMouseMove(event: any) {
+  const rect = event.currentTarget.getBoundingClientRect();
+
+  let clientX;
+
+  if (event.touches && event.touches.length > 0) {
+    clientX = event.touches[0].clientX;
+  } else {
+    clientX = event.clientX;
+  }
+
+  const position = clientX - rect.left;
+  const percentage = (position / rect.width) * 100;
+
+  this.sliderOpacity = Math.max(0, Math.min(100, percentage));
+}
+startDrag(event: any) {
+  this.isDragging = true;
+  this.updateSlider(event);
+}
+
+onMove(event: any) {
+  if (!this.isDragging) return;
+  this.updateSlider(event);
+}
+
+stopDrag() {
+  this.isDragging = false;
+}
+
+updateSlider(event: any) {
   const rect = event.currentTarget.getBoundingClientRect();
 
   let clientX;
