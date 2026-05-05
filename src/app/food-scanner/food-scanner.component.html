@@ -1,8 +1,10 @@
-<div class="scanner-wrapper"  (mousemove)="onMouseMove($event)"
-     (touchmove)="onMouseMove($event)"
-     (touchstart)="onMouseMove($event)"
-      (touchstart)="startDrag($event)"
-     (touchmove)="onMove($event)"
+<div class="scanner-wrapper" 
+     (mousedown)="startDrag($event)" 
+     (mousemove)="onMove($event)" 
+     (mouseup)="stopDrag()" 
+     (mouseleave)="stopDrag()"
+     (touchstart)="startDrag($event)" 
+     (touchmove)="onMove($event)" 
      (touchend)="stopDrag()">
 
   <!-- HAMBURGUESA (lado derecho visible) -->

@@ -61,34 +61,34 @@ introAnimation() {
 
   this.sliderOpacity = Math.max(0, Math.min(100, percentage));
 }
+// 1. Cuando el usuario hace clic o toca la pantalla
 startDrag(event: any) {
   this.isDragging = true;
   this.updateSlider(event);
 }
 
+// 2. ÚNICA función de movimiento (Solo actúa si isDragging es true)
 onMove(event: any) {
-  if (!this.isDragging) return;
+  if (!this.isDragging) return; 
   this.updateSlider(event);
 }
 
+// 3. Cuando el usuario suelta o el mouse sale del área
 stopDrag() {
   this.isDragging = false;
 }
 
-updateSlider(event: any) {
-  const rect = event.currentTarget.getBoundingClientRect();
+// Función interna de cálculo para no repetir código
+private updateSlider(event: any) {
+  const container = event.currentTarget.closest('.scanner-wrapper');
+  if (!container) return;
 
-  let clientX;
-
-  if (event.touches && event.touches.length > 0) {
-    clientX = event.touches[0].clientX;
-  } else {
-    clientX = event.clientX;
-  }
-
+  const rect = container.getBoundingClientRect();
+  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
   const position = clientX - rect.left;
   const percentage = (position / rect.width) * 100;
 
   this.sliderOpacity = Math.max(0, Math.min(100, percentage));
+  this.cdr.detectChanges();
 }
 }
