@@ -390,20 +390,20 @@ ngAfterViewInit(): void {
   });
 
   // Activar autoplay manualmente en las instancias de slick
-  this.appRef.isStable.pipe(
-    filter((stable: boolean) => stable),
-    take(1)
-  ).subscribe(() => {
-    this.ngZone.runOutsideAngular(() => {
-      // Llama slickPlay() directamente en cada instancia
-      this.slickBanner?.slickPlay();
-      this.slickFeatures?.slickPlay();
-      this.slickProducts?.slickPlay();
-      this.slickPartners?.slickPlay();
-      this.testimonialImgCarousel?.slickPlay();
-      this.testimonialTextCarousel?.slickPlay();
-    });
+this.appRef.isStable.pipe(
+  filter((stable: boolean) => stable),
+  take(1)
+).subscribe(() => {
+  this.ngZone.runOutsideAngular(() => {
+    // Validamos que la referencia exista Y que el componente esté inicializado
+    if (this.slickBanner?.initialized) this.slickBanner.slickPlay();
+    if (this.slickFeatures?.initialized) this.slickFeatures.slickPlay();
+    if (this.slickProducts?.initialized) this.slickProducts.slickPlay();
+    if (this.slickPartners?.initialized) this.slickPartners.slickPlay();
+    if (this.testimonialImgCarousel?.initialized) this.testimonialImgCarousel.slickPlay();
+    if (this.testimonialTextCarousel?.initialized) this.testimonialTextCarousel.slickPlay();
   });
+});
 }
 
   // --- Métodos para el control de cantidad ---

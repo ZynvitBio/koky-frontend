@@ -110,7 +110,7 @@
         line-height: 1.1;
         margin-left: 16px;
         margin-right: auto;
-        text-transform: capitalize;
+        text-transform: none;
     }
 
     /*-------------------------------------------*/
@@ -356,7 +356,7 @@
         line-height: 1.1;
         margin-left: 16px;
         margin-right: auto;
-        text-transform: capitalize;
+        text-transform: none;
     }
 
     /*-------------------------------------------*/
@@ -603,7 +603,7 @@
         line-height: 1.1;
         margin-left: 16px;
         margin-right: auto;
-        text-transform: capitalize;
+        text-transform: none;
     }
 
     /*-------------------------------------------*/
@@ -851,7 +851,7 @@
         line-height: 1.1;
         margin-left: 16px;
         margin-right: auto;
-        text-transform: capitalize;
+        text-transform: none;
     }
 
     /*-------------------------------------------*/
@@ -1119,7 +1119,7 @@
             line-height: 1.1;
             margin-left: 16px;
             margin-right: auto;
-            text-transform: capitalize;
+            text-transform: none;
         }
 
         /*-------------------------------------------*/
@@ -1450,7 +1450,7 @@
             line-height: 1.1;
             margin-left: 16px;
             margin-right: auto;
-            text-transform: capitalize;
+            text-transform: none;
         }
 
         /*-------------------------------------------*/
@@ -1736,7 +1736,7 @@
             line-height: 1.1;
             margin-left: 16px;
             margin-right: auto;
-            text-transform: capitalize;
+            text-transform: none;
         }
 
         /*-------------------------------------------*/
@@ -2000,7 +2000,7 @@
             line-height: 1.1;
             margin-left: 16px;
             margin-right: auto;
-            text-transform: capitalize;
+            text-transform: none;
         }
 
         /*-------------------------------------------*/
@@ -2261,7 +2261,7 @@
             line-height: 1.1;
             margin-left: 16px;
             margin-right: auto;
-            text-transform: capitalize;
+            text-transform: none;
         }
 
         /*-------------------------------------------*/
