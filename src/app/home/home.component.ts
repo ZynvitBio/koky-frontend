@@ -229,17 +229,22 @@ featureItems = [
 
 mensajeActual: any;
 ngOnInit(): void {
-  // --- INICIALIZACIÓN BÁSICA ---
-
-
-  // --- EJECUCIÓN DE CARGAS ---
-  this.loadProducts();
-  this.loadRecipes();
-  this.loadAboutData();
+  // --- 1. CARGA CRÍTICA (Lo primero que ve el usuario) ---
+  // Cargamos el Hero de una vez para que no se vea el hueco en blanco
   this.loadHeroSlides();
   this.loadHeroBackground();
-  this.loadTestimonials();
-  this.loadSameDayOffer(); // ← Nueva integración
+
+  // --- 2. CARGA DIFERIDA (Para no bloquear el renderizado inicial) ---
+  // Le damos 100ms para que el navegador respire y luego pedimos el resto
+  setTimeout(() => {
+    this.loadRecipes();
+    this.loadProducts();
+    this.loadAboutData();
+    this.loadTestimonials();
+    this.loadSameDayOffer();
+    
+    console.log('🚀 Carga secundaria de datos iniciada...');
+  }, 100);
 }
 
 /**
@@ -290,7 +295,12 @@ private loadRecipes(): void {
       this.leftRecipes = recetas.filter(r => r.position === 'left');
       this.rightRecipes = recetas.filter(r => r.position === 'right');
       console.log('✅ Recetas cargadas:', recetas.length);
-      this.cdr.detectChanges();
+      
+      // Forzamos el refresco en el siguiente ciclo
+      setTimeout(() => {
+        this.cdr.markForCheck(); // Si usas OnPush
+        this.cdr.detectChanges(); // Si usas Default
+      }, 0);
     },
     error: (err) => console.error('❌ Error en Recetas:', err)
   });
