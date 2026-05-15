@@ -15,15 +15,20 @@ export class ComingSoonService {
    * Determina si el popup debe mostrarse basándose en la ruta limpia
    * e ignorando los parámetros de rastreo (UTM, fbclid, etc.)
    */
-  private shouldShow(): boolean {
+private shouldShow(): boolean {
     if (!isPlatformBrowser(this.platformId)) return false;
 
-    // window.location.pathname solo nos da "/home", ignorando los "?" de Instagram
-    const currentPath = window.location.pathname;
+    // 1. Limpiamos la ruta para ignorar "/" al final o parámetros
+    const currentPath = window.location.pathname.toLowerCase();
     const yaMostrado = sessionStorage.getItem(this.KEY) === 'true';
 
-    // Se muestra solo en Home o Raíz si no se ha cerrado en esta sesión
-    return (currentPath === '/home' || currentPath === '/') && !yaMostrado;
+    // 2. Usamos una validación más flexible
+    // Esto acepta: "/", "/home", "/home/", y "/home?fbclid=..."
+    const esHome = currentPath === '/' || 
+                   currentPath === '/home' || 
+                   currentPath.startsWith('/home/');
+
+    return esHome && !yaMostrado;
   }
 
   /**

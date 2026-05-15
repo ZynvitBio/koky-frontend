@@ -232,8 +232,9 @@ ngOnInit(): void {
   // 1. Verificación inicial de seguridad
   if (this.isBrowser) {
     // Como main.ts ya limpió la URL, solo nos aseguramos de que el servicio esté al día
+    setTimeout(() => {
     this.cs.revalidate();
-    
+  }, 100);
     // Si el popup debe verse, forzamos el renderizado inmediato para evitar parpadeos
     if (this.cs.visible()) {
       this.cdr.detectChanges();
