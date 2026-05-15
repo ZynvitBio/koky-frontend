@@ -229,13 +229,22 @@ featureItems = [
 
 mensajeActual: any;
 ngOnInit(): void {
-  // --- 1. CARGA CRÍTICA (Lo primero que ve el usuario) ---
-  // Cargamos el Hero de una vez para que no se vea el hueco en blanco
+  // 1. Verificación inicial de seguridad
+  if (this.isBrowser) {
+    // Como main.ts ya limpió la URL, solo nos aseguramos de que el servicio esté al día
+    this.cs.revalidate();
+    
+    // Si el popup debe verse, forzamos el renderizado inmediato para evitar parpadeos
+    if (this.cs.visible()) {
+      this.cdr.detectChanges();
+    }
+  }
+
+  // --- 2. CARGA CRÍTICA (Hero y visuales inmediatos) ---
   this.loadHeroSlides();
   this.loadHeroBackground();
 
-  // --- 2. CARGA DIFERIDA (Para no bloquear el renderizado inicial) ---
-  // Le damos 100ms para que el navegador respire y luego pedimos el resto
+  // --- 3. CARGA DIFERIDA (Para no bloquear el hilo principal) ---
   setTimeout(() => {
     this.loadRecipes();
     this.loadProducts();
@@ -243,7 +252,12 @@ ngOnInit(): void {
     this.loadTestimonials();
     this.loadSameDayOffer();
     
-    console.log('🚀 Carga secundaria de datos iniciada...');
+    // Una última comprobación de UI por si hubo cambios durante la carga
+    if (this.isBrowser && this.cs.visible()) {
+      this.cdr.detectChanges();
+    }
+    
+    console.log('🚀 Koky Food: Carga de datos completada.');
   }, 100);
 }
 
@@ -595,5 +609,10 @@ onTestimonialImgChange(event: any): void {
     this.testimonialTextCarousel?.slickPlay();
     this.isSyncing = false;
   }, 600); // mayor que speed:500
+}
+isHome(): boolean {
+  if (!this.isBrowser) return false;
+  // pathname NO contiene los parámetros de Instagram, por eso devolverá TRUE
+  return window.location.pathname === '/home' || window.location.pathname === '/';
 }
 }
