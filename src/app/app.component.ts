@@ -59,49 +59,49 @@ export class AppComponent implements OnInit {
   }
 
   onRegister(data: { name: string; whatsapp: string }) {
-    const registroData = {
-      username: data.name.trim(),
-      email:    `${data.whatsapp.replace(/\D/g, '')}@koky.food`,
-      password: `Koky${data.whatsapp.replace(/\D/g, '')}!`
-    };
+  const registroData = {
+    username: data.name.trim(),
+    email:    `${data.whatsapp.replace(/\D/g, '')}@koky.food`, // Coincide perfectamente con el Backend
+    password: `Koky${data.whatsapp.replace(/\D/g, '')}!`
+  };
 
-    Swal.fire({
-      title: 'Registrando...',
-      text: 'Un momento, estamos guardando tu cupo.',
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
-    });
+  Swal.fire({
+    title: 'Registrando...',
+    text: 'Un momento, estamos guardando tu cupo.',
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading()
+  });
 
-    this.authService.register(registroData).subscribe({
-      next: () => {
-        this.cs.close();
-        Swal.fire({
-          title: '¡Bienvenido al Club, Fundador!',
-          text: 'Kira te ha registrado con éxito.',
-          icon: 'success',
-          confirmButtonText: '<i class="icofont-whatsapp"></i> Hablar con Kira',
-          confirmButtonColor: '#25D366',
-          allowOutsideClick: true,
-          showCloseButton: true,
-          showDenyButton: true,
-          denyButtonText: 'Cerrar',
-          denyButtonColor: '#6c757d',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            const mensaje = `¡Hola! Soy ${data.name}. Acabo de registrarme como Miembro Fundador de Koky desde la web.🥦`;
-            window.open(`https://wa.me/573019447660?text=${encodeURIComponent(mensaje)}`, '_blank');
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error detallado:', err.error);
-        Swal.fire({
-          title: 'Registro Fallido',
-          text: 'Asegúrate de que tu nombre y WhatsApp no hayan sido registrados antes.',
-          icon: 'error',
-          confirmButtonColor: '#d33'
-        });
-      }
-    });
-  }
+  this.authService.register(registroData).subscribe({
+    next: () => {
+      this.cs.close();
+      Swal.fire({
+        title: '¡Bienvenido al Club, Fundador!',
+        text: 'Kira te ha registrado con éxito.',
+        icon: 'success',
+        confirmButtonText: '<i class="icofont-whatsapp"></i> Hablar con Kira',
+        confirmButtonColor: '#25D366',
+        allowOutsideClick: true,
+        showCloseButton: true,
+        showDenyButton: true,
+        denyButtonText: 'Cerrar',
+        denyButtonColor: '#6c757d',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // El mensaje incluye el string exacto que el backend interceptará como "vieneDeWeb"
+          const mensaje = `¡Hola! Soy ${data.name}. Acabo de registrarme como Miembro Fundador de Koky desde la web.🥦`;
+          window.open(`https://wa.me/573019447660?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error en el registro de producción:', err);
+      Swal.fire({
+        title: 'Error',
+        text: 'No pudimos procesar tu registro. Por favor, reintenta.',
+        icon: 'error'
+      });
+    }
+  });
+}
 }
