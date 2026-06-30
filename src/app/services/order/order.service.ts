@@ -29,6 +29,11 @@ export class OrderService {
       // AGREGAMOS ESTA LÍNEA (El motor que nos faltaba):
       payment_method: orderData.payment_method, 
       
+      shipping_address: orderData.shipping_address,
+      shipping_latitude: orderData.shipping_latitude,
+      shipping_longitude: orderData.shipping_longitude,
+      shipping_notes: orderData.shipping_notes,
+
       users_permissions_user: orderData.userId 
     }
   };

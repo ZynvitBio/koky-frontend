@@ -3,10 +3,16 @@
 @import "intl-tel-input/build/css/intlTelInput.css";
 #txtDireccion, 
 #checkout_state, 
-#chechout_name, 
+#checkout_name, 
 #checkout_phonenumber, 
 #checkout_email, 
-#checkout_billing_textarea { /* <--- Añadimos el ID del textarea aquí */
+#checkout_notes,
+#txtDireccion:focus, 
+#checkout_state:focus, 
+#checkout_name:focus, 
+#checkout_phonenumber:focus, 
+#checkout_email:focus, 
+#checkout_notes:focus {
     background-color: #ffffff !important;
     color: #000000 !important;
     opacity: 1 !important;
@@ -37,14 +43,13 @@ input#checkout_state[readonly] {
 .pac-item:hover {
     background-color: #f0f0f0;
 }
-textarea#checkout_billing_textarea::placeholder {
+textarea#checkout_notes::placeholder {
     color: #999999 !important;
 }
 
 /* Aseguramos que el foco (cuando haces clic) no cambie el color bruscamente */
-#checkout_billing_textarea:focus {
+#checkout_notes:focus {
     background-color: #ffffff !important;
-  
     outline: none;
     border-color: #80bdff !important;
 }
