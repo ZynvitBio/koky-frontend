@@ -11,6 +11,7 @@ export interface CartItem {
   slug: string;
   contentPerUnit: number; 
   unitAbbreviation: 'g' | 'kg' | 'und' | 'ml' | 'L';
+  availableToday?: boolean;
 }
 
 @Injectable({

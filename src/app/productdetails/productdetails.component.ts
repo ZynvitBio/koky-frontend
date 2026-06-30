@@ -225,7 +225,8 @@ private inicializarSlickNativo() {
     image: imageUrl, // <-- Usamos la URL limpia aquí
     slug: product.slug,
     contentPerUnit: product.contentPerUnit,
-    unitAbbreviation: product.unitAbbreviation
+    unitAbbreviation: product.unitAbbreviation,
+    availableToday: product.availableToday
   };
 
   this.cartService.addToCart(itemToCart);

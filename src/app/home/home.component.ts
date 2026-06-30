@@ -498,7 +498,8 @@ addToCart(product: any) {
     image: product.image, // <--- USA LO QUE YA VIENE EN EL OBJETO
     slug: product.slug,
     contentPerUnit: product.contentPerUnit,
-    unitAbbreviation: product.unitAbbreviation
+    unitAbbreviation: product.unitAbbreviation,
+    availableToday: product.availableToday
   };
 
   this.cartService.addToCart(itemToCart);
