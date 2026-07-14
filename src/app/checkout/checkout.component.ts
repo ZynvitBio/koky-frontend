@@ -7,6 +7,7 @@ import { OrderService } from '../services/order/order.service';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DeliveryService } from '../services/delivery/delivery.service';
+import { environment } from '../../environments/environment';
 
 declare var google: any;
 
@@ -299,7 +300,7 @@ export class CheckoutComponent implements OnInit {
       currency: 'COP',
       amountInCents: Math.round(orden.pago.total * 100),
       reference: `KOKY_${Date.now()}`,
-      publicKey: 'pub_test_kB5ENAJ1QA4hPWZYlcrehcyjFrhQyUdq',
+      publicKey: environment.wompiPublicKey,
     });
 
     checkout.open((result: any) => {
