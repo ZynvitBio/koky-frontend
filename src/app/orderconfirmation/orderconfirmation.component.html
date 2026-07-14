@@ -90,7 +90,18 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="chechout_btn text-right mt-3">
+                <div class="chechout_btn text-right mt-3 d-flex justify-content-end gap-2 align-items-center flex-wrap">
+                    @if (generatingInvoice && !invoicePdfUrl) {
+                        <span class="text-muted me-2" style="font-size: 0.9em;">
+                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true" style="width: 14px; height: 14px;"></span>
+                            Generando factura...
+                        </span>
+                    }
+                    @if (invoicePdfUrl) {
+                        <button (click)="downloadInvoice()" class="btn border-radius-0 btn-success">
+                            Descargar Factura PDF
+                        </button>
+                    }
                     <button (click)="printOrder()" class="btn border-radius-0 btn-dark">Imprimir Comprobante</button>
                 </div>
             </div>

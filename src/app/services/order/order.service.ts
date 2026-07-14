@@ -41,4 +41,8 @@ export class OrderService {
   console.log("🚀 PAYLOAD FINAL ENVIADO A STRAPI:", payload);
   return this.http.post(this.apiUrl, payload);
 }
+
+  getConfirmationDetails(reference: string): Observable<any> {
+    return this.http.get(`${this.STRAPI_URL}/api/orders/confirm/${reference}`);
+  }
 }

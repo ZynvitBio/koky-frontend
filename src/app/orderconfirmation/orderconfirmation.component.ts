@@ -1,6 +1,7 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { OrderService } from '../services/order/order.service';
 
 @Component({
   selector: 'app-orderconfirmation',
@@ -17,6 +18,10 @@ export class OrderconfirmationComponent implements OnInit {
   discount: number = 0;
   totalPaid: number = 0;
   orderReference: string = '';
+  invoicePdfUrl: string | null = null;
+  generatingInvoice = false;
+
+  private orderService = inject(OrderService);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
@@ -40,10 +45,49 @@ export class OrderconfirmationComponent implements OnInit {
           
           // 3. Usamos la referencia que generamos para Wompi
           this.orderReference = lastOrder.referencia || 'Pendiente';
+
+          // 4. Cargar URL de la factura
+          this.cargarFacturaUrl();
         } catch (error) {
           console.error("Error al procesar los datos de la orden:", error);
         }
       }
+    }
+  }
+
+  cargarFacturaUrl(retryCount = 0): void {
+    if (!this.orderReference || this.orderReference === 'Pendiente') return;
+
+    this.generatingInvoice = true;
+    this.orderService.getConfirmationDetails(this.orderReference).subscribe({
+      next: (res) => {
+        if (res.invoice_pdf_url) {
+          this.invoicePdfUrl = res.invoice_pdf_url;
+          this.generatingInvoice = false;
+        } else if (retryCount < 6) {
+          setTimeout(() => {
+            this.cargarFacturaUrl(retryCount + 1);
+          }, 3000);
+        } else {
+          this.generatingInvoice = false;
+        }
+      },
+      error: (err) => {
+        console.error("Error al obtener la factura:", err);
+        if (retryCount < 6) {
+          setTimeout(() => {
+            this.cargarFacturaUrl(retryCount + 1);
+          }, 3000);
+        } else {
+          this.generatingInvoice = false;
+        }
+      }
+    });
+  }
+
+  downloadInvoice() {
+    if (this.invoicePdfUrl && isPlatformBrowser(this.platformId)) {
+      window.open(this.invoicePdfUrl, '_blank');
     }
   }
 
