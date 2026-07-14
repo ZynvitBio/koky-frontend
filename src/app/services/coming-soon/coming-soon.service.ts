@@ -8,45 +8,28 @@ export class ComingSoonService {
   private router = inject(Router);
   private readonly KEY = 'koky_coming_soon_closed';
 
-  // El signal se inicializa con el valor calculado al arranque
-  visible = signal(this.shouldShow());
+  // El signal se inicializa en falso para desactivar el popup
+  visible = signal(false);
 
   /**
    * Determina si el popup debe mostrarse basándose en la ruta limpia
-   * e ignorando los parámetros de rastreo (UTM, fbclid, etc.)
    */
-private shouldShow(): boolean {
-    if (!isPlatformBrowser(this.platformId)) return false;
-
-    // 1. Limpiamos la ruta para ignorar "/" al final o parámetros
-    const currentPath = window.location.pathname.toLowerCase();
-    const yaMostrado = sessionStorage.getItem(this.KEY) === 'true';
-
-    // 2. Usamos una validación más flexible
-    // Esto acepta: "/", "/home", "/home/", y "/home?fbclid=..."
-    const esHome = currentPath === '/' || 
-                   currentPath === '/home' || 
-                   currentPath.startsWith('/home/');
-
-    return esHome && !yaMostrado;
+  private shouldShow(): boolean {
+    return false;
   }
 
   /**
-   * NUEVO: Fuerza al signal a actualizar su valor.
-   * Se debe llamar desde el HomeComponent después de limpiar la URL.
+   * Fuerza al signal a actualizar su valor.
    */
   revalidate() {
-    this.visible.set(this.shouldShow());
+    this.visible.set(false);
   }
 
   open() {
-    this.visible.set(true);
+    this.visible.set(false);
   }
 
   close() {
     this.visible.set(false);
-    if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem(this.KEY, 'true');
-    }
   }
 }
