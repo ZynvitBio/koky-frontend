@@ -76,7 +76,7 @@ testimonialTextItems: any[] = [];
 
 bannerSliderConfig = {
   infinite: true,
-autoplay: false,
+  autoplay: true,
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplaySpeed: 6000,
