@@ -506,16 +506,16 @@ addToCart(product: any) {
   this.notify.showSuccess(`¡${itemToCart.name} añadido!`, 'Sigue comprando');
 }
 setSeoData(): void {
-    const title = 'Comprar Tofu en Bogotá | Venta de Tofu Artesanal a Domicilio - Koky Food';
-    const description = '¿Dónde comprar tofu fresco en Bogotá? Venta de tofu artesanal 100% natural y proteína vegetal a domicilio. El mejor tofu al mejor precio de la ciudad. ¡Pide hoy antes de las 4 p.m.!';
-    const url = 'https://www.koky.food';
+    const title = 'Koky Food | Tofu Artesanal y Derivados de Soya Frescos';
+    const description = 'Disfruta el tofu más fresco de Bogotá, hecho diariamente. Tofu ahumado, firme, blando y nata de soya 100% natural y orgánica.';
+    const url = 'https://tu-dominio.com'; // Cambia por tu URL real
     const imageUrl = 'https://res.cloudinary.com/jonathan-barrios/image/upload/v1774915337/logo-seo.jpg';
 
     this.titleService.setTitle(title);
 
     this.metaService.addTags([
         { name: 'description', content: description },
-        { name: 'keywords', content: 'comprar tofu bogota, comprar tofu cerca de mi, venta de tofu bogota, tofu buen precio, tofu barato, comprar tofu artesanal, tofu bogota, tofu artesanal, comida vegana bogota, nata de soya, tofu ahumado' },
+        { name: 'keywords', content: 'tofu bogota, tofu artesanal, comida vegana bogota, nata de soya, tofu ahumado' },
         
         // Open Graph (Facebook, WhatsApp)
         { property: 'og:title', content: title },
