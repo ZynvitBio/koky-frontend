@@ -88,7 +88,7 @@ sliderConfig = {
   infinite: false,
   slidesToShow: 4,
   slidesToScroll: 1,
-autoplay: false,
+  autoplay: true,
   autoplaySpeed: 2000,
   arrows: false,
   dots: true,
@@ -133,7 +133,7 @@ autoplay: false,
 testimonialImgConfig = {
   speed: 500,
   arrows: false,
-autoplay: false,
+  autoplay: true,
   autoplaySpeed: 2000,
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -147,10 +147,10 @@ autoplay: false,
 };
 
 testimonialTextConfig = {
-  infinite: false,
+  infinite: true,
   slidesToShow: 1,
   slidesToScroll: 1,
-autoplay: false,
+  autoplay: true,
   autoplaySpeed: 2000,
   arrows: true,
   centerPadding: '0px',
@@ -168,7 +168,7 @@ autoplay: false,
 featureItems = [
   { iconClass: 'icofont icofont-cheese', title: 'Tofu Blando', slug: 'tofu-blando' },
   { iconClass: 'icofont icofont-bricks', title: 'Tofu Seco', slug: 'tofu-firme' },
-  { iconClass: 'icofont icofont-bbq', title: 'Tofu Ahumado', slug: 'tofu-seco-ahumado' },
+  { iconClass: 'icofont icofont-bbq', title: 'Tofu Ahumado', slug: 'tofu-firme-ahumado' },
   { iconClass: 'icofont icofont-wave', title: 'Tofu en Hojas', slug: 'tofu-hoja' },
   { iconClass: 'icofont icofont-sausage', title: 'Rollo Ahumado', slug: 'tofu-rollo-ahumado' },
   { iconClass: 'icofont icofont-popcorn', title: 'Tofu Frito', slug: 'tofu-frito' },
@@ -530,6 +530,15 @@ setSeoData(): void {
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl }
     ]);
+}
+navigateToProduct(slug: string, event: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  if (typeof window !== 'undefined') {
+    window.location.href = '/productdetails/' + slug;
+  }
 }
 handleBannerClick(url: string, event: Event): void {
    console.log('🔗 URL recibida:', JSON.stringify(url));

@@ -39,7 +39,7 @@
   class="row slider" 
   [config]="sliderConfig">
     <div ngxSlickItem *ngFor="let item of featureItems" class="col-xs-12 col-md-12 col-lg-12 col-xl-12 mb-4">
-      <div class="features-box text-center" [routerLink]="['/productdetails', item.slug]" style="cursor: pointer;">
+      <a [routerLink]="['/productdetails', item.slug]" (click)="navigateToProduct(item.slug, $event)" class="features-box text-center d-block text-decoration-none" style="cursor: pointer;">
         <div class="features-icon-border">
           <div class="features-icon">
             <i [class]="item.iconClass"></i>
@@ -48,7 +48,7 @@
         <div class="features-text">
           <h3>{{ item.title }}</h3>
         </div>
-      </div>
+      </a>
     </div>
 </ngx-slick-carousel>
     </div><div id="full-about" style="height: 35px; margin-top: -35px;"></div>
