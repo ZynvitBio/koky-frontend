@@ -126,4 +126,63 @@
     margin-right: 10px; /* Un poco de espacio con el precio nuevo */
 }
 
+/* --- SELLOS PROPIOS ESTÁTICOS A LA DERECHA (PASO 1 V4) --- */
+.hero-static-seals-right {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    z-index: 2;
+    pointer-events: none; /* No interfiere con la navegación del banner */
+}
+
+.hero-static-seals-right .static-seal-img {
+    width: 120px; /* Tamaño destacado y grande */
+    height: auto;
+    max-width: 160px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
+}
+
+/* Ajuste de escala específico para emparejar el sello de garantía */
+.hero-static-seals-right .static-seal-img.seal-garantia {
+    width: 145px;
+    max-width: 175px;
+}
+
+@media (max-width: 1199.98px) {
+    .hero-static-seals-right {
+        right: 2%;
+        gap: 14px;
+    }
+    .hero-static-seals-right .static-seal-img {
+        width: 95px;
+    }
+    .hero-static-seals-right .static-seal-img.seal-garantia {
+        width: 115px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .hero-static-seals-right {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        flex-direction: row;
+        justify-content: center;
+        margin: 45px 0 15px 0;
+    }
+    .hero-static-seals-right .static-seal-img {
+        width: 75px;
+    }
+    .hero-static-seals-right .static-seal-img.seal-garantia {
+        width: 90px;
+    }
+}
+
 

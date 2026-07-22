@@ -9,6 +9,8 @@ import { OrderconfirmationComponent} from './orderconfirmation/orderconfirmation
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { RefundPolicyComponent } from './refund-policy/refund-policy.component';
 import { WholesalePolicyComponent } from './wholesale-policy/wholesale-policy.component';
+import { ShippingPolicyComponent } from './shipping-policy/shipping-policy.component';
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 export const routes: Routes = [
   {
     path: 'home',
@@ -44,6 +46,13 @@ export const routes: Routes = [
     
   { path: 'ventas-al-mayor', 
     component: WholesalePolicyComponent },
+
+  { path: 'politica-envio', 
+    component: ShippingPolicyComponent },
+
+  { path: 'terminos-y-condiciones', 
+    component: TermsConditionsComponent },
+  { path: 'product/:slug', redirectTo: 'productdetails/:slug', pathMatch: 'full' },
   {
     path: '',
     redirectTo: 'home', 

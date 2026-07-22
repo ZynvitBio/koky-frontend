@@ -10,85 +10,104 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./food-scanner.component.css']
 })
 export class FoodScannerComponent implements OnInit {
-  sliderOpacity: number = 50;
+  sliderOpacity: number = 0; // Comienza al 100% hamburguesa visible
   isDragging = false;
+  private animFrameId: number | null = null;
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    // Breve animación de presentación
+    // Breve animación de presentación tras cargar
     setTimeout(() => {
       this.introAnimation();
-    }, 800);
+    }, 600);
   }
 
-introAnimation() {
-  const start = 50;
-  const end = 80;
-  const duration = 3600;
-  const startTime = performance.now();
-
-  const animate = (currentTime: number) => {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    const ease = progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-    this.sliderOpacity = start + (end - start) * ease;
-
-    if (progress < 1) {
-      requestAnimationFrame(animate);
+  introAnimation() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
     }
-  };
+    const start = 0;   // 100% hamburguesa
+    const end = 50;    // 50% hamburguesa / 50% tofu
+    const duration = 1800; // 1.8s recorrido suave
+    const startTime = performance.now();
 
-  requestAnimationFrame(animate);
-}
+    const animate = (currentTime: number) => {
+      if (this.isDragging) return;
+
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Curva suave de frenado (easeOutCubic)
+      const ease = 1 - Math.pow(1 - progress, 3);
+
+      this.sliderOpacity = start + (end - start) * ease;
+      this.cdr.detectChanges();
+
+      if (progress < 1) {
+        this.animFrameId = requestAnimationFrame(animate);
+      } else {
+        this.animFrameId = null;
+      }
+    };
+
+    this.animFrameId = requestAnimationFrame(animate);
+  }
 
   onMouseMove(event: any) {
-  const rect = event.currentTarget.getBoundingClientRect();
+    const rect = event.currentTarget.getBoundingClientRect();
 
-  let clientX;
+    let clientX;
 
-  if (event.touches && event.touches.length > 0) {
-    clientX = event.touches[0].clientX;
-  } else {
-    clientX = event.clientX;
+    if (event.touches && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+    } else {
+      clientX = event.clientX;
+    }
+
+    const position = clientX - rect.left;
+    const percentage = (position / rect.width) * 100;
+
+    this.sliderOpacity = Math.max(0, Math.min(100, percentage));
   }
 
-  const position = clientX - rect.left;
-  const percentage = (position / rect.width) * 100;
+  // 1. Cuando el usuario hace clic o toca la pantalla
+  startDrag(event: any) {
+    this.cancelIntroAnimation();
+    this.isDragging = true;
+    this.updateSlider(event);
+  }
 
-  this.sliderOpacity = Math.max(0, Math.min(100, percentage));
-}
-// 1. Cuando el usuario hace clic o toca la pantalla
-startDrag(event: any) {
-  this.isDragging = true;
-  this.updateSlider(event);
-}
+  // 2. ÚNICA función de movimiento (Solo actúa si isDragging es true)
+  onMove(event: any) {
+    if (!this.isDragging) return; 
+    this.cancelIntroAnimation();
+    this.updateSlider(event);
+  }
 
-// 2. ÚNICA función de movimiento (Solo actúa si isDragging es true)
-onMove(event: any) {
-  if (!this.isDragging) return; 
-  this.updateSlider(event);
-}
+  // 3. Cuando el usuario suelta o el mouse sale del área
+  stopDrag() {
+    this.isDragging = false;
+  }
 
-// 3. Cuando el usuario suelta o el mouse sale del área
-stopDrag() {
-  this.isDragging = false;
-}
+  private cancelIntroAnimation() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+  }
 
-// Función interna de cálculo para no repetir código
-private updateSlider(event: any) {
-  const container = event.currentTarget.closest('.scanner-wrapper');
-  if (!container) return;
+  // Función interna de cálculo para no repetir código
+  private updateSlider(event: any) {
+    const container = event.currentTarget.closest('.scanner-wrapper');
+    if (!container) return;
 
-  const rect = container.getBoundingClientRect();
-  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-  const position = clientX - rect.left;
-  const percentage = (position / rect.width) * 100;
+    const rect = container.getBoundingClientRect();
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const position = clientX - rect.left;
+    const percentage = (position / rect.width) * 100;
 
-  this.sliderOpacity = Math.max(0, Math.min(100, percentage));
-  this.cdr.detectChanges();
-}
+    this.sliderOpacity = Math.max(0, Math.min(100, percentage));
+    this.cdr.detectChanges();
+  }
 }

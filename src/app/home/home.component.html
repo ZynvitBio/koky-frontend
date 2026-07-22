@@ -5,25 +5,31 @@
   }
     <div class="container">
        <ngx-slick-carousel 
-  #slickBanner
-  *ngIf="isBrowser && bannerSliderConfig && bannerSlides && bannerSlides.length > 0" 
-  class="row banner-slider" 
-  [config]="bannerSliderConfig">
-    <div ngxSlickItem *ngFor="let slide of bannerSlides" class="col-md-12">
-      <div class="banner-content">
-        <h1>{{ slide?.h1Prefix }} <span>{{ slide?.h1HighlightedText }}</span> {{ slide?.h1_suffix }}</h1>
-        <h3>{{ slide?.subtitle }}</h3>
-        <p>{{ slide?.description }}</p>
-     <a (click)="handleBannerClick(slide?.linkUrl || '', $event)" 
-   [href]="(slide?.linkUrl || '').startsWith('trigger:') ? null : (slide?.linkUrl || '#')"
-   class="btn" 
-   style="cursor: pointer;">
-   {{ slide?.linkText }} <i class="icofont-bubble-right"></i>
-</a>
-      </div>
+          #slickBanner
+          *ngIf="isBrowser && bannerSliderConfig && bannerSlides && bannerSlides.length > 0" 
+          class="row banner-slider" 
+          [config]="bannerSliderConfig">
+          <div ngxSlickItem *ngFor="let slide of bannerSlides" class="col-md-12">
+            <div class="banner-content">
+              <h1>{{ slide?.h1Prefix }} <span>{{ slide?.h1HighlightedText }}</span> {{ slide?.h1_suffix }}</h1>
+              <h3>{{ slide?.subtitle }}</h3>
+              <p>{{ slide?.description }}</p>
+              <a (click)="handleBannerClick(slide?.linkUrl || '', $event)" 
+                 [href]="(slide?.linkUrl || '').startsWith('trigger:') ? null : (slide?.linkUrl || '#')"
+                 class="btn" 
+                 style="cursor: pointer;">
+                 {{ slide?.linkText }} <i class="icofont-bubble-right"></i>
+              </a>
+            </div>
+          </div>
+       </ngx-slick-carousel>
     </div>
-</ngx-slick-carousel>
 
+    <!-- SELLOS PROPIOS ESTÁTICOS A LA DERECHA (FUERA DEL CARRUSEL DINÁMICO) -->
+    <div class="hero-static-seals-right">
+      <img src="/assets/img/artesanal.png" alt="Sello 100% Artesanal" class="static-seal-img" />
+      <img src="/assets/img/fresco.png" alt="Sello Elaborado Hoy" class="static-seal-img" />
+      <img src="/assets/img/garantia.png" alt="Sello Garantía de Frescura" class="static-seal-img seal-garantia" />
     </div>
 </div>
 <!-- BANNER PART END -->
