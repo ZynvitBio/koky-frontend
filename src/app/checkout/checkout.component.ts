@@ -323,7 +323,9 @@ export class CheckoutComponent implements OnInit {
     };
 
     if (signatureHex) {
-      checkoutConfig.signature = signatureHex;
+      checkoutConfig.signature = {
+        integrity: signatureHex
+      };
       console.log('✅ Checkout de Wompi configurado con firma de integridad.');
     } else {
       console.warn('⚠️ Abriendo checkout de Wompi sin firma de integridad (no configurada o falló).');
