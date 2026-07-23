@@ -45,4 +45,12 @@ export class OrderService {
   getConfirmationDetails(reference: string): Observable<any> {
     return this.http.get(`${this.STRAPI_URL}/api/orders/confirm/${reference}`);
   }
+
+  getWompiSignature(reference: string, amountInCents: number, currency: string): Observable<any> {
+    return this.http.post(`${this.STRAPI_URL}/api/orders/wompi-signature`, {
+      reference,
+      amountInCents,
+      currency
+    });
+  }
 }

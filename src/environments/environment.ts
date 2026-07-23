@@ -2,5 +2,6 @@ export const environment = {
   production: true,
   googleMapsApiKey: 'AIzaSyAGbY15elfHQR1Q8AmTQ9A7Tt_lo5ZvLPs',
   apiUrl: 'https://koky-backend-production.up.railway.app',
-  wompiPublicKey: 'pub_prod_fiQqn8TiiKqVLDEsmrL5LD2LSiau8xmz'
+  wompiPublicKey: 'pub_prod_fiQqn8TiiKqVLDEsmrL5LD2LSiau8xmz',
+  wompiIntegrityKey: '' // Pegar la Llave de integridad aquí
 };

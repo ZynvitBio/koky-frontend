@@ -296,12 +296,40 @@ export class CheckoutComponent implements OnInit {
   private abrirCheckoutWompi(orden: any) {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const checkout = new (window as any).WidgetCheckout({
-      currency: 'COP',
-      amountInCents: Math.round(orden.pago.total * 100),
-      reference: `KOKY_${Date.now()}`,
-      publicKey: environment.wompiPublicKey,
+    const referencia = `KOKY_${Date.now()}`;
+    const total = orden.pago.total;
+    const amountInCents = Math.round(total * 100);
+
+    // Solicitamos la firma de integridad de forma segura a nuestro backend en Railway
+    this.orderService.getWompiSignature(referencia, amountInCents, 'COP').subscribe({
+      next: (res: any) => {
+        const signatureHex = res.signature;
+        this.iniciarWompiWidget(orden, referencia, amountInCents, signatureHex);
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener la firma de Wompi desde el backend:', err);
+        // Si hay un error, abrimos Wompi sin firma (como fallback)
+        this.iniciarWompiWidget(orden, referencia, amountInCents, '');
+      }
     });
+  }
+
+  private iniciarWompiWidget(orden: any, referencia: string, amountInCents: number, signatureHex: string) {
+    const checkoutConfig: any = {
+      currency: 'COP',
+      amountInCents: amountInCents,
+      reference: referencia,
+      publicKey: environment.wompiPublicKey,
+    };
+
+    if (signatureHex) {
+      checkoutConfig.signature = signatureHex;
+      console.log('✅ Checkout de Wompi configurado con firma de integridad.');
+    } else {
+      console.warn('⚠️ Abriendo checkout de Wompi sin firma de integridad (no configurada o falló).');
+    }
+
+    const checkout = new (window as any).WidgetCheckout(checkoutConfig);
 
     checkout.open((result: any) => {
       const transaction = result.transaction;
