@@ -2,6 +2,7 @@ import { Component, OnInit, PLATFORM_ID, Inject, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OrderService } from '../services/order/order.service';
+import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 
 @Component({
   selector: 'app-orderconfirmation',
@@ -11,6 +12,10 @@ import { OrderService } from '../services/order/order.service';
   styleUrl: './orderconfirmation.component.css'
 })
 export class OrderconfirmationComponent implements OnInit {
+  getDeliveryDayName(): string {
+    return getEstimatedDeliveryDayName(new Date());
+  }
+
   // Variables para mostrar en el resumen de Koky
   purchasedItems: any[] = [];
   subtotal: number = 0;

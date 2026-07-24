@@ -22,6 +22,8 @@ import { NgZone } from '@angular/core';
 import { filter, take } from 'rxjs'
 import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
 import { FoodScannerComponent } from '../food-scanner/food-scanner.component';
+import { getDynamicAnnouncementText } from '../utils/delivery-helper';
+
 
 
 
@@ -71,7 +73,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     rightRecipes: Recipe[] = [];
     isBrowser = false;
     testimonialImageItems: any[] = [];
-testimonialTextItems: any[] = [];
+    testimonialTextItems: any[] = [];
+    googleReviews: any[] = []; // 👈 Guarda las reseñas reales de Google Maps
+    showDeliveryModal = false; // Controla la visibilidad del modal de delivery
+    dynamicDeliveryText = ''; // Guarda el texto dinámico calculado de envíos
+
   
 
 bannerSliderConfig = {
@@ -229,7 +235,9 @@ featureItems = [
 
 mensajeActual: any;
 ngOnInit(): void {
+  this.dynamicDeliveryText = getDynamicAnnouncementText();
   // 1. Verificación inicial de seguridad
+
   if (this.isBrowser) {
     // Como main.ts ya limpió la URL, solo nos aseguramos de que el servicio esté al día
     setTimeout(() => {
@@ -250,7 +258,7 @@ ngOnInit(): void {
     this.loadRecipes();
     this.loadProducts();
     this.loadAboutData();
-    this.loadTestimonials();
+    this.loadGoogleReviews(); // 👈 Reemplaza carga de testimonios viejos por reviews de Google
     this.loadSameDayOffer();
     
     // Una última comprobación de UI por si hubo cambios durante la carga
@@ -429,6 +437,51 @@ this.appRef.isStable.pipe(
     if (this.testimonialTextCarousel?.initialized) this.testimonialTextCarousel.slickPlay();
   });
 });
+
+  // Observador de scroll para animaciones en la sección "¿Cómo Funciona?"
+  // Usamos un retraso de 500ms para asegurar que la hidratación de Angular haya finalizado
+  // y estemos observando el elemento DOM real y definitivo en el navegador.
+  setTimeout(() => {
+    this.ngZone.runOutsideAngular(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const section = document.querySelector('.how-it-works-section');
+            if (section) {
+              section.classList.add('animate-in');
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15 // Umbral original que funcionaba bien
+      });
+
+      const targetElement = document.querySelector('.how-it-works-section');
+      if (targetElement) {
+        observer.observe(targetElement);
+      }
+    });
+  }, 500);
+
+  // Auto-despliegue del modal de delivery en la carga inicial (una vez por sesión)
+  if (typeof window !== 'undefined') {
+    const shown = sessionStorage.getItem('koky_delivery_modal_shown');
+    if (shown !== 'true') {
+      setTimeout(() => {
+        this.openDeliveryModal();
+        sessionStorage.setItem('koky_delivery_modal_shown', 'true');
+      }, 1500); // 1.5 segundos de retardo tras la carga inicial
+    }
+  }
+}
+
+openDeliveryModal() {
+  this.showDeliveryModal = true;
+}
+
+closeDeliveryModal() {
+  this.showDeliveryModal = false;
 }
 
   // --- Métodos para el control de cantidad ---
@@ -600,6 +653,19 @@ private loadTestimonials(): void {
       }
     },
     error: (err) => console.error('Error cargando testimonios:', err)
+  });
+}
+private loadGoogleReviews(): void {
+  this.aboutService.getGoogleReviews().subscribe({
+    next: (data: any[]) => {
+      // Filtrar destacados y limitar a un máximo de 4
+      this.googleReviews = data
+        .filter(r => r.featured !== false)
+        .slice(0, 4);
+      console.log('✅ GOOGLE REVIEWS CARGADAS:', this.googleReviews);
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error('❌ Error cargando Google Reviews:', err)
   });
 }
 onTestimonialTextChange(event: any): void {

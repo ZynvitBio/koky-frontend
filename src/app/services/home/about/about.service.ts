@@ -74,4 +74,30 @@ getTestimonials(): Observable<any> {
     })
   );
 }
+
+private googleReviewsUrl = `${this.STRAPI_URL}/api/google-reviews`;
+
+getGoogleReviews(): Observable<any> {
+  return this.http.get(`${this.googleReviewsUrl}`).pipe(
+    map((res: any) => {
+      if (res && res.data) {
+        return res.data.map((item: any) => {
+          const attrs = item.attributes || item;
+          return {
+            id: item.id,
+            documentId: item.documentId,
+            author: attrs.author,
+            comment: attrs.comment,
+            rating: attrs.rating || 5,
+            relative_time: attrs.relative_time || 'Hace unos días',
+            avatar_color: attrs.avatar_color || '#EA4335',
+            avatar_initials: attrs.avatar_initials || 'SA',
+            featured: attrs.featured !== false
+          };
+        });
+      }
+      return [];
+    })
+  );
+}
 }

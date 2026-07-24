@@ -962,8 +962,13 @@ button:hover {
     background-position: bottom center;
     background-size: cover;
     background-repeat: no-repeat;
-    z-index: 1;
+    z-index: 5; /* Sube el z-index del banner completo */
     margin-bottom: 100px;
+}
+
+.contact-now .container {
+    position: relative;
+    z-index: 2; /* Mantiene el texto y el botón por encima de las hojas */
 }
 
 .contact-now::before {
@@ -977,7 +982,7 @@ button:hover {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    z-index: -1;
+    z-index: 1; /* Cambiado de -1 a 1 para flotar sobre las secciones vecinas */
 }
 
 .contact-now::after {
@@ -991,7 +996,7 @@ button:hover {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    z-index: -1;
+    z-index: 1; /* Cambiado de -1 a 1 para flotar sobre las secciones vecinas */
 }
 
 .contact-quote {

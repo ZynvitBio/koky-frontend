@@ -60,7 +60,9 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  font-size: 18px;
+  font-size: 15px; /* Ajustado para que las puntas de flecha quepan perfecto */
+  color: #2c5e3b;  /* Verde de la marca Koky */
+  font-weight: bold;
 }
 .scanner-line,
 .scanner-handle {

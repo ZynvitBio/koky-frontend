@@ -75,3 +75,30 @@ textarea#checkout_notes::placeholder {
     scroll-behavior: smooth; /* Esto hace que el salto sea elegante y no brusco */
 }
 
+/* ==========================================================================
+   FORZAR VISIBILIDAD DE HOJAS FLOTANTES EN BANNER DE CONTACTO (CONTACT NOW)
+   ========================================================================== */
+.contact-now {
+    position: relative !important;
+    z-index: 10 !important;
+    overflow: visible !important;
+}
+
+.contact-now .container {
+    position: relative !important;
+    z-index: 20 !important;
+}
+
+.contact-now::before,
+.contact-now::after {
+    z-index: 5 !important;
+    pointer-events: none; /* Evita interferencia con clics */
+}
+
+/* Forzamos a las secciones vecinas (opiniones y recetas) a quedar por debajo */
+.google-reviews-section,
+.full-latest-news {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
