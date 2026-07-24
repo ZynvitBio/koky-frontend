@@ -168,6 +168,9 @@
 }
 
 @media (max-width: 991.98px) {
+    .how-it-works-section {
+        background-attachment: scroll;
+    }
     .hero-static-seals-right {
         position: relative;
         right: auto;
