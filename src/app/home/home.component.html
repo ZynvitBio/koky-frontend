@@ -11,6 +11,10 @@
           [config]="bannerSliderConfig">
           <div ngxSlickItem *ngFor="let slide of bannerSlides" class="col-md-12">
             <div class="banner-content">
+              <div class="hero-trust-badge">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span class="rating-text">4.9/5 | +500 clientes felices</span>
+              </div>
               <h1>{{ slide?.h1Prefix }} <span>{{ slide?.h1HighlightedText }}</span> {{ slide?.h1_suffix }}</h1>
               <h3>{{ slide?.subtitle }}</h3>
               <p>{{ slide?.description }}</p>
@@ -34,32 +38,92 @@
 </div>
 <!-- BANNER PART END -->
 
-<!-- FEATURES PART START -->
-<div class="full-features">
+<!-- HOW IT WORKS PART START -->
+<div class="how-it-works-section">
     <div class="container">
-        <!-- El div con la clase 'row slider' se convierte en ngx-slick-carousel.
-             Mantenemos las clases 'row' y 'slider' para preservar tus estilos. -->
-    <ngx-slick-carousel 
-  #slickFeatures
-  *ngIf="isBrowser && sliderConfig"
-  class="row slider" 
-  [config]="sliderConfig">
-    <div ngxSlickItem *ngFor="let item of featureItems" class="col-xs-12 col-md-12 col-lg-12 col-xl-12 mb-4">
-      <a [routerLink]="['/productdetails', item.slug]" (click)="navigateToProduct(item.slug, $event)" class="features-box text-center d-block text-decoration-none" style="cursor: pointer;">
-        <div class="features-icon-border">
-          <div class="features-icon">
-            <i [class]="item.iconClass"></i>
-          </div>
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h3 class="section-title">¿Cómo Funciona Nuestro Tofu bajo Pedido?</h3>
+                <p class="section-subtitle">Elaboramos a mano cada noche para garantizar la máxima frescura en tu mesa</p>
+            </div>
         </div>
-        <div class="features-text">
-          <h3>{{ item.title }}</h3>
+
+        <div class="row mt-3 justify-content-center">
+            <!-- Step 1 -->
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div class="step-card">
+                    <div class="step-number-badge">1</div>
+                    <div class="step-icon-wrapper">
+                        <img src="assets/img/koky_phone.jpg" alt="Paso 1: Ordena en la Web" class="step-icon-img" />
+                    </div>
+                    <h4>1. Haz tu Orden</h4>
+                    <p>Puedes pedir 24/7 (web o WhatsApp). Si ordenas antes de las 4:00 PM, tu pedido entra a producción esa misma noche.</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div class="step-card">
+                    <div class="step-number-badge">2</div>
+                    <div class="step-icon-wrapper">
+                        <img src="assets/img/koky_moon.jpg" alt="Paso 2: Producción Nocturna" class="step-icon-img" />
+                    </div>
+                    <h4>2. Producción Nocturna</h4>
+                    <p>Elaboramos tu tofu a mano durante la noche bajo pedido. Así garantizamos un producto fresco y libre de conservantes.</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div class="step-card" (click)="openDeliveryModal()" style="cursor: pointer;">
+                    <div class="step-number-badge">3</div>
+                    <div class="step-icon-wrapper">
+                        <img src="assets/img/koky_deli.png" alt="Paso 3: Entrega a Domicilio" class="step-icon-img" />
+                    </div>
+                    <h4>3. Entrega a Domicilio</h4>
+                    <p>Recibe tu pedido al día siguiente en Bogotá. Haz clic aquí para ver cobertura, tarifas y horarios de entrega.</p>
+                    <span style="font-size: 13px; color: #2c5e3b; font-weight: 700; margin-top: auto; display: flex; align-items: center; gap: 4px;">
+                        Ver más detalles ↗
+                    </span>
+                </div>
+            </div>
         </div>
-      </a>
     </div>
-</ngx-slick-carousel>
-    </div><div id="full-about" style="height: 35px; margin-top: -35px;"></div>
+
+    <!-- MODAL DE DETALLES DE DELIVERY (POPOP DELI) -->
+    <div class="delivery-modal-overlay" *ngIf="showDeliveryModal" (click)="closeDeliveryModal()">
+        <div class="delivery-modal-content" (click)="$event.stopPropagation()">
+            <button class="close-btn" (click)="closeDeliveryModal()">&times;</button>
+            <div class="modal-body-wrapper">
+                <div class="modal-left-text">
+                    <h3>Políticas de Delivery</h3>
+                    <div class="highlight-text">
+                        <i class="icofont-truck-loaded"></i> {{ dynamicDeliveryText }}
+                    </div>
+                    <ul class="delivery-features">
+                        <li>
+                            <i class="icofont-clock-time"></i>
+                            <strong>Recibimos pedidos 24/7.</strong> Preparación artesanal nocturna. Tu orden entra a producción la misma noche si compras antes de las <strong>4:00 PM</strong>.
+                        </li>
+                        <li>
+                            <i class="icofont-delivery-time"></i>
+                            <strong>Envío al día siguiente.</strong> Entregas a domicilio de <strong>martes a viernes</strong> directo a tu puerta para conservar la frescura de tu tofu.
+                        </li>
+                        <li>
+                            <i class="icofont-location-pin"></i>
+                            <strong>Logística en Bogotá.</strong> Despachos programados con mensajería propia y cadena de frío para que tu pedido llegue en condiciones óptimas.
+                        </li>
+                    </ul>
+                    <button class="modal-action-btn" (click)="closeDeliveryModal()">Entendido, ¡quiero ordenar!</button>
+                </div>
+                <div class="modal-right-spacer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="full-about" style="height: 35px; margin-top: -35px;"></div>
 </div>
-<!-- FEATURES PART END -->
+<!-- HOW IT WORKS PART END -->
 <div class="about-wrapper" style="min-height: 400px; display: block; clear: both;"> 
   <div
     class="about-background"
@@ -164,10 +228,11 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
 <!-- BEST SELLER PART END -->
 
 <!-- OFFER PART START -->
-<div  class="post_category">
 <div class="full-offer">
     <div class="bg-1"></div>
     <div class="bg-2"></div>
@@ -192,6 +257,7 @@
 </div>
 <!-- OFFER PART END -->
 <!-- PARTNERS PART START -->
+<div class="container mt-5">
 <div   class="row">
     <div id="productos" class="col-md-6">
         <ul class="list-group">
@@ -232,50 +298,100 @@
         </video>
     </div>
 </div>
+</div>
 <!-- PARTNERS PART END -->
-<!-- TESTIMONIAL PART START -->
- <br>
-<br>
-<div class="full-testimonial" id="full-testimonial">
-    <div class="container">
+<!-- GOOGLE REVIEWS PART START -->
+<div class="google-reviews-section" id="full-testimonial">
+    <div class="container" *ngIf="googleReviews && googleReviews.length > 0">
         <div class="row">
-            <div class="col-12 text-center">
-                <h3 class="section-title">Nuestros Clientes Felices</h3>
-                <p class="section-subtitle">Descubre las opiniones de quienes ya disfrutan de nuestros productos.</p>
+            <div class="col-12 text-center mb-5">
+                <div class="google-badge-wrapper">
+                    <!-- SVG oficial del logotipo G de Google para optimización -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px" style="vertical-align: middle; margin-right: 6px;">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.5 24c0-1.61-.15-3.16-.42-4.69H24v9.07h12.75c-.53 2.87-2.14 5.31-4.57 6.95l7.1 5.5C43.43 36.19 46.5 30.65 46.5 24z"/>
+                        <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.1-5.5c-1.97 1.32-4.5 2.11-7.29 2.11-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    <span class="google-rating-text">⭐ 4.9 / 5.0 en Google Maps</span>
+                </div>
+                <h3 class="section-title mt-3">Opiniones de Nuestros Clientes</h3>
+                <p class="section-subtitle">Valoraciones reales escritas por clientes en nuestro perfil de Google Business</p>
             </div>
         </div>
 
-        <div class="form-row align-items-center mt-5">
-            <div class="col-md-4">
-              <ngx-slick-carousel 
-  #slickModalTestimonialImg
-  *ngIf="isBrowser && testimonialImgConfig"
-  class="testimonial-img text-center" 
-  [config]="testimonialImgConfig"
-   (beforeChange)="onTestimonialImgChange($event)">
-    <div ngxSlickItem *ngFor="let img of testimonialImageItems" class="img">
-      <img class="w-100" [src]="img.src" [alt]="img.alt">
-    </div>
-</ngx-slick-carousel>
+        <div class="row">
+            <!-- Cuadrícula responsiva fija de 4 tarjetas -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4" *ngFor="let review of googleReviews">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar-initials" [style.background-color]="review.avatar_color">
+                            {{ review.avatar_initials }}
+                        </div>
+                        <div class="reviewer-meta">
+                            <h4 class="reviewer-name">{{ review.author }}</h4>
+                            <span class="review-date">{{ review.relative_time }}</span>
+                        </div>
+                        <!-- Logotipo G de Google discreto en la esquina -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16px" height="16px" class="google-g-icon">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.5 24c0-1.61-.15-3.16-.42-4.69H24v9.07h12.75c-.53 2.87-2.14 5.31-4.57 6.95l7.1 5.5C43.43 36.19 46.5 30.65 46.5 24z"/>
+                            <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.1-5.5c-1.97 1.32-4.5 2.11-7.29 2.11-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                    </div>
+                    <div class="stars-row">
+                        <!-- Estrellas de reseña (5 estrellas) -->
+                        <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
+                    </div>
+                    <p class="review-text">"{{ review.comment }}"</p>
+                </div>
             </div>
-            <div class="col-md-8">
-               <ngx-slick-carousel 
-  #slickModalTestimonialText
-  *ngIf="isBrowser && testimonialTextConfig"
-  class="testimonial-text" 
-  [config]="testimonialTextConfig"
-  (beforeChange)="onTestimonialTextChange($event)">
-    <div ngxSlickItem *ngFor="let text of testimonialTextItems" class="testimonial-info">
-      <p>" {{ text.quote }}</p>
-      <h3>{{ text.author }}</h3>
-      <h4>{{ text.role }}</h4>
-    </div>
-</ngx-slick-carousel>
+        </div>
+
+        <!-- Botón para ver más opiniones en Google Maps -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="https://www.google.com/maps/place/Koky+Food/@4.6489055,-74.4374946,10z/data=!3m1!4b1!4m6!3m5!1s0x3dd2e8723585077:0xda956c749b4050ed!8m2!3d4.6482976!4d-74.107807!16s%2Fg%2F11nr68gk9f?entry=ttu&g_ep=EgoyMDI2MDcyMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn-view-more-google">
+                    Ver más opiniones en Google Maps ↗
+                </a>
             </div>
         </div>
     </div>
 </div>
-<!-- TESTIMONIAL PART END -->
+<!-- GOOGLE REVIEWS PART END -->
+
+<style>
+.contact-now {
+  position: relative !important;
+  z-index: 10 !important;
+  overflow: visible !important;
+}
+.contact-now .container {
+  position: relative !important;
+  z-index: 20 !important;
+}
+.contact-now::before {
+  z-index: 5 !important;
+  pointer-events: none !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
+.contact-now::after {
+  z-index: 5 !important;
+  pointer-events: none !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
+.google-reviews-section {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.full-latest-news {
+  position: relative !important;
+  z-index: 1 !important;
+}
+</style>
 
 <!-- CONTACT NOW PART END -->
 <div class="contact-now">
@@ -352,4 +468,3 @@
             </div>
         </div>
     </div>
-</div>
