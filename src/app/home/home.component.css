@@ -703,6 +703,9 @@
 @media (max-width: 991.98px) {
   .how-it-works-section {
     background-attachment: scroll !important;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/assets/img/tofu-patron.png') !important;
+    background-size: cover !important;
+    background-position: center center !important;
   }
 }
 
