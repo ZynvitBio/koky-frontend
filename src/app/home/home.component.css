@@ -710,3 +710,145 @@
   }
 }
 
+/* --- Same Day Order Card Glassmorphism --- */
+.same-day-order-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.same-day-order-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.same-day-order-card .card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.same-day-list {
+  background: transparent !important;
+}
+
+.same-day-list .list-group-item {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.same-day-list .list-group-item:last-child {
+  border-bottom: none !important;
+}
+
+.same-day-list .tofu-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.same-day-order-card .quantity-control {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: inline-flex;
+  align-items: center;
+}
+
+.same-day-order-card .quantity-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 2px 12px;
+  line-height: 1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.same-day-order-card .quantity-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+}
+
+.same-day-order-card .quantity-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.same-day-order-card .quantity-input {
+  width: 48px;
+  height: 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Remueve los spinners de número nativos */
+.same-day-order-card .quantity-input::-webkit-outer-spin-button,
+.same-day-order-card .quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.same-day-order-card .quantity-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.same-day-order-card .unit-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.same-day-btn {
+  background: #2c5e3b;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 6px 20px rgba(44, 94, 59, 0.3);
+  cursor: pointer;
+}
+
+.same-day-btn:hover {
+  background: #397a4d;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(57, 122, 77, 0.45);
+  color: #ffffff;
+}
+
+.same-day-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 991.98px) {
+  .same-day-order-card {
+    padding: 20px;
+    margin-top: 15px;
+  }
+}
+

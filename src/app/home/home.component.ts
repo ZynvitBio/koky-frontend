@@ -527,6 +527,13 @@ closeDeliveryModal() {
     }
   }
 
+  scrollToOrderCard() {
+    const element = document.getElementById('productos-same-day');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
   // --- Método para el reproductor de video ---
   onVideoEnded(event: Event) {
     const videoElement = event.target as HTMLVideoElement;

@@ -232,74 +232,51 @@
 </div>
 <!-- BEST SELLER PART END -->
 
-<!-- OFFER PART START -->
+    <!-- OFFER PART START -->
 <div class="full-offer">
     <div class="bg-1"></div>
     <div class="bg-2"></div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
+        <div class="row align-items-center">
+            <!-- Lado Izquierdo: Contenido de la oferta -->
+            <div class="col-lg-6 col-md-12">
                 <div class="offer-content">
-                    <!-- Contenido dinámico para la oferta de entrega el mismo día -->
                     <h3>{{ sameDayProduct.name }}</h3>
                     <h2>{{ sameDayProduct.quantity }} {{ sameDayProduct.unit }}<br> {{ sameDayProduct.deliveryMessage }}</h2>
-                    <a (click)="handleBannerClick(sameDayProduct.linkUrl || '', $event)" 
-   [href]="(sameDayProduct.linkUrl || '').startsWith('#') ? 'javascript:void(0)' : (sameDayProduct.linkUrl || '#')"
-   class="btn"
-   style="cursor: pointer;">
-    {{ sameDayProduct.linkText }} 
-    <i class="icofont-bubble-right"></i>
-</a>
+                    <!-- Botón de scroll o llamada a la acción en móvil -->
+                    <a (click)="scrollToOrderCard()" class="btn d-lg-none mt-3" style="cursor: pointer;">
+                        VER DISPONIBLES AHORA <i class="icofont-bubble-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Lado Derecho: Tarjeta de pedido con glassmorphism -->
+            <div id="productos-same-day" class="col-lg-6 col-md-12 mt-4 mt-lg-0">
+                <div class="same-day-order-card">
+                    <h4 class="card-title">Selecciona tu pedido</h4>
+                    <ul class="list-group same-day-list">
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0 px-0" *ngFor="let tofuType of tofuTypesList">
+                            <!-- Lado Izquierdo: Nombre del producto -->
+                            <span class="tofu-name text-white">{{ tofuType.name }}</span>
+
+                            <!-- Lado Derecho: Controles de cantidad -->
+                            <div class="d-flex align-items-center">
+                                <div class="quantity-control d-flex align-items-center">
+                                    <button class="btn btn-sm quantity-btn text-white" [disabled]="tofuType.quantity === 0" (click)="decrementQuantity(tofuType, $event)">-</button>
+                                    <input type="number" [(ngModel)]="tofuType.selectedQuantity" [disabled]="tofuType.quantity === 0" (change)="onQuantityChange(tofuType)"
+                                           [min]="0" [max]="tofuType.quantity" class="form-control form-control-sm quantity-input text-center text-white bg-transparent border-0">
+                                    <button class="btn btn-sm quantity-btn text-white" [disabled]="tofuType.quantity === 0" (click)="incrementQuantity(tofuType, $event)">+</button>
+                                </div>
+                                <span class="unit-text ml-2 text-white">{{ tofuType.unit }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="btn w-100 same-day-btn mt-3" (click)="placeOrder()">Ordenar Seleccionados</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- OFFER PART END -->
-<!-- PARTNERS PART START -->
-<div class="container mt-5">
-<div   class="row">
-    <div id="productos" class="col-md-6">
-        <ul class="list-group">
-            <!-- Usamos *ngFor para iterar sobre el array 'tofuTypesList' del componente TS -->
-            <li class="list-group-item list_icon" *ngFor="let tofuType of tofuTypesList">
-                <!-- Contenedor principal para alinear elementos a izquierda y derecha -->
-                <div class="d-flex flex-wrap justify-content-between align-items-center w-100 tofu-row">
-                    <!-- Lado Izquierdo: Nombre del producto -->
-                    <a [href]="tofuType.link" class="text-decoration-none text-dark d-flex align-items-center">
-                       
-                        {{ tofuType.name }}
-                    </a>
-
-                    <!-- Lado Derecho: Selector de Cantidad Interactivo y su Unidad -->
-                    <div class="d-flex align-items-center">
-                        <!-- Control de cantidad con botones de +/- y input -->
-                        <div class="quantity-control d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary quantity-btn" [disabled]="tofuType.quantity === 0" (click)="decrementQuantity(tofuType, $event)">-</button>
-                            <!-- El input ahora muestra la cantidad seleccionada, que se inicializa con la cantidad disponible -->
-                            <input type="number" [(ngModel)]="tofuType.selectedQuantity" [disabled]="tofuType.quantity === 0" (change)="onQuantityChange(tofuType)"
-                                   [min]="0" [max]="tofuType.quantity" class="form-control form-control-sm quantity-input text-center">
-                            <button class="btn btn-sm btn-outline-secondary quantity-btn" [disabled]="tofuType.quantity === 0" (click)="incrementQuantity(tofuType, $event)">+</button>
-                        </div>
-                        <span class="unit-text ml-1">{{ tofuType.unit }}</span> <!-- Texto de la unidad con clase nueva -->
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <!-- Botón para ordenar, del mismo tamaño que las opciones y responsivo -->
-        <button class="btn  mt-3 w-100 order-button" (click)="placeOrder()">Ordenar Seleccionados</button>
-    </div>
-    <div class="col-md-6 mt-4"> <!-- ¡Clase mt-4 añadida aquí para margen superior! -->
-        <!-- Reproductor de Video -->
-        <!-- ¡CORREGIDO: Ahora pasamos el objeto $event completo al método! -->
-        <video #videoPlayer [src]="currentVideoUrl" (ended)="onVideoEnded($event)"
-               autoplay muted class="w-100 img-fluid" style="border-radius: 8px;">
-            Tu navegador no soporta la etiqueta de video.
-        </video>
-    </div>
-</div>
-</div>
-<!-- PARTNERS PART END -->
 <!-- GOOGLE REVIEWS PART START -->
 <div class="google-reviews-section" id="full-testimonial">
     <div class="container" *ngIf="googleReviews && googleReviews.length > 0">
