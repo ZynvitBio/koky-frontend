@@ -275,11 +275,11 @@
                     <div class="d-flex align-items-center">
                         <!-- Control de cantidad con botones de +/- y input -->
                         <div class="quantity-control d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary quantity-btn" (click)="decrementQuantity(tofuType, $event)">-</button>
+                            <button class="btn btn-sm btn-outline-secondary quantity-btn" [disabled]="tofuType.quantity === 0" (click)="decrementQuantity(tofuType, $event)">-</button>
                             <!-- El input ahora muestra la cantidad seleccionada, que se inicializa con la cantidad disponible -->
-                            <input type="number" [(ngModel)]="tofuType.selectedQuantity" (change)="onQuantityChange(tofuType)"
-                                   [min]="1" [max]="tofuType.quantity" class="form-control form-control-sm quantity-input text-center">
-                            <button class="btn btn-sm btn-outline-secondary quantity-btn" (click)="incrementQuantity(tofuType, $event)">+</button>
+                            <input type="number" [(ngModel)]="tofuType.selectedQuantity" [disabled]="tofuType.quantity === 0" (change)="onQuantityChange(tofuType)"
+                                   [min]="0" [max]="tofuType.quantity" class="form-control form-control-sm quantity-input text-center">
+                            <button class="btn btn-sm btn-outline-secondary quantity-btn" [disabled]="tofuType.quantity === 0" (click)="incrementQuantity(tofuType, $event)">+</button>
                         </div>
                         <span class="unit-text ml-1">{{ tofuType.unit }}</span> <!-- Texto de la unidad con clase nueva -->
                     </div>

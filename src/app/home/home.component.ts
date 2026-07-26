@@ -185,11 +185,11 @@ featureItems = [
 
 
   tofuTypesList = [
-    { name: 'Tofu Blando', link: '#', quantity: 340, unit: 'G', selectedQuantity: 340 },
-    { name: 'Tofu Seco', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
-    { name: 'Tofu Ahumado', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
-    { name: 'Tofu en Hojas', link: '#', quantity: 500, unit: 'G', selectedQuantity: 500 },
-    { name: 'Rollo Ahumado', link: '#', quantity: 1, unit: 'Unidad', selectedQuantity: 1 }
+    { name: 'Tofu Semiduro', link: '#', quantity: 0, unit: 'G', selectedQuantity: 0 },
+    { name: 'Tofu Seco', link: '#', quantity: 0, unit: 'G', selectedQuantity: 0 },
+    { name: 'Tofu Ahumado', link: '#', quantity: 0, unit: 'G', selectedQuantity: 0 },
+    { name: 'Tofu en Hojas', link: '#', quantity: 0, unit: 'G', selectedQuantity: 0 },
+    { name: 'Rollo Ahumado', link: '#', quantity: 0, unit: 'Unidad', selectedQuantity: 0 }
   ];
 
   // --- Propiedades para el Reproductor de Video ---
