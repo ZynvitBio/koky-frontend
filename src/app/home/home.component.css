@@ -680,6 +680,7 @@
 /* Responsivo para móviles */
 @media (max-width: 767px) {
   .delivery-modal-content {
+    background-image: url('/assets/img/pop_up.jpg');
     background-position: center;
     height: auto;
     max-height: 85vh;
