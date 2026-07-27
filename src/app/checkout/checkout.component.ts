@@ -300,16 +300,49 @@ export class CheckoutComponent implements OnInit {
     const total = orden.pago.total;
     const amountInCents = Math.round(total * 100);
 
-    // Solicitamos la firma de integridad de forma segura a nuestro backend en Railway
-    this.orderService.getWompiSignature(referencia, amountInCents, 'COP').subscribe({
-      next: (res: any) => {
-        const signatureHex = res.signature;
-        this.iniciarWompiWidget(orden, referencia, amountInCents, signatureHex);
+    const inputNombre = document.getElementById(
+      'checkout_name',
+    ) as HTMLInputElement;
+    const nombreParaStrapi = inputNombre
+      ? inputNombre.value.trim()
+      : 'Jonathan Barrios';
+
+    const orderData = {
+      whatsapp_id: String(orden.cliente.telefono),
+      customer_name: nombreParaStrapi,
+      total_amount: Number(orden.pago.total),
+      wompi_reference: String(referencia), // ✅ Guardamos la referencia correcta
+      source: String(this.detectedSource || 'whatsapp'),
+      items: orden.productos,
+      payment_method: 'PENDING', // Empieza como pendiente
+      shipping_address: String(orden.cliente.direccion),
+      shipping_latitude: Number(this.destinoLat),
+      shipping_longitude: Number(this.destinoLng),
+      shipping_notes: String(orden.cliente.notes),
+    };
+
+    console.log('🚀 Pre-creando orden en Strapi:', orderData);
+
+    this.orderService.createOrder(orderData).subscribe({
+      next: (orderRes: any) => {
+        console.log('✅ Orden pre-creada con éxito en Strapi:', orderRes);
+        // Solicitamos la firma de integridad de forma segura a nuestro backend en Railway
+        this.orderService.getWompiSignature(referencia, amountInCents, 'COP').subscribe({
+          next: (res: any) => {
+            const signatureHex = res.signature;
+            this.iniciarWompiWidget(orden, referencia, amountInCents, signatureHex);
+          },
+          error: (err) => {
+            console.error('❌ Error al obtener la firma de Wompi desde el backend:', err);
+            // Si hay un error, abrimos Wompi sin firma (como fallback)
+            this.iniciarWompiWidget(orden, referencia, amountInCents, '');
+          }
+        });
       },
       error: (err) => {
-        console.error('❌ Error al obtener la firma de Wompi desde el backend:', err);
-        // Si hay un error, abrimos Wompi sin firma (como fallback)
-        this.iniciarWompiWidget(orden, referencia, amountInCents, '');
+        console.error('❌ Error al pre-crear la orden en Strapi:', err);
+        alert('Tuvimos un inconveniente al procesar tu pedido en el servidor. Por favor, intenta de nuevo en unos minutos.');
+        this.procesandoOrden = false;
       }
     });
   }
@@ -340,60 +373,17 @@ export class CheckoutComponent implements OnInit {
         console.log('--- EVENTO WOMPI APPROVED ---', {
           id: transaction.id,
           status: transaction.status,
-          orderSaved: this.orderSaved,
         });
 
-        if (this.orderSaved) {
-          console.warn('⚠️ Se bloqueó una llamada duplicada de Wompi.');
-          return;
-        }
-        this.orderSaved = true;
-        console.log('🚀 Enviando petición de creación de orden a Strapi...');
+        // Guardamos la información en localStorage para la vista de confirmación
+        localStorage.setItem('last_koky_order', JSON.stringify({
+          productos: orden.productos,
+          pago: orden.pago,
+          referencia: String(referencia)
+        }));
 
-        const inputNombre = document.getElementById(
-          'checkout_name',
-        ) as HTMLInputElement;
-        const nombreParaStrapi = inputNombre
-          ? inputNombre.value.trim()
-          : 'Jonathan Barrios';
-
-        const metodoFinal = String(
-          transaction.paymentMethodType || 'CARDX',
-        ).trim();
-
-        const orderData = {
-          whatsapp_id: String(orden.cliente.telefono),
-          customer_name: nombreParaStrapi,
-          total_amount: Number(orden.pago.total),
-          wompi_reference: String(transaction.id),
-          source: String(this.detectedSource || 'whatsapp'),
-          items: orden.productos,
-          payment_method: metodoFinal,
-          shipping_address: String(orden.cliente.direccion),
-          shipping_latitude: Number(this.destinoLat),
-          shipping_longitude: Number(this.destinoLng),
-          shipping_notes: String(orden.cliente.notas),
-        };
-
-        this.orderService.createOrder(orderData).subscribe({
-          next: (res) => {
-            console.log('¡Orden Guardada!', res);
-            
-            // Guardamos la información en localStorage para la vista de confirmación
-            localStorage.setItem('last_koky_order', JSON.stringify({
-              productos: orden.productos,
-              pago: orden.pago,
-              referencia: String(transaction.id)
-            }));
-
-            this.cartService.clearCart();
-            this.router.navigate(['/orderconfirmation']);
-          },
-          error: (err) => {
-            console.error('Error al guardar:', err);
-            this.router.navigate(['/orderconfirmation']);
-          },
-        });
+        this.cartService.clearCart();
+        this.router.navigate(['/orderconfirmation']);
       } else {
         // Permitimos volver a intentar si el pago fue rechazado o cerrado
         this.procesandoOrden = false;
