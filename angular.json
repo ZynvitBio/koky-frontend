@@ -23,11 +23,9 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              {
-                "glob": "**/*",
-                "input": "public",
-                "output": "/"
-              }
+              "src/robots.txt",
+              "src/sitemap.xml",
+              "src/llms.txt"
             ],
             "styles": [
               "src/assets/css/bootstrap.min.css",
