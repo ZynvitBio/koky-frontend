@@ -24,6 +24,24 @@ const commonEngine = new CommonEngine();
  * ```
  */
 
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile('sitemap.xml', { root: browserDistFolder });
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile('robots.txt', { root: browserDistFolder });
+});
+
+app.get('/llms.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile('llms.txt', { root: browserDistFolder });
+});
+
 /**
  * Serve static files from /browser
  */
@@ -33,24 +51,6 @@ app.use(
     index: false
   }),
 );
-
-app.get('/sitemap.xml', (req, res) => {
-  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile(join(browserDistFolder, 'sitemap.xml'));
-});
-
-app.get('/robots.txt', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile(join(browserDistFolder, 'robots.txt'));
-});
-
-app.get('/llms.txt', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile(join(browserDistFolder, 'llms.txt'));
-});
 
 /**
  * Handle all other requests by rendering the Angular application.
