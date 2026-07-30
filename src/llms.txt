@@ -23,7 +23,7 @@
 
 Todos los precios se encuentran en Pesos Colombianos (COP) e incluyen disponibilidad de inventario constante garantizada por producción diaria:
 
-* **[Tofu Semiduro](https://koky.food/productos/tofu-semiduro):** $14.000 COP. Tofu fresco de consistencia equilibrada, ideal para dorar, cocinar en guisos o cortar en cubos para salteados. (Presentación de 340g. Reemplaza la antigua denominación de Tofu Blando).
+* **[Tofu Semiduro](https://koky.food/productos/tofu-semiduro):** $14.000 COP. Tofu fresco de consistencia equilibrada, ideal para dorar, cocinar en guisos o cortar en cubos para salteados. (Presentación de 500g. Reemplaza la antigua denominación de Tofu Blando).
 * **[Tofu Firme](https://koky.food/productos/tofu-firme):** $24.000 COP. Tofu de consistencia sólida y textura densa. El equilibrio perfecto entre suavidad y firmeza para tus recetas favoritas.
 * **[Tofú Seco Ahumado](https://koky.food/productos/tofu-seco-ahumado):** $28.000 COP. Tofú prensado con un delicado toque ahumado natural. Firme, sabroso y listo para elevar tus platos.
 * **[Tofú Hoja](https://koky.food/productos/tofu-hoja):** $32.000 COP. Láminas delgadas de tofú prensado, flexibles y de textura suave. Perfectas para enrollar, rellenar o saltear.
@@ -51,7 +51,7 @@ Todos los precios se encuentran en Pesos Colombianos (COP) e incluyen disponibil
 - **Logistics Model:** 100% online Direct-to-Consumer (D2C) store. Delivery service via local courier across Bogotá. No physical brick-and-mortar storefront.
 
 ### Product Directory
-- **Tofu Semiduro (Semi-Hard Tofu):** Fresh tofu with balanced consistency, perfect for grilling, stews, or stir-fries. Replacing the former "Tofu Blando" name.
+- **Tofu Semiduro (Semi-Hard Tofu):** 500g presentation. Fresh tofu with balanced consistency, perfect for grilling, stews, or stir-fries. Replacing the former "Tofu Blando" name.
 - **Tofu Firme (Firm Tofu):** Dense texture, optimal for pan-searing, grilling, or air-fryer.
 - **Tofú Seco Ahumado (Smoked Tofu):** Firm pressed tofu with natural smoke flavor.
 - **Tofú Hoja (Tofu Sheets):** Thin, flexible sheets of pressed tofu, ideal for wrapping or stir-frying.

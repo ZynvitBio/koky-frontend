@@ -138,22 +138,274 @@
       },
       {
         "@type": "Product",
-        "@id": "https://koky.food/#product-tofu",
-        "name": "Tofu Artesanal Koky Food",
+        "@id": "https://koky.food/#product-tofu-semiduro",
+        "name": "Tofu Semiduro Artesanal 500g",
         "image": "https://koky.food/assets/img/og-image.jpg",
-        "description": "Tofu artesanal fresco de soya en Bogotá, elaborado diariamente bajo pedido por el productor directo. Disponibilidad de inventario 100% garantizada para entrega al día siguiente.",
+        "description": "Tofu fresco de consistencia equilibrada 500g en Bogotá. Ideal para dorar, cocinar en guisos o cortar en cubos para salteados.",
         "brand": {
           "@type": "Brand",
           "name": "Koky Food"
         },
         "offers": {
           "@type": "Offer",
-          "url": "https://koky.food/",
-          "price": "24000",
+          "url": "https://koky.food/productdetails/tofu-semiduro",
+          "price": "14000",
           "priceCurrency": "COP",
           "availability": "https://schema.org/InStock",
           "seller": {
             "@id": "https://koky.food/#store"
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "CO",
+              "addressRegion": "Bogotá"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-tofu-firme",
+        "name": "Tofu Firme Artesanal 500g",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Tofu de consistencia sólida y textura densa. El equilibrio perfecto entre suavidad y firmeza en Bogotá.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/tofu-firme",
+          "price": "24000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-tofu-seco-ahumado",
+        "name": "Tofú Seco Ahumado",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Tofú prensado con un delicado toque ahumado natural. Firme, sabroso y listo para elevar tus platos.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/tofu-seco-ahumado",
+          "price": "28000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-tofu-hoja",
+        "name": "Tofú Hoja",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Láminas delgadas de tofú prensado, flexibles y de textura suave. Perfectas para enrollar, rellenar o saltear.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/tofu-hoja",
+          "price": "32000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-tofu-rollo-ahumado",
+        "name": "Tofú Rollo Ahumado",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Rollo de tofú artesanal, intensamente ahumado y marinado con especias seleccionadas.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/tofu-rollo-ahumado",
+          "price": "35000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-tofu-frito",
+        "name": "Tofú Frito",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Bloques de tofú fritos artesanalmente hasta lograr una capa exterior dorada y un interior suave.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/tofu-frito",
+          "price": "32000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-leche-de-soya",
+        "name": "Leche de Soya Natural",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Bebida vegetal de soya 100% natural, fresca y cremosa. Sin conservantes ni azúcar añadida.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/leche-de-soya",
+          "price": "7000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://koky.food/#product-nata-de-soya",
+        "name": "Nata de Soya",
+        "image": "https://koky.food/assets/img/og-image.jpg",
+        "description": "Delicadas láminas de nata de soya formadas naturalmente. Textura sedosa y sabor sutil.",
+        "brand": { "@type": "Brand", "name": "Koky Food" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://koky.food/productdetails/nata-de-soya",
+          "price": "29000",
+          "priceCurrency": "COP",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://koky.food/#store" },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO", "addressRegion": "Bogotá" },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+              "transitTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "CO",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 1,
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnLink": "https://koky.food/refund-policy"
           }
         }
       }

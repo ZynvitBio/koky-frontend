@@ -35,14 +35,20 @@ app.use(
 );
 
 app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(join(browserDistFolder, 'sitemap.xml'));
 });
 
 app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(join(browserDistFolder, 'robots.txt'));
 });
 
 app.get('/llms.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(join(browserDistFolder, 'llms.txt'));
 });
 
