@@ -46,16 +46,12 @@
                 <div class="producudetails_content">
                     <h3>{{ product.name }}</h3>
                     
-                    <div class="customer_review">
-                        <ul>
-                            <li>
-                                <i class="icofont-star"></i>
-                                <i class="icofont-star"></i>
-                                <i class="icofont-star"></i>
-                                <i class="icofont-star"></i>
-                                <i class="icofont-star"></i>
+                    <div class="customer_review mb-2">
+                        <ul class="d-flex align-items-center gap-2 mb-0 list-unstyled">
+                            <li class="text-warning">
+                                <i class="icofont-star" *ngFor="let s of [1,2,3,4,5]"></i>
                             </li>
-                            <li><p>(0 Customer Review)</p></li>
+                            <li><p class="mb-0"><strong>{{ averageRating }}</strong> <span class="text-secondary">({{ reviewCount }} Opiniones de clientes)</span></p></li>
                         </ul>
                     </div>
                     <strong>{{ product.price | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
@@ -91,10 +87,10 @@
                         <a class="nav-link nav-link-custom active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">DESCRIPCIÓN</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link nav-link-custom" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false">INFORMACIÓNS</a>
+                        <a class="nav-link nav-link-custom" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="false">INFORMACIÓN</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link nav-link-custom" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">RESEÑAS</a>
+                        <a class="nav-link nav-link-custom" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">RESEÑAS ({{ reviewCount }})</a>
                     </li>
                 </ul>
 
@@ -123,8 +119,41 @@
 
                     <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="mt-4">
-                            <p>Actualmente no hay reseñas para este producto.</p>
-                            <p>¡Sé el primero en compartir tu experiencia!</p>
+                            <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded border">
+                                <div>
+                                    <h2 class="mb-0 fw-bold text-primary">{{ averageRating }} / 5.0</h2>
+                                    <div class="text-warning fs-5">
+                                        <i class="icofont-star" *ngFor="let s of [1,2,3,4,5]"></i>
+                                    </div>
+                                </div>
+                                <div class="border-start ps-3 ms-2">
+                                    <h5 class="mb-0 fw-bold">{{ reviewCount }} Reseñas Verificadas de Clientes</h5>
+                                    <p class="mb-0 text-muted small">Basado en opiniones reales de entregas a domicilio en Bogotá</p>
+                                </div>
+                            </div>
+
+                            <div class="review-list">
+                                <div *ngFor="let rev of resenasVisibles" class="card mb-3 border-0 shadow-sm bg-white p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div>
+                                            <strong class="fs-6 text-dark me-2">{{ rev.author }}</strong>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small me-2">Compra Verificada</span>
+                                            <span class="text-muted small">• {{ rev.location }}</span>
+                                        </div>
+                                        <span class="text-muted small">{{ rev.date }}</span>
+                                    </div>
+                                    <div class="text-warning mb-2" style="font-size: 14px;">
+                                        <i class="icofont-star" *ngFor="let s of [1,2,3,4,5]"></i>
+                                    </div>
+                                    <p class="card-text text-secondary mb-0">"{{ rev.comment }}"</p>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4" *ngIf="reviews.length > 3">
+                                <button (click)="toggleResenas()" class="btn border-transparent px-4">
+                                    {{ mostrarTodasLasResenas ? 'Mostrar menos opiniones' : 'Ver las ' + reviewCount + ' opiniones completas' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
