@@ -21,9 +21,11 @@ app.get('/sitemap.xml', (req, res) => {
   if (existsSync(targetPath)) {
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    return;
   }
   res.status(404).send('sitemap.xml not found');
+  return;
 });
 
 app.get('/robots.txt', (req, res) => {
@@ -33,9 +35,11 @@ app.get('/robots.txt', (req, res) => {
   if (existsSync(targetPath)) {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    return;
   }
   res.status(404).send('robots.txt not found');
+  return;
 });
 
 app.get('/llms.txt', (req, res) => {
@@ -45,9 +49,11 @@ app.get('/llms.txt', (req, res) => {
   if (existsSync(targetPath)) {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    res.status(200).send(readFileSync(targetPath, 'utf-8'));
+    return;
   }
   res.status(404).send('llms.txt not found');
+  return;
 });
 
 /**
