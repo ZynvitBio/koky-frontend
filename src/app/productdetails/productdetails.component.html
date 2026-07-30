@@ -119,15 +119,16 @@
 
                     <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="mt-4">
-                            <div class="d-flex align-items-center mb-4 p-3 bg-light rounded border flex-wrap">
-                                <div class="pe-4 me-3 border-end text-center" style="min-width: 140px; border-right: 2px solid #e2e8f0 !important; padding-right: 20px;">
-                                    <h2 class="mb-0 fw-bold text-primary" style="font-size: 2rem; line-height: 1.2;">{{ averageRating }} <span class="fs-6 text-muted fw-normal" style="font-size: 1rem;">/ 5.0</span></h2>
-                                    <div class="text-warning mt-1" style="font-size: 14px;">
+                            <div class="d-flex align-items-center mb-4 p-4 bg-light rounded border flex-wrap">
+                                <div class="text-center" style="min-width: 150px; border-right: 2px solid #cbd5e1; padding-right: 30px; margin-right: 30px;">
+                                    <h2 class="mb-0 fw-bold text-primary" style="font-size: 2.2rem; line-height: 1; display: inline-block;">{{ averageRating }}</h2>
+                                    <span class="text-muted fw-normal ms-1" style="font-size: 1.1rem;">/ 5.0</span>
+                                    <div class="text-warning mt-2" style="font-size: 15px;">
                                         <i class="icofont-star" *ngFor="let s of [1,2,3,4,5]"></i>
                                     </div>
                                 </div>
-                                <div class="pt-2 pt-sm-0 ms-2">
-                                    <h5 class="mb-1 fw-bold text-dark" style="font-size: 1.15rem;">{{ reviewCount }} Reseñas Verificadas de Clientes</h5>
+                                <div class="py-2">
+                                    <h5 class="mb-1 fw-bold text-dark" style="font-size: 1.2rem;">{{ reviewCount }} Reseñas Verificadas de Clientes</h5>
                                     <p class="mb-0 text-muted small">Basado en opiniones reales de entregas a domicilio en Bogotá</p>
                                 </div>
                             </div>

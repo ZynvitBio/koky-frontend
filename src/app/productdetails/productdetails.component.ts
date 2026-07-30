@@ -169,7 +169,8 @@ ngAfterViewChecked(): void {
         count: 6,
         items: [
           { author: 'Juan David B.', location: 'Rosales', rating: 5, date: 'hace 2 días', comment: 'Increíbles láminas para hacer enrollados rellenos o salteados estilo asiático auténtico.' },
-          { author: 'Marcela K.', location: 'Salitre', rating: 4, date: 'hace 6 días', comment: 'Textura sedosa pero elástica. Difícil de conseguir en Bogotá hasta que los encontré a ustedes.' }
+          { author: 'Marcela K.', location: 'Salitre', rating: 4, date: 'hace 6 días', comment: 'Textura sedosa pero elástica. Difícil de conseguir en Bogotá hasta que los encontré a ustedes.' },
+          { author: 'Alejandra M.', location: 'Chicó', rating: 5, date: 'hace 1 semana', comment: 'Me encantó para preparar rollitos al vapor con verduras. Quedan firmes y no se rompen.' }
         ]
       },
       'tofu-rollo-ahumado': {
@@ -177,7 +178,8 @@ ngAfterViewChecked(): void {
         count: 7,
         items: [
           { author: 'Daniela S.', location: 'Modelia', rating: 5, date: 'hace 3 días', comment: 'Marinado delicioso con especias. Se corta en rodajas perfectas para picoteo o tabla de quesos vegetales.' },
-          { author: 'Carlos A.', location: 'Colina', rating: 5, date: 'hace 1 semana', comment: 'Intensamente sabroso y muy nutritivo. Lo pido todas las semanas.' }
+          { author: 'Carlos A.', location: 'Colina', rating: 5, date: 'hace 1 semana', comment: 'Intensamente sabroso y muy nutritivo. Lo pido todas las semanas.' },
+          { author: 'Fabián T.', location: 'Cedritos', rating: 5, date: 'hace 2 semanas', comment: 'Espectacular el marinado con especias. Lo corto en rodajas finas para picar con galletas de arroz.' }
         ]
       },
       'tofu-frito': {
@@ -185,7 +187,8 @@ ngAfterViewChecked(): void {
         count: 9,
         items: [
           { author: 'Paula T.', location: 'Galerías', rating: 5, date: 'hace 2 días', comment: '¡Ahorra un tiempo impresionante en la cocina! Solo dorar 2 minutos y agregar a la salsa favorita.' },
-          { author: 'Gabriel N.', location: 'La Castellana', rating: 5, date: 'hace 5 días', comment: 'Interior jugoso con corteza dorada. A mis hijos les encanta en guisos.' }
+          { author: 'Gabriel N.', location: 'La Castellana', rating: 5, date: 'hace 5 días', comment: 'Interior jugoso con corteza dorada. A mis hijos les encanta en guisos.' },
+          { author: 'Camilo B.', location: 'Quinta Paredes', rating: 5, date: 'hace 1 semana', comment: 'Capa dorada y crujiente por fuera con un centro súper tierno. Súper práctico para la cena.' }
         ]
       },
       'leche-de-soya': {
@@ -193,7 +196,8 @@ ngAfterViewChecked(): void {
         count: 10,
         items: [
           { author: 'Esperanza R.', location: 'Santa Bárbara', rating: 5, date: 'hace 1 día', comment: 'Cremosa, fresca y 100% natural. Se nota que es hecha en la noche, sin ese sabor a cartón ni azúcares raros.' },
-          { author: 'Nicolás M.', location: 'Batán', rating: 5, date: 'hace 4 días', comment: 'Excelente para hacer café o espumar en la mañana. Muy digestiva.' }
+          { author: 'Nicolás M.', location: 'Batán', rating: 5, date: 'hace 4 días', comment: 'Excelente para hacer café o espumar en la mañana. Muy digestiva.' },
+          { author: 'Juliana P.', location: 'Rosales', rating: 5, date: 'hace 1 semana', comment: 'Sabor suave y pura soya natural. La uso para batidos y postres veganos con excelente resultado.' }
         ]
       },
       'nata-de-soya': {
@@ -201,7 +205,8 @@ ngAfterViewChecked(): void {
         count: 5,
         items: [
           { author: 'Mariana H.', location: 'Nogal', rating: 5, date: 'hace 3 días', comment: 'Textura de alta cocina vegetal. La coloco sobre caldos bien calientes y queda divina.' },
-          { author: 'Esteban P.', location: 'Virrey', rating: 5, date: 'hace 1 semana', comment: 'Sabor delicado y sofisticado. La mejor Yuba artesanal de Bogotá.' }
+          { author: 'Esteban P.', location: 'Virrey', rating: 5, date: 'hace 1 semana', comment: 'Sabor delicado y sofisticado. La mejor Yuba artesanal de Bogotá.' },
+          { author: 'Carolina D.', location: 'Santa Ana', rating: 5, date: 'hace 2 semanas', comment: 'Textura sedosa de restaurante gourmet. Ideal para estofados y sopas asiáticas tradicionales.' }
         ]
       }
     };
