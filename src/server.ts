@@ -5,6 +5,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bootstrap from './main.server';
 
+import { readFileSync, existsSync } from 'node:fs';
+
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
@@ -12,34 +14,40 @@ const indexHtml = join(serverDistFolder, 'index.server.html');
 const app = express();
 const commonEngine = new CommonEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-
 app.get('/sitemap.xml', (req, res) => {
-  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile('sitemap.xml', { root: browserDistFolder });
+  const primaryPath = join(browserDistFolder, 'sitemap.xml');
+  const fallbackPath = join(process.cwd(), 'dist/koky/browser/sitemap.xml');
+  const targetPath = existsSync(primaryPath) ? primaryPath : fallbackPath;
+  if (existsSync(targetPath)) {
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+  }
+  res.status(404).send('sitemap.xml not found');
 });
 
 app.get('/robots.txt', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile('robots.txt', { root: browserDistFolder });
+  const primaryPath = join(browserDistFolder, 'robots.txt');
+  const fallbackPath = join(process.cwd(), 'dist/koky/browser/robots.txt');
+  const targetPath = existsSync(primaryPath) ? primaryPath : fallbackPath;
+  if (existsSync(targetPath)) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+  }
+  res.status(404).send('robots.txt not found');
 });
 
 app.get('/llms.txt', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.sendFile('llms.txt', { root: browserDistFolder });
+  const primaryPath = join(browserDistFolder, 'llms.txt');
+  const fallbackPath = join(process.cwd(), 'dist/koky/browser/llms.txt');
+  const targetPath = existsSync(primaryPath) ? primaryPath : fallbackPath;
+  if (existsSync(targetPath)) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    return res.status(200).send(readFileSync(targetPath, 'utf-8'));
+  }
+  res.status(404).send('llms.txt not found');
 });
 
 /**
