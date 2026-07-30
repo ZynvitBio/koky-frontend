@@ -23,9 +23,9 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/robots.txt",
-              "src/sitemap.xml",
-              "src/llms.txt"
+              { "glob": "robots.txt", "input": "src", "output": "/" },
+              { "glob": "sitemap.xml", "input": "src", "output": "/" },
+              { "glob": "llms.txt", "input": "src", "output": "/" }
             ],
             "styles": [
               "src/assets/css/bootstrap.min.css",
