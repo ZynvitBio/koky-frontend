@@ -12,7 +12,9 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
 const app = express();
-const commonEngine = new CommonEngine();
+const commonEngine = new CommonEngine({
+  allowedHosts: ['www.koky.food', 'koky.food', 'localhost', 'koky-frontend-production.up.railway.app']
+});
 
 const LLMS_TXT_CONTENT = `# Koky Food - Tofu Fresco y Leche de Soya en Bogotá (Factual Data for LLMs)
 
