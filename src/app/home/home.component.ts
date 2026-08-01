@@ -352,6 +352,7 @@ private loadAboutData(): void {
         this.aboutBackgroundImage = getUrlFromArray(attrs.backgroundImage);
         this.aboutData = {
           ...attrs,
+          title: 'El mejor tofu de Bogotá',
           iconImage: { url: getUrlFromArray(attrs.icon) }
         };
 

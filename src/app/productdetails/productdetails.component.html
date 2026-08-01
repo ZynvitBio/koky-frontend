@@ -62,6 +62,16 @@
                     
                     <p>{{ product.shortDescription }}</p>
 
+                    <!-- BADGES DE SALUD Y SEO LOCAL -->
+                    <div class="product_features_badges d-flex flex-wrap gap-2 my-3" style="gap: 8px;">
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-leaf text-success me-1"></i> 100% Vegano</span>
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-check-circled text-primary me-1"></i> Sin Gluten</span>
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-seed text-success me-1"></i> Soya No Transgénica (Non-GMO)</span>
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-muscle-weight text-warning me-1"></i> Alto en Proteína Vegetal</span>
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-shield text-info me-1"></i> Sin Conservantes</span>
+                      <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-location-pin text-danger me-1"></i> Venta Directa en Bogotá</span>
+                    </div>
+
                     <div class="add_to_cart d-flex">
                         <div class="quantity d-flex">
                             <div class="left_arrow"><button type="button"><i class="icofont-arrow-left"></i></button></div>
@@ -76,6 +86,15 @@
     </div>
 </div>
     <!-- PRODUCT DETAILS PART END -->
+
+    <!-- SEO GUARANTEE BANNER START -->
+    <div class="container my-4" *ngIf="product">
+      <div class="p-3 bg-light rounded border text-center" style="font-size: 14px; color: #333; line-height: 1.5;">
+        <strong>🥦 Garantía de Frescura Koky Tofu Artesanal en Bogotá:</strong> 
+        Fabricamos contra pedido para garantizar la máxima calidad. Compras realizadas antes de las 4:00 PM se elaboran artesanalmente y se entregan a domicilio al día siguiente en Bogotá D.C.
+      </div>
+    </div>
+    <!-- SEO GUARANTEE BANNER END -->
 
     <!-- PRODUCT TABBER START -->
  <div class="product_tabber" *ngIf="product">
