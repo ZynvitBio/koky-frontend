@@ -639,6 +639,16 @@ handleBannerClick(url: string, event: Event): void {
 
   // 4. URLs externas (se manejarán por el href normal)
 }
+scrollToReviews(event: Event): void {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const element = document.getElementById('full-testimonial');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
 private loadTestimonials(): void {
   this.aboutService.getTestimonials().subscribe({
     next: (data: any[]) => {

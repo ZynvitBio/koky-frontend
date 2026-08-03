@@ -32,7 +32,11 @@
     >
       <div ngxSlickItem *ngFor="let slide of bannerSlides" class="col-md-12">
         <div class="banner-content">
-          <div class="hero-trust-badge">
+          <div
+            class="hero-trust-badge"
+            (click)="scrollToReviews($event)"
+            style="cursor: pointer;"
+          >
             <span class="stars">⭐⭐⭐⭐⭐</span>
             <span class="rating-text">4.9/5 | +500 clientes felices</span>
           </div>
