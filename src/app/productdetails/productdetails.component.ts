@@ -135,7 +135,7 @@ ngAfterViewChecked(): void {
 
   private cargarResenasPorSlug(slug: string): void {
     const database: Record<string, { rating: number, count: number, items: Array<{ author: string, location: string, rating: number, date: string, comment: string }> }> = {
-      'tofu-semiduro': {
+      'tofu-blando': {
         rating: 4.9,
         count: 12,
         items: [
