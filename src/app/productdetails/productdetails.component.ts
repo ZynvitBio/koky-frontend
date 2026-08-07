@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewChecked, Renderer2, Inject, ElementRef, PLATFORM_ID } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router'; 
+import { ActivatedRoute, RouterModule, Router } from '@angular/router'; 
 import { ProductService } from '../services/product/product.service'; 
 import { CartService, CartItem} from '../services/cart/cart.service';
 import { NotificationService } from '../services/notification/notification.service';
@@ -8,6 +8,17 @@ import { Title, Meta } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
 
 declare var $: any;
+
+const slugRedirects: Record<string, string> = {
+  'tofu-semiduro': 'tofu-semiduro-bogota',
+  'tofu-firme': 'tofu-firme-bogota',
+  'tofu-seco-ahumado': 'tofu-firme-ahumado-bogota',
+  'tofu-hoja': 'tofu-hoja-bogota',
+  'tofu-rollo-ahumado': 'tofu-rollo-ahumado-bogota',
+  'tofu-frito': 'tofu-frito-bogota',
+  'leche-de-soya': 'leche-de-soya-bogota',
+  'nata-de-soya': 'nata-de-soya-yuba-bogota'
+};
 
 @Component({
   selector: 'app-productdetails',
@@ -25,6 +36,7 @@ export class ProductdetailsComponent implements OnInit, AfterViewChecked {
   constructor(
     private cartService: CartService,
     private route: ActivatedRoute,
+    private router: Router,
     private productService: ProductService,
     private renderer: Renderer2,
     private el: ElementRef,
@@ -41,6 +53,12 @@ export class ProductdetailsComponent implements OnInit, AfterViewChecked {
     this.route.paramMap.subscribe(params => {
       const slug = params.get('slug');
       if (slug) {
+        // Redirección si se entra con un slug viejo
+        if (slugRedirects[slug]) {
+          this.router.navigate(['/productdetails', slugRedirects[slug]], { replaceUrl: true });
+          return;
+        }
+
         // RESET TOTAL: Limpiamos datos y bandera para que el HTML se vacíe
         this.productItems = [];
         this.slickInicializado = false;
