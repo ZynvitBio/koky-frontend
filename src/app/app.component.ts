@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
   authService         = inject(AuthService);
   notificationService = inject(NotificationService);
   private router      = inject(Router);
-  private platformId  = inject(PLATFORM_ID); // ← agregar
+  private platformId  = inject(PLATFORM_ID);
+  private document    = inject(DOCUMENT);
   title               = 'koky';
   isHomeRoute         = false;
 
@@ -40,7 +41,36 @@ export class AppComponent implements OnInit {
       .subscribe((e: any) => {
         const path = e.urlAfterRedirects || e.url;
         this.isHomeRoute = path === '/home' || path === '/' || path.startsWith('/home#');
+        this.updateCanonicalAndOgUrl(path);
       });
+  }
+
+  private updateCanonicalAndOgUrl(path: string) {
+    const domain = 'https://www.koky.food';
+    const cleanPath = path.split('?')[0].split('#')[0];
+    const canonicalUrl = `${domain}${cleanPath === '/' ? '' : cleanPath}`;
+
+    // Actualizar o crear Canonical Link
+    let link: HTMLLinkElement | null = this.document.querySelector("link[rel='canonical']");
+    if (link) {
+      link.setAttribute('href', canonicalUrl);
+    } else {
+      link = this.document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      link.setAttribute('href', canonicalUrl);
+      this.document.head.appendChild(link);
+    }
+
+    // Actualizar o crear og:url Meta Tag
+    let ogUrl: HTMLMetaElement | null = this.document.querySelector("meta[property='og:url']");
+    if (ogUrl) {
+      ogUrl.setAttribute('content', canonicalUrl);
+    } else {
+      ogUrl = this.document.createElement('meta');
+      ogUrl.setAttribute('property', 'og:url');
+      ogUrl.setAttribute('content', canonicalUrl);
+      this.document.head.appendChild(ogUrl);
+    }
   }
 
   isHome(): boolean {
