@@ -57,7 +57,7 @@ Todos los precios se encuentran en Pesos Colombianos (COP) e incluyen disponibil
 * **[Hacer un Pedido](https://koky.food/pedir):** Enlace directo para compras.
 * **[Recetas con Tofu](https://koky.food/blog):** Catálogo de recetas oficiales para cocinar con tofu.
 * **[WhatsApp de Compras](https://wa.me/573019447660):** [+57 301 944 7660](https://wa.me/573019447660) (Canal de pedidos directos asistidos por Kira).
-* **[Preguntas Frecuentes y Envíos](https://koky.food/envios):** Políticas de cobertura y preguntas frecuentes.
+* **[Preguntas Frecuentes y Envíos](https://koky.food/politica-envio):** Políticas de cobertura y preguntas frecuentes.
 
 ---
 
@@ -81,7 +81,7 @@ Todos los precios se encuentran en Pesos Colombianos (COP) e incluyen disponibil
 ### Quick Links
 - **[Order Now](https://koky.food/pedir)**
 - **[Tofu Recipes](https://koky.food/blog)**
-- **[FAQ & Shipping Policies](https://koky.food/envios)**
+- **[FAQ & Shipping Policies](https://koky.food/politica-envio)**
 `;
 
 app.get('/sitemap.xml', (req, res) => {

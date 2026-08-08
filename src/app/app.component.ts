@@ -28,9 +28,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      if (window.location.hostname === 'koky.food') {
+      if (window.location.hostname === 'www.koky.food') {
         window.location.replace(
-          'https://www.koky.food' + window.location.pathname + window.location.search
+          'https://koky.food' + window.location.pathname + window.location.search
         );
         return;
       }
@@ -40,15 +40,15 @@ export class AppComponent implements OnInit {
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e: any) => {
         const path = e.urlAfterRedirects || e.url;
-        this.isHomeRoute = path === '/home' || path === '/' || path.startsWith('/home#');
+        this.isHomeRoute = path === '/' || path === '' || path.startsWith('/#') || path.startsWith('#') || path === '/home' || path.startsWith('/home#');
         this.updateCanonicalAndOgUrl(path);
       });
   }
 
   private updateCanonicalAndOgUrl(path: string) {
-    const domain = 'https://www.koky.food';
+    const domain = 'https://koky.food';
     const cleanPath = path.split('?')[0].split('#')[0];
-    const canonicalUrl = `${domain}${cleanPath === '/' ? '' : cleanPath}`;
+    const canonicalUrl = `${domain}${cleanPath === '/' ? '' : (cleanPath === '/home' ? '' : cleanPath)}`;
 
     // Actualizar o crear Canonical Link
     let link: HTMLLinkElement | null = this.document.querySelector("link[rel='canonical']");
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
 
   isHome(): boolean {
     const path = this.router.url;
-    return path === '/home' || path === '/' || path.startsWith('/home#');
+    return path === '/' || path === '' || path.startsWith('/#') || path.startsWith('#') || path === '/home' || path.startsWith('/home#');
   }
 
   onClose() {

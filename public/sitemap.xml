@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://koky.food/</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
     <image:image>
@@ -13,67 +13,91 @@
   </url>
   <url>
     <loc>https://koky.food/pedir</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://koky.food/blog</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://koky.food/envios</loc>
-    <lastmod>2026-07-29</lastmod>
+    <loc>https://koky.food/politica-envio</loc>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
+    <loc>https://koky.food/politica-privacidad</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://koky.food/devoluciones</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://koky.food/terminos-y-condiciones</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://koky.food/ventas-al-mayor</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
     <loc>https://koky.food/productdetails/tofu-semiduro-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/tofu-firme-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/tofu-firme-ahumado-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://koky.food/productdetails/tofu-hoja</loc>
-    <lastmod>2026-07-29</lastmod>
+    <loc>https://koky.food/productdetails/tofu-hoja-bogota</loc>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/tofu-rollo-ahumado-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/tofu-frito-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/leche-de-soya-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://koky.food/productdetails/nata-de-soya-yuba-bogota</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>

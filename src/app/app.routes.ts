@@ -14,7 +14,8 @@ import { TermsConditionsComponent } from './terms-conditions/terms-conditions.co
 export const routes: Routes = [
   {
     path: 'home',
-    component: HomeComponent,
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'blog', 
@@ -55,8 +56,7 @@ export const routes: Routes = [
   { path: 'product/:slug', redirectTo: 'productdetails/:slug', pathMatch: 'full' },
   {
     path: '',
-    redirectTo: 'home', 
-    pathMatch: 'full' 
+    component: HomeComponent,
   },
   
   
