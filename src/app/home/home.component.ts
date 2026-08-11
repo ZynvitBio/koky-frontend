@@ -569,8 +569,8 @@ addToCart(product: any) {
 setSeoData(): void {
     const title = 'Koky Food | Tofu Artesanal y Derivados de Soya Frescos';
     const description = 'Disfruta el tofu más fresco de Bogotá, hecho diariamente. Tofu ahumado, firme, blando y nata de soya 100% natural y orgánica.';
-    const url = 'https://tu-dominio.com'; // Cambia por tu URL real
-    const imageUrl = 'https://res.cloudinary.com/jonathan-barrios/image/upload/v1774915337/logo-seo.jpg';
+    const url = 'https://koky.food/';
+    const imageUrl = 'https://koky.food/assets/img/512.png';
 
     this.titleService.setTitle(title);
 
@@ -586,7 +586,7 @@ setSeoData(): void {
         { property: 'og:type', content: 'website' },
 
         // Twitter
-        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:card', content: 'summary' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: imageUrl }
