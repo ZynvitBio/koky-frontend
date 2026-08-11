@@ -12,6 +12,57 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
 const app = express();
+
+// Redirección de www a no-www (https://koky.food)
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.startsWith('www.')) {
+    const cleanHost = host.replace(/^www\./, '');
+    const redirectUrl = `https://${cleanHost}${req.originalUrl}`;
+    return res.redirect(301, redirectUrl);
+  }
+  next();
+});
+
+// Mapa de redirecciones 301 para URLs antiguas/heredadas
+const slugRedirects: Record<string, string> = {
+  '/productdetails/tofu-semiduro': '/productdetails/tofu-semiduro-bogota',
+  '/productdetails/tofu-firme': '/productdetails/tofu-firme-bogota',
+  '/productdetails/tofu-seco-ahumado': '/productdetails/tofu-firme-ahumado-bogota',
+  '/productdetails/tofu-hoja': '/productdetails/tofu-hoja-bogota',
+  '/productdetails/tofu-rollo-ahumado': '/productdetails/tofu-rollo-ahumado-bogota',
+  '/productdetails/tofu-frito': '/productdetails/tofu-frito-bogota',
+  '/productdetails/leche-de-soya': '/productdetails/leche-de-soya-bogota',
+  '/productdetails/nata-de-soya': '/productdetails/nata-de-soya-yuba-bogota',
+  
+  '/product/tofu-semiduro': '/productdetails/tofu-semiduro-bogota',
+  '/product/tofu-firme': '/productdetails/tofu-firme-bogota',
+  '/product/tofu-seco-ahumado': '/productdetails/tofu-firme-ahumado-bogota',
+  '/product/tofu-hoja': '/productdetails/tofu-hoja-bogota',
+  '/product/tofu-rollo-ahumado': '/productdetails/tofu-rollo-ahumado-bogota',
+  '/product/tofu-frito': '/productdetails/tofu-frito-bogota',
+  '/product/leche-de-soya': '/productdetails/leche-de-soya-bogota',
+  '/product/nata-de-soya': '/productdetails/nata-de-soya-yuba-bogota',
+  
+  '/product/tofu-semiduro-bogota': '/productdetails/tofu-semiduro-bogota',
+  '/product/tofu-firme-bogota': '/productdetails/tofu-firme-bogota',
+  '/product/tofu-firme-ahumado-bogota': '/productdetails/tofu-firme-ahumado-bogota',
+  '/product/tofu-hoja-bogota': '/productdetails/tofu-hoja-bogota',
+  '/product/tofu-rollo-ahumado-bogota': '/productdetails/tofu-rollo-ahumado-bogota',
+  '/product/tofu-frito-bogota': '/productdetails/tofu-frito-bogota',
+  '/product/leche-de-soya-bogota': '/productdetails/leche-de-soya-bogota',
+  '/product/nata-de-soya-yuba-bogota': '/productdetails/nata-de-soya-yuba-bogota',
+};
+
+app.use((req, res, next) => {
+  const pathWithoutQuery = req.path;
+  if (slugRedirects[pathWithoutQuery]) {
+    const query = req.originalUrl.includes('?') ? req.originalUrl.substring(req.originalUrl.indexOf('?')) : '';
+    return res.redirect(301, `${slugRedirects[pathWithoutQuery]}${query}`);
+  }
+  next();
+});
+
 const commonEngine = new CommonEngine({
   allowedHosts: ['www.koky.food', 'koky.food', 'localhost', 'koky-frontend-production.up.railway.app']
 });

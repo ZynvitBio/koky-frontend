@@ -9,16 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 declare var $: any;
 
-const slugRedirects: Record<string, string> = {
-  'tofu-semiduro': 'tofu-semiduro-bogota',
-  'tofu-firme': 'tofu-firme-bogota',
-  'tofu-seco-ahumado': 'tofu-firme-ahumado-bogota',
-  'tofu-hoja': 'tofu-hoja-bogota',
-  'tofu-rollo-ahumado': 'tofu-rollo-ahumado-bogota',
-  'tofu-frito': 'tofu-frito-bogota',
-  'leche-de-soya': 'leche-de-soya-bogota',
-  'nata-de-soya': 'nata-de-soya-yuba-bogota'
-};
+
 
 @Component({
   selector: 'app-productdetails',
@@ -53,11 +44,7 @@ export class ProductdetailsComponent implements OnInit, AfterViewChecked {
     this.route.paramMap.subscribe(params => {
       const slug = params.get('slug');
       if (slug) {
-        // Redirección si se entra con un slug viejo
-        if (slugRedirects[slug]) {
-          this.router.navigate(['/productdetails', slugRedirects[slug]], { replaceUrl: true });
-          return;
-        }
+
 
         // RESET TOTAL: Limpiamos datos y bandera para que el HTML se vacíe
         this.productItems = [];
@@ -269,7 +256,7 @@ ngAfterViewChecked(): void {
       },
       "offers": {
         "@type": "Offer",
-        "url": `https://www.koky.food/productdetails/${slug}`,
+        "url": `https://koky.food/productdetails/${slug}`,
         "priceCurrency": "COP",
         "price": product.price,
         "priceValidUntil": "2027-12-31",
