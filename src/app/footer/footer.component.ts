@@ -18,5 +18,15 @@ export class FooterComponent {
       window.scrollTo(0, 0); // Esto asegura que el usuario aparezca arriba de la nueva página
     });
   }
+  goToFaq() {
+    this.router.navigate(['/']).then(() => {
+      setTimeout(() => {
+        const element = document.getElementById('faq');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    });
+  }
 
 }

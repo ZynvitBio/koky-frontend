@@ -23,6 +23,7 @@ import { filter, take } from 'rxjs'
 import { ComingSoonService } from '../services/coming-soon/coming-soon.service';
 import { FoodScannerComponent } from '../food-scanner/food-scanner.component';
 import { getDynamicAnnouncementText } from '../utils/delivery-helper';
+import { FaqService } from '../services/faq/faq.service';
 
 
 
@@ -55,6 +56,16 @@ import { getDynamicAnnouncementText } from '../utils/delivery-helper';
 export class HomeComponent implements OnInit, AfterViewInit {
   private isSyncing = false;
   cs = inject(ComingSoonService);
+  faqService = inject(FaqService);
+  faqs: any[] = [];
+  categories: any[] = [
+    { name: 'Envíos y Compras', icon: 'icofont-delivery-time', items: [] },
+    { name: 'Nutrición y Dieta', icon: 'icofont-heart-beat', items: [] },
+    { name: 'Salud y Digestión', icon: 'icofont-medical-sign', items: [] },
+    { name: 'Cocina y Conservación', icon: 'icofont-restaurant', items: [] },
+    { name: 'Preguntas Generales', icon: 'icofont-question-circle', items: [] }
+  ];
+  activeCategoryIndex = 0;
     @ViewChild('videoPlayer') videoPlayerRef!: ElementRef<HTMLVideoElement>;
  
     @ViewChild('slickBanner') slickBanner!: SlickCarouselComponent;
@@ -260,6 +271,7 @@ ngOnInit(): void {
     this.loadAboutData();
     this.loadGoogleReviews(); // 👈 Reemplaza carga de testimonios viejos por reviews de Google
     this.loadSameDayOffer();
+    this.loadFaqs();
     
     // Una última comprobación de UI por si hubo cambios durante la carga
     if (this.isBrowser && this.cs.visible()) {
@@ -705,7 +717,93 @@ onTestimonialImgChange(event: any): void {
     this.isSyncing = false;
   }, 600); // mayor que speed:500
 }
-isHome(): boolean {
+loadFaqs(): void {
+    this.faqService.getFaqs().subscribe({
+      next: (data) => {
+        this.faqs = data.filter(f => f.active).map(f => ({ ...f, isOpen: false }));
+        this.groupFaqs(this.faqs);
+        console.log('✅ FAQS CARGADAS EN HOME:', this.faqs.length);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('❌ Error cargando FAQs:', err)
+    });
+  }
+
+  selectCategory(index: number): void {
+    this.activeCategoryIndex = index;
+  }
+
+  toggleFaq(faq: any): void {
+    this.categories[this.activeCategoryIndex].items.forEach((f: any) => {
+      if (f !== faq) f.isOpen = false;
+    });
+    faq.isOpen = !faq.isOpen;
+  }
+
+  private groupFaqs(faqs: any[]): void {
+    // Reset items to avoid duplicates on hot-reload
+    this.categories.forEach(c => c.items = []);
+
+    faqs.forEach(faq => {
+      const topicLower = faq.topic.toLowerCase();
+      
+      if (
+        topicLower.includes('envío') || 
+        topicLower.includes('domicilio') || 
+        topicLower.includes('comprar') || 
+        topicLower.includes('dónde') || 
+        topicLower.includes('donde') ||
+        topicLower.includes('pago') ||
+        topicLower.includes('colombia') ||
+        topicLower.includes('bogotá')
+      ) {
+        this.categories[0].items.push(faq);
+      } else if (
+        topicLower.includes('pollo') || 
+        topicLower.includes('proteína') || 
+        topicLower.includes('proteina') || 
+        topicLower.includes('peso') || 
+        topicLower.includes('engorda') || 
+        topicLower.includes('dieta') || 
+        topicLower.includes('semana') || 
+        topicLower.includes('veces')
+      ) {
+        this.categories[1].items.push(faq);
+      } else if (
+        topicLower.includes('sano') || 
+        topicLower.includes('riñón') || 
+        topicLower.includes('riñon') || 
+        topicLower.includes('creatinina') || 
+        topicLower.includes('barriga') || 
+        topicLower.includes('efecto') || 
+        topicLower.includes('alergia') || 
+        topicLower.includes('soya') || 
+        topicLower.includes('soja')
+      ) {
+        this.categories[2].items.push(faq);
+      } else if (
+        topicLower.includes('comer') || 
+        topicLower.includes('sabor') || 
+        topicLower.includes('conservar') || 
+        topicLower.includes('dura') || 
+        topicLower.includes('receta') || 
+        topicLower.includes('cocinar')
+      ) {
+        this.categories[3].items.push(faq);
+      } else {
+        this.categories[4].items.push(faq);
+      }
+    });
+
+    // Filtramos las categorías vacías para que no se muestren pestañas en blanco
+    this.categories = this.categories.filter(c => c.items.length > 0);
+    if (this.categories.length > 0) {
+      this.activeCategoryIndex = 0;
+    }
+  }
+
+
+  isHome(): boolean {
   if (!this.isBrowser) return false;
   // pathname NO contiene los parámetros de Instagram, por eso devolverá TRUE
   return window.location.pathname === '/home' || window.location.pathname === '/';

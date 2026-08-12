@@ -674,3 +674,74 @@
     </div>
   </div>
 </div>
+
+<!-- FAQ SECTION START -->
+<div id="faq" class="full-faq-section" style="padding: 80px 0; background: #fdfefe; border-top: 1px solid #f0f0f0;" *ngIf="faqs && faqs.length > 0">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 text-center">
+        <h3 class="section-title">Preguntas Frecuentes</h3>
+        <p class="section-subtitle mb-5">
+          Resolvemos tus dudas sobre nuestro tofu artesanal, envíos, métodos de pago y beneficios nutricionales.
+        </p>
+      </div>
+    </div>
+    
+    <div class="row">
+      <!-- Menú de Categorías (Izquierda) -->
+      <div class="col-md-4 mb-4">
+        <div class="faq-categories-card">
+          <ul class="faq-categories-list">
+            <li *ngFor="let cat of categories; let i = index" 
+                [class.active]="i === activeCategoryIndex"
+                (click)="selectCategory(i)">
+              <i [class]="cat.icon"></i>
+              <span>{{ cat.name }}</span>
+              <span class="badge">{{ cat.items.length }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Listado de Acordeones (Derecha) -->
+      <div class="col-md-8">
+        <div class="faq-content-area-home">
+          <!-- Usamos [class.d-none] en lugar de *ngIf para que Googlebot indexe el 100% de las preguntas de todas las categorías -->
+          <div *ngFor="let cat of categories; let i = index" [class.d-none]="i !== activeCategoryIndex">
+            <h3 class="category-title mb-4">
+              <i [class]="cat.icon"></i> 
+              {{ cat.name }}
+            </h3>
+
+            <div class="accordion-container">
+              <div *ngFor="let item of cat.items" 
+                   class="faq-card-home" 
+                   [class.open]="item.isOpen">
+                
+                <div class="faq-question-header-home" (click)="toggleFaq(item)">
+                  <h4>{{ item.topic }}</h4>
+                  <i class="icofont-rounded-down toggle-icon"></i>
+                </div>
+
+                <div class="faq-answer-body-home">
+                  <p>{{ item.information }}</p>
+                  
+                  <!-- Botón dinámico si amerita ir al blog -->
+                  <div *ngIf="item.topic.toLowerCase().includes('pollo') || item.topic.toLowerCase().includes('peso') || item.topic.toLowerCase().includes('engorda') || item.topic.toLowerCase().includes('comer')" class="mt-3">
+                    <a routerLink="/blog" class="btn btn-sm btn-outline-success">
+                      Leer artículo completo en el blog <i class="icofont-arrow-right"></i>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- FAQ SECTION END -->
+
