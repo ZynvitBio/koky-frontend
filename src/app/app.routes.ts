@@ -11,7 +11,10 @@ import { RefundPolicyComponent } from './refund-policy/refund-policy.component';
 import { WholesalePolicyComponent } from './wholesale-policy/wholesale-policy.component';
 import { ShippingPolicyComponent } from './shipping-policy/shipping-policy.component';
 import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
+import { FaqComponent } from './faq/faq.component';
+
 export const routes: Routes = [
+  { path: 'preguntas-frecuentes', component: FaqComponent },
   {
     path: 'home',
     redirectTo: '',
