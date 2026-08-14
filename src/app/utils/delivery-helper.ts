@@ -113,74 +113,56 @@ export function getDynamicAnnouncementText(): string {
   const hour = parseInt(parts.find(p => p.type === 'hour')!.value);
 
   const bogotaNow = new Date(year, month, day, hour);
-  const dayOfWeek = bogotaNow.getDay(); 
-
-  // Nombres de días en español
   const dayNames = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
-  // Ventana del fin de semana largo (Jueves 4:00 PM al Domingo 4:00 PM)
-  const isWeekendWindow = 
-    (dayOfWeek === 4 && hour >= 16) || 
-    (dayOfWeek === 5) ||               
-    (dayOfWeek === 6) ||               
-    (dayOfWeek === 0 && hour < 16);    
+  // Buscar dinámicamente el próximo día de entrega disponible
+  let deliveryDate = new Date(bogotaNow);
+  deliveryDate.setDate(bogotaNow.getDate() + 1);
 
-  if (isWeekendWindow) {
-    // Para pedidos del fin de semana, el día estimado de entrega base es el lunes
-    let targetDate = new Date(bogotaNow);
-    // Calcular cuántos días sumar para llegar al lunes
-    const daysToAdd = dayOfWeek === 4 ? 4 : (dayOfWeek === 5 ? 3 : (dayOfWeek === 6 ? 2 : 1));
-    targetDate.setDate(bogotaNow.getDate() + daysToAdd);
+  while (true) {
+    if (!isWeekendOrHoliday(deliveryDate)) {
+      const cutoffDate = new Date(deliveryDate);
+      cutoffDate.setDate(deliveryDate.getDate() - 1);
+      cutoffDate.setHours(16, 0, 0, 0); // Corte a las 4:00 PM del día anterior
 
-    // Si el lunes es festivo, corre la fecha al martes, etc.
-    while (isWeekendOrHoliday(targetDate)) {
-      targetDate.setDate(targetDate.getDate() + 1);
+      if (bogotaNow.getTime() < cutoffDate.getTime()) {
+        break;
+      }
     }
-    const deliveryDayName = dayNames[targetDate.getDay()];
-    return `Pedidos antes del domingo a las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
+    deliveryDate.setDate(deliveryDate.getDate() + 1);
   }
 
-  // Caso Domingo después de las 4:00 PM (la entrega base es el martes)
-  if (dayOfWeek === 0 && hour >= 16) {
-    let targetDate = new Date(bogotaNow);
-    targetDate.setDate(bogotaNow.getDate() + 2);
-    while (isWeekendOrHoliday(targetDate)) {
-      targetDate.setDate(targetDate.getDate() + 1);
-    }
-    const deliveryDayName = dayNames[targetDate.getDay()];
-    return `Pedidos antes del lunes a las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
-  }
+  const cutoffDate = new Date(deliveryDate);
+  cutoffDate.setDate(deliveryDate.getDate() - 1);
 
-  // Caso estándar de lunes a jueves (antes de las 4 PM de jueves)
-  const beforeCutoff = hour < 16;
-  let targetDate = new Date(bogotaNow);
+  const isToday = cutoffDate.getDate() === bogotaNow.getDate() &&
+                  cutoffDate.getMonth() === bogotaNow.getMonth() &&
+                  cutoffDate.getFullYear() === bogotaNow.getFullYear();
 
-  if (beforeCutoff) {
-    targetDate.setDate(targetDate.getDate() + 1); // Entrega estimada mañana
-  } else {
-    targetDate.setDate(targetDate.getDate() + 2); // Entrega estimada pasado mañana
-  }
+  const isTomorrow = (() => {
+    const tom = new Date(bogotaNow);
+    tom.setDate(bogotaNow.getDate() + 1);
+    return cutoffDate.getDate() === tom.getDate() &&
+           cutoffDate.getMonth() === tom.getMonth() &&
+           cutoffDate.getFullYear() === tom.getFullYear();
+  })();
 
-  // Saltar fines de semana y festivos
-  while (isWeekendOrHoliday(targetDate)) {
-    targetDate.setDate(targetDate.getDate() + 1);
-  }
+  const deliveryDayName = dayNames[deliveryDate.getDay()];
+  const cutoffDayName = dayNames[cutoffDate.getDay()];
 
-  // Calcular diferencia en días naturales para saber si cae "mañana"
-  const todayReset = new Date(bogotaNow.getFullYear(), bogotaNow.getMonth(), bogotaNow.getDate());
-  const targetReset = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-  const diffDays = Math.ceil(Math.abs(targetReset.getTime() - todayReset.getTime()) / (1000 * 60 * 60 * 24));
-
-  const deliveryDayName = dayNames[targetDate.getDay()];
-
-  if (beforeCutoff) {
+  if (isToday) {
+    // Si la entrega es mañana (diferencia de 1 día natural)
+    const diffTime = Math.abs(deliveryDate.getTime() - bogotaNow.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays === 1) {
       return `Pedidos antes de las 4:00 PM se entregan mañana (${deliveryDayName}) en Bogotá`;
     } else {
       return `Pedidos antes de las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
     }
-  } else {
+  } else if (isTomorrow) {
     return `Pedidos antes de las 4:00 PM de mañana se entregan el ${deliveryDayName} en Bogotá`;
+  } else {
+    return `Pedidos antes del ${cutoffDayName} a las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
   }
 }
 
@@ -205,32 +187,21 @@ export function getEstimatedDeliveryDayName(createdAtDate: Date): string {
   const hour = parseInt(parts.find(p => p.type === 'hour')!.value);
 
   const bogotaDate = new Date(year, month, day, hour);
-  const dayOfWeek = bogotaDate.getDay();
-
   const dayNames = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
   let targetDate = new Date(bogotaDate);
+  targetDate.setDate(bogotaDate.getDate() + 1);
 
-  const isWeekendWindow = 
-    (dayOfWeek === 4 && hour >= 16) || 
-    (dayOfWeek === 5) ||               
-    (dayOfWeek === 6) ||               
-    (dayOfWeek === 0 && hour < 16);    
+  while (true) {
+    if (!isWeekendOrHoliday(targetDate)) {
+      const cutoffDate = new Date(targetDate);
+      cutoffDate.setDate(targetDate.getDate() - 1);
+      cutoffDate.setHours(16, 0, 0, 0);
 
-  if (isWeekendWindow) {
-    const daysToAdd = dayOfWeek === 4 ? 4 : (dayOfWeek === 5 ? 3 : (dayOfWeek === 6 ? 2 : 1));
-    targetDate.setDate(bogotaDate.getDate() + daysToAdd);
-  } else if (dayOfWeek === 0 && hour >= 16) {
-    targetDate.setDate(bogotaDate.getDate() + 2);
-  } else {
-    if (hour < 16) {
-      targetDate.setDate(bogotaDate.getDate() + 1);
-    } else {
-      targetDate.setDate(bogotaDate.getDate() + 2);
+      if (bogotaDate.getTime() < cutoffDate.getTime()) {
+        break;
+      }
     }
-  }
-
-  while (isWeekendOrHoliday(targetDate)) {
     targetDate.setDate(targetDate.getDate() + 1);
   }
 
