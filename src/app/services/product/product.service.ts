@@ -85,6 +85,12 @@ export class ProductService {
     contentPerUnit: attrs.contentPerUnit,
     unitMeasure: attrs.unitMeasure,
     brand: attrs.brand,
+    stock: attrs.stock,
+    metaTitle: attrs.metaTitle,
+    metaDescription: attrs.metaDescription,
+    availableToday: attrs.availableToday,
+    active: attrs.active,
+    immediateDeliveryStock: attrs.immediateDeliveryStock,
     
     // 3. MAPEO DE BANNERS (Usando la lógica de Railway)
     bannerImage: bannerUrl 
