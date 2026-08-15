@@ -119,3 +119,314 @@
     font-size: 20px;
   }
 }
+
+/* --- ESTILOS DEL CARRITO DESLIZANTE (SLIDE-OUT DRAWER) --- */
+.cart-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 999998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.cart-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -380px; /* Escondido a la derecha por defecto */
+  width: 380px;
+  max-width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.15);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-drawer.open {
+  right: 0; /* Se desliza a la vista */
+}
+
+/* Cabecera del Panel */
+.cart-drawer-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-drawer-header h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #03262c;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cart-drawer-header .close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-drawer-header .close-btn:hover {
+  color: #ff3b30;
+  transform: rotate(90deg);
+}
+
+/* Cuerpo del Panel */
+.cart-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Lista de Artículos */
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cart-item-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f1f3f5;
+  position: relative;
+}
+
+.cart-item-img {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.cart-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart-item-details h4 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.cart-item-meta {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.cart-item-price-qty {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.cart-item-price-qty .price {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d8007; /* Verde Koky */
+}
+
+/* Selector de Cantidades */
+.qty-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 24px;
+}
+
+.qty-selector button {
+  background-color: #f8f9fa;
+  border: none;
+  width: 24px;
+  height: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-selector button:hover {
+  background-color: #e9ecef;
+}
+
+.qty-selector span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  width: 28px;
+  text-align: center;
+  color: #495057;
+}
+
+/* Botón Eliminar Artículo */
+.remove-item-btn {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-item-btn:hover {
+  color: #dc3545;
+}
+
+/* Pie del Panel */
+.cart-drawer-footer {
+  padding: 20px;
+  border-top: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+
+.subtotal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.subtotal-row span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.subtotal-row .subtotal-price {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #03262c;
+}
+
+.shipping-info-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.btn-checkout-drawer {
+  background-color: #1d8007; /* Verde Koky */
+  color: #ffffff;
+  border: none;
+  width: 100%;
+  padding: 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  border-radius: 4px;
+}
+
+.btn-checkout-drawer:hover {
+  background-color: #166105;
+}
+
+.btn-checkout-drawer:active {
+  transform: scale(0.98);
+}
+
+/* Pestaña flotante lateral del carrito */
+.cart-floating-tab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px; /* Más ancha y clickable */
+  height: 85px; /* Más alta y notable */
+  background-color: #1d8007; /* Verde Koky */
+  color: #ffffff;
+  border-radius: 12px 0 0 12px; /* Redondeado a la izquierda, plano contra el borde derecho */
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.2);
+  z-index: 9999; /* Debajo del z-index del drawer abierto */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s ease, background-color 0.2s ease, right 0.2s ease;
+}
+
+.cart-floating-tab:hover {
+  background-color: #03262c; /* Cambia al color oscuro de Koky al pasar el mouse */
+  padding-right: 6px; /* Invita a hacer clic */
+  transform: translateY(-50%) scale(1.05);
+}
+
+.cart-floating-tab i {
+  font-size: 30px; /* Icono grande y visible */
+}
+
+.cart-floating-tab .tab-badge {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px; /* Número más grande */
+  font-weight: 700;
+  background-color: #ffffff;
+  color: #1d8007;
+  padding: 3px 9px;
+  border-radius: 15px;
+  line-height: 1;
+}
+
+.cart-floating-tab:hover .tab-badge {
+  color: #03262c;
+}

@@ -18,3 +18,63 @@
     z-index: 1000 !important;
     background-color: white;
 }
+
+/* 4. Estilos globales con ::ng-deep para garantizar letras oscuras en el dropdown de localidad */
+::ng-deep .select-locality-custom {
+    color: #333333 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+    font-size: 15px;
+    height: 50px !important;
+}
+
+::ng-deep .select-locality-custom option {
+    color: #333333 !important;
+    background-color: #ffffff !important;
+}
+
+/* Caja de Confianza y Sellos de Pago Responsivos */
+.checkout-trust-box {
+  background-color: #f8f9fa; /* Fondo gris suave y limpio */
+  border: 1px solid #e9ecef; /* Borde sutil */
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.trust-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #03262c; /* Color verde Koky oscuro */
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+}
+
+.trust-logos-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Separación entre los logos */
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Soporte responsivo: envuelve en pantallas pequeñas (celulares) */
+}
+
+.trust-logo {
+  height: 20px; /* Altura más pequeña y elegante */
+  width: auto;
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.trust-footer {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  color: #6c757d; /* Gris secundario para letra chica */
+  margin-bottom: 0;
+  letter-spacing: 0.2px;
+}
+

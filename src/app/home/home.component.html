@@ -66,19 +66,22 @@
   <!-- SELLOS PROPIOS ESTÁTICOS A LA DERECHA (FUERA DEL CARRUSEL DINÁMICO) -->
   <div class="hero-static-seals-right">
     <img
-      src="/assets/img/artesanal.png"
+      src="assets/img/artesanal.png"
       alt="Sello 100% Artesanal"
       class="static-seal-img"
+      (click)="openSealModal('artesanal')"
     />
     <img
-      src="/assets/img/fresco.png"
+      src="assets/img/fresco.png"
       alt="Sello Elaborado Hoy"
       class="static-seal-img"
+      (click)="openSealModal('fresco')"
     />
     <img
-      src="/assets/img/garantia.png"
+      src="assets/img/garantia.png"
       alt="Sello Garantía de Frescura"
       class="static-seal-img seal-garantia"
+      (click)="openSealModal('garantia')"
     />
   </div>
 </div>
@@ -744,4 +747,76 @@
   </div>
 </div>
 <!-- FAQ SECTION END -->
+
+<!-- MODAL DE DETALLES DE SELLOS -->
+<div class="delivery-modal-overlay" *ngIf="showSealModal" (click)="closeSealModal()">
+  <!-- 1. MODAL 100% ARTESANAL -->
+  <div class="seal-modal-content artesanal" *ngIf="activeSeal === 'artesanal'" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeSealModal()">&times;</button>
+    <div class="modal-body-wrapper">
+      <div class="modal-left-spacer"></div>
+      <div class="modal-right-text">
+        <h3>100% Artesanal</h3>
+        <div class="highlight-text-gold">
+          <i class="icofont-heart-alt"></i> Elaborado a Mano, No Industrial
+        </div>
+        <p class="story-paragraph">
+          En Koky Food no usamos procesos mecánicos masivos. Molemos soya no transgénica seleccionada, coagulamos con sales minerales naturales (nigari) y prensamos a mano en moldes tradicionales.
+        </p>
+        <p class="story-paragraph">
+          Así logramos un tofu con el sabor real, alto contenido nutricional y la textura perfecta que la industria no puede duplicar.
+        </p>
+        <button class="modal-action-btn-gold" (click)="closeSealModal()">
+          Entendido, ¡gracias!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MODAL FRESCO / ELABORADO HOY -->
+  <div class="seal-modal-content fresco" *ngIf="activeSeal === 'fresco'" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeSealModal()">&times;</button>
+    <div class="modal-body-wrapper">
+      <div class="modal-left-spacer"></div>
+      <div class="modal-right-text">
+        <h3>Elaborado Hoy</h3>
+        <div class="highlight-text-gold">
+          <i class="icofont-clock"></i> Frescura Diaria Bajo Pedido
+        </div>
+        <p class="story-paragraph">
+          No almacenamos stock en neveras durante semanas con conservantes químicos artificiales. 
+        </p>
+        <p class="story-paragraph">
+          Elaboramos a mano cada noche bajo pedido para que tu tofu salga fresco de nuestra cocina por la mañana y llegue directo a tu puerta el mismo día. ¡Del grano a tu plato en menos de 12 horas!
+        </p>
+        <button class="modal-action-btn-gold" (click)="closeSealModal()">
+          Entendido, ¡gracias!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. MODAL GARANTÍA DE FRESCURA -->
+  <div class="seal-modal-content garantia" *ngIf="activeSeal === 'garantia'" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeSealModal()">&times;</button>
+    <div class="modal-body-wrapper">
+      <div class="modal-left-spacer"></div>
+      <div class="modal-right-text">
+        <h3>Garantía de Frescura</h3>
+        <div class="highlight-text-gold">
+          <i class="icofont-shield"></i> Nuestra Promesa de Calidad
+        </div>
+        <p class="story-paragraph">
+          Nos comprometemos con tu satisfacción total. Si por alguna razón tu tofu no llega en condiciones óptimas de frescura, te lo reponemos de inmediato sin ningún costo adicional.
+        </p>
+        <p class="story-paragraph">
+          <strong>Tip de conservación:</strong> Mantén tu tofu refrigerado sumergido en agua limpia dentro de un recipiente cerrado, cambiando el agua cada 2 días para que se conserve fresco hasta por 6 días.
+        </p>
+        <button class="modal-action-btn-gold" (click)="closeSealModal()">
+          Entendido, ¡gracias!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 

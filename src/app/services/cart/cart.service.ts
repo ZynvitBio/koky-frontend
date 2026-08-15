@@ -22,6 +22,9 @@ export class CartService {
   private _cart = new BehaviorSubject<CartItem[]>([]);
   cart$ = this._cart.asObservable();
 
+  private _cartOpen = new BehaviorSubject<boolean>(false);
+  cartOpen$ = this._cartOpen.asObservable();
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     // 🛡️ Solo intentamos leer el localStorage si estamos en el Navegador
     if (isPlatformBrowser(this.platformId)) {
@@ -38,6 +41,14 @@ export class CartService {
     }
   }
 
+  openCart() {
+    this._cartOpen.next(true);
+  }
+
+  closeCart() {
+    this._cartOpen.next(false);
+  }
+
   addToCart(product: CartItem) {
     const index = this.cartItems.findIndex(i => i.id === product.id);
     if (index > -1) {
@@ -46,6 +57,7 @@ export class CartService {
       this.cartItems.push({ ...product });
     }
     this.updateCart();
+    this.openCart(); // 👈 Abre automáticamente el panel lateral al agregar un producto
   }
 
   /** Elimina completamente un producto del carrito (Botón "X") */

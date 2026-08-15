@@ -88,6 +88,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     googleReviews: any[] = []; // 👈 Guarda las reseñas reales de Google Maps
     showDeliveryModal = false; // Controla la visibilidad del modal de delivery
     dynamicDeliveryText = ''; // Guarda el texto dinámico calculado de envíos
+    showSealModal = false;     // Controla la visibilidad del modal de historia de sellos
+    activeSeal = '';           // Guarda qué sello se está visualizando ('artesanal', 'fresco', 'garantia')
 
   
 
@@ -808,4 +810,18 @@ loadFaqs(): void {
   // pathname NO contiene los parámetros de Instagram, por eso devolverá TRUE
   return window.location.pathname === '/home' || window.location.pathname === '/';
 }
+
+  openSealModal(sealType: string) {
+    if (!this.isBrowser) return;
+    this.activeSeal = sealType;
+    this.showSealModal = true;
+    document.body.classList.add('modal-open');
+  }
+
+  closeSealModal() {
+    if (!this.isBrowser) return;
+    this.showSealModal = false;
+    this.activeSeal = '';
+    document.body.classList.remove('modal-open');
+  }
 }

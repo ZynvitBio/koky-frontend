@@ -46,7 +46,7 @@
     </a>
 </div>
 							
-						<div class="header_icon" [routerLink]="['/cartoverview']" style="cursor: pointer;">
+						<div class="header_icon" (click)="openCartDrawer($event)" style="cursor: pointer;">
     
     <i class="icofont icofont-cart"></i>
     
@@ -64,3 +64,75 @@
 		</div>
 	</header>
 	<!-- HEADER PART END -->
+
+	<!-- Pestaña lateral flotante cuando el carrito está cerrado (solo si hay items) -->
+	@if (isBrowser && !cartOpen && totalItems > 0) {
+		<div class="cart-floating-tab" (click)="openCartDrawer($event)" title="Ver mi carrito">
+			<i class="icofont icofont-cart"></i>
+			<span class="tab-badge">{{ totalItems }}</span>
+		</div>
+	}
+
+	<!-- Carrito Deslizante Lateral (Mini-Cart Drawer) -->
+	<div class="cart-drawer-overlay" [class.open]="cartOpen" (click)="closeCartDrawer($event)"></div>
+
+	<div class="cart-drawer" [class.open]="cartOpen">
+		<div class="cart-drawer-header">
+			<h3>Tu Carrito</h3>
+			<button class="close-btn" (click)="closeCartDrawer($event)" aria-label="Cerrar carrito">
+				<i class="icofont icofont-close"></i>
+			</button>
+		</div>
+
+		@if (isBrowser) {
+			<div class="cart-drawer-body">
+				@if (cartItems.length === 0) {
+					<div class="empty-cart-message text-center py-5">
+						<i class="icofont icofont-cart" style="font-size: 54px; color: #ced4da; display: block; margin-bottom: 15px;"></i>
+						<p style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #6c757d;">Tu carrito está vacío.</p>
+						<button class="btn border-radius-0 mt-3" style="background-color: #1d8007; color: white;" (click)="closeCartDrawer($event)">
+							SEGUIR COMPRANDO
+						</button>
+					</div>
+				} @else {
+					<div class="cart-items-list">
+						@for (item of cartItems; track item.id) {
+							<div class="cart-item-row">
+								<div class="cart-item-img">
+									<img [src]="item.image" [alt]="item.name" />
+								</div>
+								<div class="cart-item-details">
+									<h4>{{ item.name }}</h4>
+									<p class="cart-item-meta">{{ item.contentPerUnit }}{{ item.unitAbbreviation }}</p>
+									<div class="cart-item-price-qty">
+										<span class="price">{{ item.price | currency: 'COP' : 'symbol' : '1.0-0' }}</span>
+										<div class="qty-selector">
+											<button type="button" (click)="decrementQuantity(item.id)">-</button>
+											<span>{{ item.quantity }}</span>
+											<button type="button" (click)="incrementQuantity(item)">+</button>
+										</div>
+									</div>
+								</div>
+								<button class="remove-item-btn" (click)="removeFromCart(item.id)" title="Eliminar producto">
+									<i class="icofont icofont-trash"></i>
+								</button>
+							</div>
+						}
+					</div>
+				}
+			</div>
+
+			@if (cartItems.length > 0) {
+				<div class="cart-drawer-footer">
+					<div class="subtotal-row">
+						<span>Subtotal:</span>
+						<span class="subtotal-price">{{ getTotalPrice() | currency: 'COP' : 'symbol' : '1.0-0' }}</span>
+					</div>
+					<p class="shipping-info-text">El costo de envío se calculará en el siguiente paso.</p>
+					<button class="btn-checkout-drawer" (click)="goToCheckout()">
+						FINALIZAR COMPRA
+					</button>
+				</div>
+			}
+		}
+	</div>

@@ -42,7 +42,6 @@ export class CheckoutComponent implements OnInit {
   detectedSource: string = 'directo';
   destinoLat: number = 0;
   destinoLng: number = 0;
-  procesandoOrden: boolean = false;
   orderSaved: boolean = false;
 
   readonly PRECIOS_ENVIO: { [key: string]: number } = {
@@ -170,28 +169,23 @@ export class CheckoutComponent implements OnInit {
         if (!input.value || input.value.trim() === '') {
           this.ngZone.run(() => {
             this.direccionValida = false;
-            this.mensajeDireccion =
-              'Debes elegir una dirección de las sugerencias de Google.';
+            this.mensajeDireccion = 'Por favor escribe tu dirección.';
             this.costoEnvio = 0;
             this.calculateTotal();
           });
         } else {
-          if (this.direccionValida) {
-            this.ngZone.run(() => {
+          // Si digitó algo, verifiquemos si seleccionó una localidad en el select dropdown
+          const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+          const localidad = selectLocalidad?.value || '';
+          this.ngZone.run(() => {
+            if (localidad) {
+              this.direccionValida = true;
+              this.mensajeDireccion = 'Dirección y localidad válidas ✔';
+            } else {
               this.direccionValida = false;
-              this.costoEnvio = 0;
-              this.calculateTotal();
-              this.mensajeDireccion =
-                'Debes elegir una dirección de las sugerencias de Google.';
-            });
-          } else {
-            if (this.mensajeDireccion !== 'Debes elegir una dirección de las sugerencias de Google.') {
-              this.ngZone.run(() => {
-                this.mensajeDireccion =
-                  'Debes elegir una dirección de las sugerencias de Google.';
-              });
+              this.mensajeDireccion = 'Por favor selecciona tu localidad de la lista.';
             }
-          }
+          });
         }
       });
 
@@ -200,8 +194,7 @@ export class CheckoutComponent implements OnInit {
           const place = autocomplete.getPlace();
           if (!place.geometry || !place.geometry.location) {
             this.direccionValida = false;
-            this.mensajeDireccion =
-              'Debes elegir una dirección de las sugerencias de Google.';
+            this.mensajeDireccion = 'Debes elegir una dirección de las sugerencias o seleccionarla de la lista.';
             return;
           }
 
@@ -229,14 +222,22 @@ export class CheckoutComponent implements OnInit {
             }
           }
 
-          const campoLocalidad = document.getElementById(
-            'checkout_state'
-          ) as HTMLInputElement;
-          if (campoLocalidad) {
-            campoLocalidad.value = localidadDetectada || 'Bogotá';
+          // Seteamos el valor de la localidad detectada en el dropdown select
+          const selectLocalidad = document.getElementById(
+            'checkout_state_select'
+          ) as HTMLSelectElement;
+          if (selectLocalidad) {
+            const matchingLoc = Object.keys(this.PRECIOS_ENVIO).find(
+              k => k.toLowerCase() === (localidadDetectada || '').toLowerCase()
+            );
+            if (matchingLoc) {
+              selectLocalidad.value = matchingLoc;
+            } else {
+              selectLocalidad.value = '';
+            }
           }
 
-          // Llamamos a la nueva función que consulta Cabify
+          // Llamamos a la función que consulta Cabify
           this.consultarCostoEnvio({ lat, lng });
         });
       });
@@ -245,27 +246,29 @@ export class CheckoutComponent implements OnInit {
 
   processOrder() {
     if (!isPlatformBrowser(this.platformId)) return;
-    if (this.procesandoOrden) return;
-    this.procesandoOrden = true;
 
     if (!this.direccionValida) {
       alert('Por favor, selecciona una dirección válida.');
       document.getElementById('txtDireccion')?.focus();
-      this.procesandoOrden = false;
       return;
     }
 
     if (!this.telefonoValido || !this.iti) {
       alert('Por favor, ingresa un número celular válido.');
       (document.querySelector('#checkout_phonenumber') as HTMLElement)?.focus();
-      this.procesandoOrden = false;
       return;
     }
 
     this.telefonoFinal = this.iti.getNumber();
-    const direccionFinal = (
+    let direccionFinal = (
       document.getElementById('txtDireccion') as HTMLInputElement
     ).value;
+
+    const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+    const localidad = selectLocalidad?.value || '';
+    if (localidad) {
+      direccionFinal += `, ${localidad}`;
+    }
 
     const nombreInput = document.getElementById(
       'checkout_name',
@@ -277,7 +280,7 @@ export class CheckoutComponent implements OnInit {
         nombre: nombreCliente,
         telefono: this.telefonoFinal,
         direccion: direccionFinal,
-        notas:
+        notes:
           (document.getElementById('checkout_notes') as HTMLTextAreaElement)
             ?.value || '',
       },
@@ -342,7 +345,6 @@ export class CheckoutComponent implements OnInit {
       error: (err) => {
         console.error('❌ Error al pre-crear la orden en Strapi:', err);
         alert('Tuvimos un inconveniente al procesar tu pedido en el servidor. Por favor, intenta de nuevo en unos minutos.');
-        this.procesandoOrden = false;
       }
     });
   }
@@ -364,32 +366,35 @@ export class CheckoutComponent implements OnInit {
       console.warn('⚠️ Abriendo checkout de Wompi sin firma de integridad (no configurada o falló).');
     }
 
-    const checkout = new (window as any).WidgetCheckout(checkoutConfig);
+    try {
+      const checkout = new (window as any).WidgetCheckout(checkoutConfig);
 
-    checkout.open((result: any) => {
-      const transaction = result.transaction;
+      checkout.open((result: any) => {
+        console.log('Wompi callback received:', result);
 
-      if (transaction.status === 'APPROVED') {
-        console.log('--- EVENTO WOMPI APPROVED ---', {
-          id: transaction.id,
-          status: transaction.status,
-        });
+        if (result && result.transaction && result.transaction.status === 'APPROVED') {
+          console.log('--- EVENTO WOMPI APPROVED ---', {
+            id: result.transaction.id,
+            status: result.transaction.status,
+          });
 
-        // Guardamos la información en localStorage para la vista de confirmación
-        localStorage.setItem('last_koky_order', JSON.stringify({
-          productos: orden.productos,
-          pago: orden.pago,
-          referencia: String(referencia)
-        }));
+          // Guardamos la información en localStorage para la vista de confirmación
+          localStorage.setItem('last_koky_order', JSON.stringify({
+            productos: orden.productos,
+            pago: orden.pago,
+            referencia: String(referencia)
+          }));
 
-        this.cartService.clearCart();
-        this.router.navigate(['/orderconfirmation']);
-      } else {
-        // Permitimos volver a intentar si el pago fue rechazado o cerrado
-        this.procesandoOrden = false;
-      }
-    });
+          this.cartService.clearCart();
+          this.router.navigate(['/orderconfirmation']);
+        }
+      });
+    } catch (e) {
+      console.error('❌ Error al inicializar o abrir el Widget de Wompi:', e);
+      alert('Tuvimos un problema al abrir el portal de pagos de Wompi. Por favor, verifica tu conexión o recarga la página.');
+    }
   }
+
   consultarCostoEnvio(destino: { lat: number; lng: number }) {
     this.deliveryService.calcularEnvio(destino).subscribe({
       next: (res) => {
@@ -399,15 +404,49 @@ export class CheckoutComponent implements OnInit {
           this.direccionValida = true;
           this.mensajeDireccion = 'Dirección válida ✔';
         } else {
-          this.direccionValida = false;
-          this.mensajeDireccion = 'No se pudo calcular el envío para esta dirección.';
+          // Fallback en caso de que la API de Cabify responda sin éxito
+          this.aplicarTarifaFijaDeLocalidad();
         }
       },
       error: (err) => {
         console.error('Error al calcular envío:', err);
-        this.direccionValida = false;
-        this.mensajeDireccion = 'Error al obtener tarifa de envío. Intenta de nuevo.';
+        // Fallback en caso de fallo de conexión o caída de Cabify
+        this.aplicarTarifaFijaDeLocalidad();
       },
     });
+  }
+
+  aplicarTarifaFijaDeLocalidad() {
+    const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+    const localidad = selectLocalidad?.value || 'DEFAULT';
+    this.costoEnvio = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+    this.direccionValida = true;
+    this.mensajeDireccion = 'Dirección válida (Tarifa fija de contingencia aplicada) ✔';
+    this.calculateTotal();
+  }
+
+  onLocalityChange(event: any) {
+    const localidad = event.target.value;
+    const inputDireccion = document.getElementById('txtDireccion') as HTMLInputElement;
+    const direccionText = inputDireccion?.value.trim() || '';
+
+    if (direccionText.length < 5) {
+      this.direccionValida = false;
+      this.mensajeDireccion = 'Por favor escribe tu dirección antes de seleccionar la localidad.';
+      this.costoEnvio = 0;
+      this.calculateTotal();
+      return;
+    }
+
+    if (localidad) {
+      this.costoEnvio = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+      this.direccionValida = true;
+      this.mensajeDireccion = 'Dirección y localidad válidas ✔';
+      this.calculateTotal();
+    }
+  }
+
+  getLocalidades(): string[] {
+    return Object.keys(this.PRECIOS_ENVIO).filter(k => k !== 'DEFAULT');
   }
 }
