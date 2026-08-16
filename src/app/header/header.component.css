@@ -118,6 +118,26 @@
   .capsule-close {
     font-size: 20px;
   }
+
+  /* Ajustes específicos del carrito lateral en móvil para evitar cortes de pantalla */
+  .cart-drawer-footer {
+    padding: 12px 15px !important;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  
+  .btn-checkout-drawer {
+    padding: 10px !important;
+    font-size: 15px !important;
+  }
+  
+  .subtotal-row {
+    margin-bottom: 5px !important;
+  }
+  
+  .shipping-info-text {
+    margin-bottom: 8px !important;
+    font-size: 10px !important;
+  }
 }
 
 /* --- ESTILOS DEL CARRITO DESLIZANTE (SLIDE-OUT DRAWER) --- */
@@ -127,6 +147,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Soporte de altura dinámica para evitar cortes en móvil */
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
   z-index: 999998;
@@ -147,6 +168,7 @@
   width: 380px;
   max-width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Altura dinámica que descuenta la barra del navegador móvil */
   background-color: #ffffff;
   box-shadow: -4px 0 25px rgba(0, 0, 0, 0.15);
   z-index: 999999;
@@ -329,6 +351,7 @@
 /* Pie del Panel */
 .cart-drawer-footer {
   padding: 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid #e9ecef;
   background-color: #f8f9fa;
 }
