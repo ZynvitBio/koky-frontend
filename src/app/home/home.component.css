@@ -1122,14 +1122,14 @@
 .modal-right-text {
   width: 50%;
   height: 100%;
-  background: rgba(3, 38, 44, 0.82); /* Capa oscura traslúcida estilo pizarra para legibilidad */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.45); /* Blanco traslúcido glassmorphism */
+  backdrop-filter: blur(12px); /* Difuminado de fondo incrementado para máxima legibilidad de texto */
+  -webkit-backdrop-filter: blur(12px);
   padding: 40px 45px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
 }
 
 /* En pantallas móviles invertimos el comportamiento para que sea legible en vertical */
@@ -1162,12 +1162,13 @@
     width: 100%;
     height: auto;
     padding: 30px 25px;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.65); /* Un poco más de contraste en móvil por luz externa */
   }
 }
 
 .modal-right-text h3 {
-  color: #ffffff;
+  color: #03262c; /* Color oscuro insignia de Koky para contraste en fondo claro */
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 6px;
@@ -1175,7 +1176,7 @@
 }
 
 .modal-right-text .highlight-text-gold {
-  color: #a8ff78; /* Verde limón brillante de alta legibilidad en fondo oscuro */
+  color: #1d8007; /* Verde insignia de Koky en lugar del verde limón claro */
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 22px;
@@ -1192,14 +1193,14 @@
 
 .modal-right-text .story-paragraph {
   font-size: 14.5px;
-  color: rgba(255, 255, 255, 0.95);
-  font-weight: 400;
+  color: #03262c; /* Color oscuro insignia para texto fluido legible */
+  font-weight: 500;
   line-height: 1.6;
   margin-bottom: 16px;
 }
 
 .modal-right-text .story-paragraph strong {
-  color: #ffffff;
+  color: #03262c;
   font-weight: 700;
 }
 
@@ -1221,8 +1222,8 @@
 }
 
 .modal-right-text .modal-action-btn-gold:hover {
-  background: #a8ff78;
-  color: #03262c;
-  box-shadow: 0 6px 20px rgba(168, 255, 120, 0.4);
+  background: #03262c; /* Cambia a azul oscuro de Koky en el hover */
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(3, 38, 44, 0.25);
   transform: translateY(-2px);
 }
