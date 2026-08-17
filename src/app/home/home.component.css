@@ -1122,9 +1122,9 @@
 .modal-right-text {
   width: 50%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.45); /* Blanco traslúcido glassmorphism */
-  backdrop-filter: blur(12px); /* Difuminado de fondo incrementado para máxima legibilidad de texto */
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.22); /* Reducido al 22% de blanco para máxima transparencia */
+  backdrop-filter: blur(5px); /* Desenfoque más suave para permitir ver a Kira detrás del texto */
+  -webkit-backdrop-filter: blur(5px);
   padding: 40px 45px;
   display: flex;
   flex-direction: column;
@@ -1163,7 +1163,9 @@
     height: auto;
     padding: 30px 25px;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.65); /* Un poco más de contraste en móvil por luz externa */
+    background: rgba(255, 255, 255, 0.35); /* Reducido al 35% en móvil para transparentar el cuerpo de Kira */
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
   }
 }
 
