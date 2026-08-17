@@ -1139,12 +1139,24 @@
     max-height: 90vh;
     overflow-y: auto;
   }
+  
+  /* Ajustamos la posición de la imagen de fondo para que el arte (Kira) a la izquierda no se corte */
+  .seal-modal-content.artesanal {
+    background-position: left center !important;
+  }
+  .seal-modal-content.fresco {
+    background-position: left center !important;
+  }
+  .seal-modal-content.garantia {
+    background-position: left center !important;
+  }
+
   .modal-body-wrapper {
     flex-direction: column;
   }
   .modal-left-spacer {
     width: 100%;
-    height: 160px;
+    height: 200px; /* Incrementado de 160px para dar más espacio a la ilustración */
   }
   .modal-right-text {
     width: 100%;
