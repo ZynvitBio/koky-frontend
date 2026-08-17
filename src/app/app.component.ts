@@ -27,15 +27,6 @@ export class AppComponent implements OnInit {
   isHomeRoute         = false;
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (window.location.hostname === 'www.koky.food') {
-        window.location.replace(
-          'https://koky.food' + window.location.pathname + window.location.search
-        );
-        return;
-      }
-    }
-
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e: any) => {
@@ -47,8 +38,20 @@ export class AppComponent implements OnInit {
 
   private updateCanonicalAndOgUrl(path: string) {
     const domain = 'https://koky.food';
-    const cleanPath = path.split('?')[0].split('#')[0];
-    const canonicalUrl = `${domain}${cleanPath === '/' ? '' : (cleanPath === '/home' ? '' : cleanPath)}`;
+    let cleanPath = path.split('?')[0].split('#')[0];
+
+    // Normalizar: quitar la barra inclinada final si es una página interna
+    if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+      cleanPath = cleanPath.slice(0, -1);
+    }
+
+    // El Home lleva barra final (https://koky.food/) y las internas no (https://koky.food/devoluciones)
+    let canonicalUrl = '';
+    if (cleanPath === '/' || cleanPath === '' || cleanPath === '/home') {
+      canonicalUrl = `${domain}/`;
+    } else {
+      canonicalUrl = `${domain}${cleanPath}`;
+    }
 
     // Actualizar o crear Canonical Link
     let link: HTMLLinkElement | null = this.document.querySelector("link[rel='canonical']");
