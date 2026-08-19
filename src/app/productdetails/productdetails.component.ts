@@ -108,14 +108,20 @@ ngAfterViewChecked(): void {
           this.cargarResenasPorSlug(slug);
           this.inyectarJsonLdProducto(this.product, slug);
 
-          // 1. Título: Prioridad al metaTitle de Strapi, si no, usa el name
-          const finalTitle = this.product.metaTitle || `${this.product.name} | Koky Food`;
+          // 1. Título: Prioridad al metaTitle de Strapi, si no, usa una fórmula optimizada para SEO local en Bogotá
+          const fallbackTitle = this.product.name.toLowerCase().includes('tofu')
+            ? `Comprar ${this.product.name} en Bogotá | Tofu Artesanal Fresco`
+            : `Comprar ${this.product.name} en Bogotá | Soya Artesanal Natural`;
+          const finalTitle = this.product.metaTitle || fallbackTitle;
           this.titleService.setTitle(finalTitle);
 
-          // 2. Descripción: Prioridad al metaDescription de Strapi, si no, usa shortDescription o genérico
+          // 2. Descripción: Prioridad al metaDescription de Strapi, si no, usa shortDescription o fórmula local
+          const fallbackDesc = this.product.name.toLowerCase().includes('tofu')
+            ? `¿Buscas dónde comprar ${this.product.name.toLowerCase()} en Bogotá? En Koky elaboramos tu tofu fresco contra pedido: pides hoy y te llega mañana a domicilio.`
+            : `¿Buscas dónde comprar ${this.product.name.toLowerCase()} fresca en Bogotá? En Koky elaboramos soya artesanal contra pedido: pides hoy y te llega mañana a domicilio.`;
           const finalDesc = this.product.metaDescription || 
                             this.product.shortDescription || 
-                            `Compra ${this.product.name} artesanal en Bogotá. Proteína vegetal de alta calidad.`;
+                            fallbackDesc;
           
           this.metaService.updateTag({ name: 'description', content: finalDesc });
 
