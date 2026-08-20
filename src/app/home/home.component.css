@@ -435,6 +435,14 @@
   border-color: #2c5e3b !important;
 }
 
+.step-card.static-card:hover {
+  background: rgba(255, 255, 255, 0.82) !important;
+  transform: none !important;
+  box-shadow: 0 8px 32px rgba(44, 94, 59, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  cursor: default !important;
+}
+
 .step-number-badge {
   position: absolute;
   top: 20px;

@@ -293,6 +293,11 @@ private inicializarSlickNativo() {
         return;
     }
 
+    // 1.1. Verificar si jQuery ($) está disponible en el navegador (evita race conditions de scripts diferidos)
+    if (typeof $ === 'undefined' || !$) {
+        return;
+    }
+
     // 2. Selección del elemento en el DOM de Angular
     const slider = $(this.el.nativeElement).find('.product-slider');
 
