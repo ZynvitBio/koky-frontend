@@ -92,7 +92,7 @@ export function isWeekendOrHoliday(date: Date): boolean {
  */
 export function getDynamicAnnouncementText(): string {
   if (typeof window === 'undefined') {
-    return 'Pedidos antes de las 4:00 PM se entregan mañana en Bogotá'; // Fallback para SSR
+    return 'Pedidos antes de las 7:00 PM se entregan mañana en Bogotá'; // Fallback para SSR
   }
 
   // Obtener fecha y hora actual en Bogotá de forma segura
@@ -123,7 +123,7 @@ export function getDynamicAnnouncementText(): string {
     if (!isWeekendOrHoliday(deliveryDate)) {
       const cutoffDate = new Date(deliveryDate);
       cutoffDate.setDate(deliveryDate.getDate() - 1);
-      cutoffDate.setHours(16, 0, 0, 0); // Corte a las 4:00 PM del día anterior
+      cutoffDate.setHours(19, 0, 0, 0); // Corte a las 7:00 PM del día anterior
 
       if (bogotaNow.getTime() < cutoffDate.getTime()) {
         break;
@@ -155,14 +155,14 @@ export function getDynamicAnnouncementText(): string {
     const diffTime = Math.abs(deliveryDate.getTime() - bogotaNow.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays === 1) {
-      return `Pedidos antes de las 4:00 PM se entregan mañana (${deliveryDayName}) en Bogotá`;
+      return `Pedidos antes de las 7:00 PM se entregan mañana (${deliveryDayName}) en Bogotá`;
     } else {
-      return `Pedidos antes de las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
+      return `Pedidos antes de las 7:00 PM se entregan el ${deliveryDayName} en Bogotá`;
     }
   } else if (isTomorrow) {
-    return `Pedidos antes de las 4:00 PM de mañana se entregan el ${deliveryDayName} en Bogotá`;
+    return `Pedidos antes de las 7:00 PM de mañana se entregan el ${deliveryDayName} en Bogotá`;
   } else {
-    return `Pedidos antes del ${cutoffDayName} a las 4:00 PM se entregan el ${deliveryDayName} en Bogotá`;
+    return `Pedidos antes del ${cutoffDayName} a las 7:00 PM se entregan el ${deliveryDayName} en Bogotá`;
   }
 }
 
@@ -196,7 +196,7 @@ export function getEstimatedDeliveryDayName(createdAtDate: Date): string {
     if (!isWeekendOrHoliday(targetDate)) {
       const cutoffDate = new Date(targetDate);
       cutoffDate.setDate(targetDate.getDate() - 1);
-      cutoffDate.setHours(16, 0, 0, 0);
+      cutoffDate.setHours(19, 0, 0, 0);
 
       if (bogotaDate.getTime() < cutoffDate.getTime()) {
         break;

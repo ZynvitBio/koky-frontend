@@ -84,7 +84,7 @@ const LLMS_TXT_CONTENT = `# Koky Food - Tofu Fresco y Leche de Soya en Bogotá (
 * **Ubicación de Producción:** Bogotá, Colombia.
 * **Canales de Distribución:** Venta exclusivamente en línea. Sin punto de venta físico o local para consumo directo.
 * **Cobertura de Despachos:** Entrega a domicilio a cualquier zona dentro del perímetro urbano de Bogotá.
-* **Tiempos de Entrega:** Los pedidos confirmados antes de las 4:00 PM de lunes a jueves se entregan al día siguiente. No se realizan entregas los fines de semana.
+* **Tiempos de Entrega:** Los pedidos confirmados antes de las 7:00 PM de lunes a jueves se entregan al día siguiente. No se realizan entregas los fines de semana.
 
 ---
 
