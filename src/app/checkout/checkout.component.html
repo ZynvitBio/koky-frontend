@@ -163,9 +163,21 @@
                 </tr>
 
                 <tr *ngIf="costoEnvio > 0">
-                  <th class="subtotal">Envío:</th>
+                  <th class="subtotal">
+                    <span *ngIf="isMixedDelivery">Envío Dividido (Hoy + Mañana):</span>
+                    <span *ngIf="!isMixedDelivery">Envío:</span>
+                  </th>
                   <td class="text-right">
                     {{ costoEnvio | currency: "COP" : "symbol" : "1.0-0" }}
+                  </td>
+                </tr>
+
+                <tr *ngIf="isMixedDelivery && costoEnvio > 0">
+                  <td colspan="2" class="p-2" style="background-color: #eaf6ed; border: 1px solid #cceadd; border-radius: 4px; text-align: left;">
+                    <small style="color: #2e5e3b; display: block; line-height: 1.3;">
+                      <strong>🥦 Envío Dividido Activado:</strong> 
+                      Tu pedido contiene productos con entrega para <strong>hoy</strong> y otros de preparación nocturna para <strong>mañana</strong>. Se realizarán dos despachos independientes.
+                    </small>
                   </td>
                 </tr>
 

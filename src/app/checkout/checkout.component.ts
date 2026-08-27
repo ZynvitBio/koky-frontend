@@ -43,6 +43,7 @@ export class CheckoutComponent implements OnInit {
   destinoLat: number = 0;
   destinoLng: number = 0;
   orderSaved: boolean = false;
+  isMixedDelivery: boolean = false;
 
   readonly PRECIOS_ENVIO: { [key: string]: number } = {
     Suba: 6100,
@@ -81,6 +82,7 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.cartService.cart$.subscribe((items) => {
       this.cartItems = items;
+      this.checkMixedDelivery();
       this.calculateTotal();
     });
 
@@ -147,6 +149,16 @@ export class CheckoutComponent implements OnInit {
       0,
     );
     this.totalFinal = this.subtotal + this.costoEnvio - this.discount;
+  }
+
+  checkMixedDelivery() {
+    if (!this.cartItems || this.cartItems.length === 0) {
+      this.isMixedDelivery = false;
+      return;
+    }
+    const hasExpress = this.cartItems.some(item => item.availableToday === true);
+    const hasRegular = this.cartItems.some(item => !item.availableToday);
+    this.isMixedDelivery = hasExpress && hasRegular;
   }
 
   initAutocomplete() {
@@ -322,7 +334,9 @@ export class CheckoutComponent implements OnInit {
       shipping_address: String(orden.cliente.direccion),
       shipping_latitude: Number(this.destinoLat),
       shipping_longitude: Number(this.destinoLng),
-      shipping_notes: String(orden.cliente.notes),
+      shipping_notes: this.isMixedDelivery
+        ? `[ENVÍO DIVIDIDO] ${orden.cliente.notes || ''}`.trim()
+        : String(orden.cliente.notes),
     };
 
     console.log('🚀 Pre-creando orden en Strapi:', orderData);
@@ -400,10 +414,11 @@ export class CheckoutComponent implements OnInit {
     this.deliveryService.calcularEnvio(destino).subscribe({
       next: (res) => {
         if (res.success) {
-          this.costoEnvio = res.data.deliveries[0].estimation.price.amount;
+          const rawAmount = res.data.deliveries[0].estimation.price.amount;
+          this.costoEnvio = this.isMixedDelivery ? rawAmount * 2 : rawAmount;
           this.calculateTotal();
           this.direccionValida = true;
-          this.mensajeDireccion = 'Dirección válida ✔';
+          this.mensajeDireccion = this.isMixedDelivery ? 'Dirección válida (Envío dividido) ✔' : 'Dirección válida ✔';
         } else {
           // Fallback en caso de que la API de Cabify responda sin éxito
           this.aplicarTarifaFijaDeLocalidad();
@@ -420,9 +435,10 @@ export class CheckoutComponent implements OnInit {
   aplicarTarifaFijaDeLocalidad() {
     const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
     const localidad = selectLocalidad?.value || 'DEFAULT';
-    this.costoEnvio = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+    const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+    this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
     this.direccionValida = true;
-    this.mensajeDireccion = 'Dirección válida (Tarifa fija de contingencia aplicada) ✔';
+    this.mensajeDireccion = this.isMixedDelivery ? 'Dirección válida (Envío dividido de contingencia) ✔' : 'Dirección válida (Tarifa fija de contingencia aplicada) ✔';
     this.calculateTotal();
   }
 
@@ -440,9 +456,10 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (localidad) {
-      this.costoEnvio = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+      const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+      this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
       this.direccionValida = true;
-      this.mensajeDireccion = 'Dirección y localidad válidas ✔';
+      this.mensajeDireccion = this.isMixedDelivery ? 'Dirección y localidad válidas (Envío dividido) ✔' : 'Dirección y localidad válidas ✔';
       this.calculateTotal();
     }
   }
