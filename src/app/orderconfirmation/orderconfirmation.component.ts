@@ -23,6 +23,7 @@ export class OrderconfirmationComponent implements OnInit {
   discount: number = 0;
   totalPaid: number = 0;
   orderReference: string = '';
+  orderId: number | null = null;
   invoicePdfUrl: string | null = null;
   generatingInvoice = false;
 
@@ -51,7 +52,7 @@ export class OrderconfirmationComponent implements OnInit {
           // 3. Usamos la referencia que generamos para Wompi
           this.orderReference = lastOrder.referencia || 'Pendiente';
 
-          // 4. Cargar URL de la factura
+          // 4. Cargar URL de la factura y número de orden
           this.cargarFacturaUrl();
         } catch (error) {
           console.error("Error al procesar los datos de la orden:", error);
@@ -66,6 +67,9 @@ export class OrderconfirmationComponent implements OnInit {
     this.generatingInvoice = true;
     this.orderService.getConfirmationDetails(this.orderReference).subscribe({
       next: (res) => {
+        if (res.id) {
+          this.orderId = res.id;
+        }
         if (res.invoice_pdf_url) {
           this.invoicePdfUrl = res.invoice_pdf_url;
           this.generatingInvoice = false;

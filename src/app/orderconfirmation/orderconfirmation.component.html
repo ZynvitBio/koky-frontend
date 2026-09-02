@@ -17,7 +17,17 @@
         <div class="row">
             <div class="col-12 mb-4">
                 <h3 class="mb-3">Resumen de tu Pedido</h3>
-                <p><strong>Referencia:</strong> {{ orderReference }}</p>
+                <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+                    <p class="mb-0 fs-5">
+                        <strong>Número de Orden:</strong> 
+                        <span class="badge bg-success text-white px-3 py-2 fs-6">
+                            {{ orderId ? 'KOKY-' + orderId : 'Cargando orden...' }}
+                        </span>
+                    </p>
+                </div>
+                <p class="text-muted small mb-0">
+                    <span>Ref. Transacción Bancaria:</span> {{ orderReference }}
+                </p>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 table-responsive">
                 <table class="table">
