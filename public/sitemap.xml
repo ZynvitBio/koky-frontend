@@ -12,6 +12,12 @@
     </image:image>
   </url>
   <url>
+    <loc>https://koky.food/recetas</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://koky.food/pedir</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>

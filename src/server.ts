@@ -198,6 +198,31 @@ app.get('/llms.txt', (req, res) => {
   return;
 });
 
+// Ruta dedicada para servir el portal interactivo de recetas
+app.get(['/recetas', '/recetas/', '/recetas.html'], (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  const possiblePaths = [
+    join(browserDistFolder, 'recetas.html'),
+    join(browserDistFolder, 'recetas/index.html'),
+    join(process.cwd(), 'dist/koky/browser/recetas.html'),
+    join(process.cwd(), 'dist/koky/browser/recetas/index.html'),
+    join(process.cwd(), 'src/recetas.html'),
+    join(process.cwd(), 'src/recetas/index.html'),
+    join(process.cwd(), 'public/recetas.html'),
+    join(process.cwd(), 'public/recetas/index.html')
+  ];
+  for (const path of possiblePaths) {
+    if (existsSync(path)) {
+      try {
+        res.status(200).send(readFileSync(path, 'utf-8'));
+        return;
+      } catch (e) {}
+    }
+  }
+  res.status(404).send('Recetario no encontrado');
+  return;
+});
+
 /**
  * Serve static files from /browser
  */

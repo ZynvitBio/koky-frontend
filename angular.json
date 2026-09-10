@@ -26,7 +26,9 @@
               "src/assets",
               { "glob": "robots.txt", "input": "src", "output": "/" },
               { "glob": "sitemap.xml", "input": "src", "output": "/" },
-              { "glob": "llms.txt", "input": "src", "output": "/" }
+              { "glob": "llms.txt", "input": "src", "output": "/" },
+              { "glob": "recetas.html", "input": "src", "output": "/" },
+              { "glob": "recetas/**", "input": "src", "output": "/" }
             ],
             "styles": [
               "src/assets/css/bootstrap.min.css",
