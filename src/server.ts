@@ -234,6 +234,17 @@ app.use(
 );
 
 /**
+ * Return 404 for missing static assets to prevent running heavy Angular SSR
+ */
+app.use((req, res, next) => {
+  if (/\.(mp4|webm|ogv|jpg|jpeg|png|gif|webp|svg|ico|css|js|map|woff|woff2|ttf|eot)$/i.test(req.path)) {
+    res.status(404).send('Asset not found');
+    return;
+  }
+  next();
+});
+
+/**
  * Handle all other requests by rendering the Angular application.
  */
 app.get('**', (req, res, next) => {
