@@ -275,11 +275,11 @@ export class CheckoutComponent implements OnInit {
     this.telefonoFinal = this.iti.getNumber();
     let direccionFinal = (
       document.getElementById('txtDireccion') as HTMLInputElement
-    ).value;
+    ).value.trim();
 
     const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
     const localidad = selectLocalidad?.value || '';
-    if (localidad) {
+    if (localidad && !direccionFinal.toLowerCase().includes(localidad.toLowerCase())) {
       direccionFinal += `, ${localidad}`;
     }
 
