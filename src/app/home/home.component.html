@@ -327,18 +327,24 @@
             </div>
 
             <div class="buttons">
-              @if (product.availableToday) {
+              @if (product.stock === 0) {
+                <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
+                  Agotado
+                </span>
+              } @else if (product.availableToday) {
                 <span class="sold-out-tag position-top-right">
                   Disponible Hoy
                 </span>
               }
 
-              <button
-                (click)="addToCart(product)"
-                class="btn custom-btn position-bottom-right"
-              >
-                Añadir
-              </button>
+              @if (product.stock > 0) {
+                <button
+                  (click)="addToCart(product)"
+                  class="btn custom-btn position-bottom-right"
+                >
+                  Añadir
+                </button>
+              }
             </div>
 
             <div class="icons position-center">

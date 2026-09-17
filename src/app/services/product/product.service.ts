@@ -18,8 +18,12 @@ export class ProductService {
   return this.http.get<any>(`${this.apiUrl}/products?populate=*`).pipe(
     map(res => {
       if (!res || !res.data) return [];
-      // Obligamos a cada producto a pasar por tu filtro de Railway
-      return res.data.map((item: any) => this.mapProductData(item));
+      return res.data
+        .filter((item: any) => {
+          const attrs = item.attributes ? item.attributes : item;
+          return attrs.active !== false;
+        })
+        .map((item: any) => this.mapProductData(item));
     })
   );
 }
