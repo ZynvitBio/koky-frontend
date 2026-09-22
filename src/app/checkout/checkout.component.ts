@@ -44,28 +44,75 @@ export class CheckoutComponent implements OnInit {
   destinoLng: number = 0;
   orderSaved: boolean = false;
   isMixedDelivery: boolean = false;
+  calculandoEnvio: boolean = false;
+  mostrarSelectorLocalidad: boolean = false;
+  zonaDetectada: string = '';
+  suggestionsList: Array<{ text: string; placePrediction: any }> = [];
+  sessionToken: any = null;
+  debounceTimer: any = null;
+  geocoder: any = null;
 
   readonly PRECIOS_ENVIO: { [key: string]: number } = {
-    Suba: 6100,
-    Usaquén: 7300,
-    Engativá: 9200,
-    'Barrios Unidos': 9200,
-    Chapinero: 10400,
-    Teusaquillo: 10400,
-    Fontibón: 11600,
-    'Puente Aranda': 11600,
-    'Los Mártires': 12200,
-    'Santa Fe': 13400,
-    'La Candelaria': 13400,
-    Kennedy: 14600,
-    Bosa: 17100,
-    'Ciudad Bolívar': 18300,
-    Tunjuelito: 15900,
-    'Antonio Nariño': 14600,
-    'Rafael Uribe Uribe': 17100,
-    'San Cristóbal': 18300,
-    Usme: 22000,
-    DEFAULT: 9800,
+    // SUBA
+    'Suba - Niza / Pontevedra / Bulevar': 7500,
+    'Suba - Colina / San José de Bavaria / Mazurén': 9500,
+    'Suba - Centro / Rincón / Aures': 12000,
+    'Suba - Gaitana / Lisboa / Tibabuyes': 14500,
+    'Suba - Guaymaral / Corpas': 17000,
+
+    // USAQUÉN
+    'Usaquén - Santa Bárbara / Unicentro': 8500,
+    'Usaquén - Cedritos / Contador': 9500,
+    'Usaquén - San Cristóbal Norte / Servitá': 11500,
+    'Usaquén - Torca / Autopista Norte': 16000,
+
+    // ENGATIVÁ
+    'Engativá - Las Ferias / Bonanza / Metrópolis': 10500,
+    'Engativá - Álamos / Minuto de Dios / Boyacá Real': 11500,
+    'Engativá - Centro / Villas de Granada / Garcés Navas': 13500,
+    'Engativá - Engativá Pueblo / Aeropuerto': 15500,
+
+    // FONTIBÓN
+    'Fontibón - Ciudad Salitre / Carlos Lleras': 11500,
+    'Fontibón - Modelia / Hayuelos / Capellanía': 13500,
+    'Fontibón - Centro / Villemar / Fontibón Pueblo': 16500,
+    'Fontibón - Zona Franca / HB / Puente Grande': 18500,
+
+    // KENNEDY
+    'Kennedy - Castilla / Marsella / Américas': 13500,
+    'Kennedy - Kennedy Central / Timiza / Carvajal': 15500,
+    'Kennedy - Tintal / Calandaima': 17500,
+    'Kennedy - Patio Bonito / Corabastos / El Amparo': 19000,
+
+    // BOSA
+    'Bosa - Bosa Central / Laureles': 18500,
+    'Bosa - San Bernardino / Bosa Porvenir': 21000,
+
+    // CHAPINERO & TEUSAQUILLO
+    'Chapinero - Chicó / El Virrey / Parque 93': 9500,
+    'Chapinero - Chapinero Central / Alto': 11500,
+    'Teusaquillo - Galerías / Palermo / La Soledad': 11500,
+    'Teusaquillo - Salitre Oriental / CAN / Quinta Paredes': 12500,
+
+    // BARRIOS UNIDOS
+    'Barrios Unidos - Polo / Castellana / Andes': 9500,
+    'Barrios Unidos - 12 de Octubre / 7 de Agosto': 10500,
+
+    // PUENTE ARANDA & LOS MÁRTIRES
+    'Puente Aranda - Ciudad Montes / Salazar Gómez / Trinidad': 13500,
+    'Los Mártires - Paloquemao / Santa Isabel / Ricaurte': 13500,
+
+    // CENTRO Y SUR
+    'Santa Fe / La Candelaria - Centro Histórico / Las Aguas': 14500,
+    'Antonio Nariño - Restrepo / Santander / Ciudad Berna': 15500,
+    'Tunjuelito - Venecia / San Vicente / Tunjuelito': 17000,
+    'Rafael Uribe Uribe - Olaya / Quiroga / Marruecos': 18500,
+    'San Cristóbal - 20 de Julio / San Blas / Sur Oriental': 19500,
+    'Ciudad Bolívar - Perdomo / Ismael Perdomo / Candelaria': 19500,
+    'Ciudad Bolívar - Meissen / San Francisco / Arborizadora': 22000,
+    'Usme - Usme Pueblo / Yomasa / Santa Librada': 24000,
+
+    DEFAULT: 11000,
   };
 
   constructor(
@@ -161,111 +208,287 @@ export class CheckoutComponent implements OnInit {
     this.isMixedDelivery = hasExpress && hasRegular;
   }
 
-  initAutocomplete() {
+  async initAutocomplete() {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const input = document.getElementById('txtDireccion') as HTMLInputElement;
-    if (!input || typeof google === 'undefined') return;
+    if (!input || typeof google === 'undefined' || !google.maps) return;
 
-    const options = {
-      bounds: bogotaBounds,
-      componentRestrictions: { country: 'co' },
-      fields: ['address_components', 'geometry'],
-      strictBounds: true,
-    };
+    if (google.maps.importLibrary) {
+      try {
+        await google.maps.importLibrary('places');
+      } catch (e) {
+        console.warn('Google Places library load error:', e);
+      }
+    }
 
-    // Inicializamos Autocomplete fuera de la zona de Angular para evitar ciclos de change detection al digitar
-    this.ngZone.runOutsideAngular(() => {
-      const autocomplete = new google.maps.places.Autocomplete(input, options);
+    if (google.maps && google.maps.Geocoder) {
+      this.geocoder = new google.maps.Geocoder();
+    }
 
-      input.addEventListener('input', () => {
-        if (!input.value || input.value.trim() === '') {
-          this.ngZone.run(() => {
-            this.direccionValida = false;
-            this.mensajeDireccion = 'Por favor escribe tu dirección.';
-            this.costoEnvio = 0;
-            this.calculateTotal();
-          });
+    input.addEventListener('input', () => {
+      const val = input.value?.trim() || '';
+      this.ngZone.run(() => {
+        this.destinoLat = 0;
+        this.destinoLng = 0;
+        this.zonaDetectada = '';
+
+        if (this.debounceTimer) {
+          clearTimeout(this.debounceTimer);
+        }
+
+        if (!val) {
+          this.direccionValida = false;
+          this.mensajeDireccion = 'Por favor escribe tu dirección.';
+          this.costoEnvio = 0;
+          this.suggestionsList = [];
+          this.calculateTotal();
         } else {
-          // Si digitó algo, verifiquemos si seleccionó una localidad en el select dropdown
-          const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
-          const localidad = selectLocalidad?.value || '';
-          this.ngZone.run(() => {
-            if (localidad) {
-              this.direccionValida = true;
-              this.mensajeDireccion = 'Dirección y localidad válidas ✔';
-            } else {
-              this.direccionValida = false;
-              this.mensajeDireccion = 'Por favor selecciona tu localidad de la lista.';
-            }
-          });
+          this.direccionValida = false;
+          this.mensajeDireccion = 'Selecciona tu dirección de las sugerencias o elige tu sector.';
+          this.debounceTimer = setTimeout(() => {
+            this.buscarSugerencias(val);
+          }, 250);
         }
       });
+    });
 
-      autocomplete.addListener('place_changed', () => {
+    // Cerrar sugerencias si hace clic fuera
+    document.addEventListener('click', (e: any) => {
+      if (!e.target.closest('#txtDireccion') && !e.target.closest('.places-suggestions-container')) {
         this.ngZone.run(() => {
-          const place = autocomplete.getPlace();
-          if (!place.geometry || !place.geometry.location) {
-            this.direccionValida = false;
-            this.mensajeDireccion = 'Debes elegir una dirección de las sugerencias o seleccionarla de la lista.';
-            return;
-          }
+          this.suggestionsList = [];
+        });
+      }
+    });
+  }
 
-          // Obtenemos las coordenadas reales del lugar seleccionado
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
+  async buscarSugerencias(query: string) {
+    if (!query || query.length < 3 || typeof google === 'undefined' || !google.maps) {
+      this.suggestionsList = [];
+      return;
+    }
+
+    try {
+      if (!this.sessionToken && google.maps.places?.AutocompleteSessionToken) {
+        this.sessionToken = new google.maps.places.AutocompleteSessionToken();
+      }
+
+      const request: any = {
+        input: query,
+        includedRegionCodes: ['co'],
+        locationBias: {
+          north: bogotaBounds.north,
+          south: bogotaBounds.south,
+          west: bogotaBounds.west,
+          east: bogotaBounds.east,
+        }
+      };
+
+      if (this.sessionToken) {
+        request.sessionToken = this.sessionToken;
+      }
+
+      if (google.maps.places?.AutocompleteSuggestion?.fetchAutocompleteSuggestions) {
+        const response = await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        this.ngZone.run(() => {
+          if (response && response.suggestions && response.suggestions.length > 0) {
+            this.suggestionsList = response.suggestions.map((s: any) => ({
+              text: s.placePrediction?.text?.text || s.placePrediction?.mainText?.text || '',
+              placePrediction: s.placePrediction
+            })).filter((item: any) => item.text.length > 0);
+          } else {
+            this.suggestionsList = [];
+          }
+        });
+      }
+    } catch (error) {
+      console.warn('Error fetching Places suggestions:', error);
+      this.suggestionsList = [];
+    }
+  }
+
+  async seleccionarSugerencia(sug: { text: string; placePrediction: any }) {
+    const input = document.getElementById('txtDireccion') as HTMLInputElement;
+    if (input) {
+      input.value = sug.text;
+    }
+    this.suggestionsList = [];
+    this.mostrarSelectorLocalidad = false;
+
+    this.calculandoEnvio = true;
+    this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
+
+    try {
+      if (sug.placePrediction && sug.placePrediction.toPlace) {
+        const place = sug.placePrediction.toPlace();
+        await place.fetchFields({
+          fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
+        });
+
+        const lat = place.location ? (typeof place.location.lat === 'function' ? place.location.lat() : place.location.lat) : 0;
+        const lng = place.location ? (typeof place.location.lng === 'function' ? place.location.lng() : place.location.lng) : 0;
+
+        this.sessionToken = null;
+
+        if (place.addressComponents) {
+          this.sincronizarSectorDesdeGoogle(place.addressComponents);
+        }
+
+        if (lat && lng) {
           this.destinoLat = lat;
           this.destinoLng = lng;
-
-          // Extraemos la localidad / barrio para rellenar el input
-          let localidadDetectada = '';
-          if (place.address_components) {
-            for (const component of place.address_components) {
-              if (component.types.includes('sublocality_level_1')) {
-                localidadDetectada = component.long_name;
-                break;
-              }
-            }
-
-            if (!localidadDetectada) {
-              const barrio = place.address_components.find((c: any) =>
-                c.types.includes('neighborhood')
-              );
-              if (barrio) localidadDetectada = barrio.long_name;
-            }
-          }
-
-          // Seteamos el valor de la localidad detectada en el dropdown select
-          const selectLocalidad = document.getElementById(
-            'checkout_state_select'
-          ) as HTMLSelectElement;
-          if (selectLocalidad) {
-            const matchingLoc = Object.keys(this.PRECIOS_ENVIO).find(
-              k => k.toLowerCase() === (localidadDetectada || '').toLowerCase()
-            );
-            if (matchingLoc) {
-              selectLocalidad.value = matchingLoc;
-            } else {
-              selectLocalidad.value = '';
-            }
-          }
-
-          // Llamamos a la función que consulta Cabify
           this.consultarCostoEnvio({ lat, lng });
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Place fetchFields error, usando geocoder de respaldo:', err);
+    }
+
+    this.geocodificarDireccion(sug.text);
+  }
+
+  private sincronizarSectorDesdeGoogle(components: any[]) {
+    if (!components) return;
+    let barrio = '';
+    let localidad = '';
+
+    for (const comp of components) {
+      const name = comp.longText || comp.long_name || comp.text || '';
+      const types = comp.types || [];
+      if (types.includes('neighborhood') && !barrio) {
+        barrio = name;
+      }
+      if ((types.includes('sublocality_level_1') || types.includes('sublocality')) && !localidad) {
+        localidad = name;
+      }
+    }
+
+    if (barrio && localidad && barrio.toLowerCase() !== localidad.toLowerCase()) {
+      this.zonaDetectada = `${barrio} (${localidad})`;
+    } else if (barrio) {
+      this.zonaDetectada = barrio;
+    } else if (localidad) {
+      this.zonaDetectada = localidad;
+    } else {
+      this.zonaDetectada = '';
+    }
+
+    const searchTarget = (barrio || localidad || '').toLowerCase();
+    if (searchTarget) {
+      const matchingSector = Object.keys(this.PRECIOS_ENVIO).find(sec =>
+        sec.toLowerCase().includes(searchTarget)
+      );
+      const selectSector = document.getElementById('checkout_state_select') as HTMLSelectElement;
+      if (selectSector && matchingSector) {
+        selectSector.value = matchingSector;
+      }
+    }
+  }
+
+  geocodificarDireccion(direccion: string, callback?: (success: boolean) => void) {
+    if (typeof google === 'undefined' || !google.maps) {
+      if (callback) callback(false);
+      return;
+    }
+
+    if (!this.geocoder) {
+      this.geocoder = new google.maps.Geocoder();
+    }
+
+    this.calculandoEnvio = true;
+    this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
+
+    const cleanAddress = direccion.toLowerCase().includes('bogot') ? direccion : `${direccion}, Bogotá, Colombia`;
+
+    this.geocoder.geocode(
+      {
+        address: cleanAddress,
+        bounds: bogotaBounds,
+        componentRestrictions: { country: 'CO' }
+      },
+      (results: any, status: any) => {
+        this.ngZone.run(() => {
+          if (status === 'OK' && results && results.length > 0) {
+            const loc = results[0].geometry.location;
+            const lat = loc.lat();
+            const lng = loc.lng();
+            this.destinoLat = lat;
+            this.destinoLng = lng;
+
+            this.sincronizarSectorDesdeGoogle(results[0].address_components);
+
+            this.consultarCostoEnvio({ lat, lng }, () => {
+              if (callback) callback(true);
+            });
+          } else {
+            console.warn('⚠️ Google Geocoder no pudo ubicar la dirección exacta:', status);
+            this.calculandoEnvio = false;
+            this.mostrarSelectorLocalidad = true;
+            const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+            const localidad = selectLocalidad?.value;
+            if (localidad && this.PRECIOS_ENVIO[localidad]) {
+              this.aplicarTarifaFijaDeLocalidad();
+              if (callback) callback(true);
+            } else {
+              this.direccionValida = false;
+              this.mensajeDireccion = 'Por favor selecciona tu sector/localidad de la lista.';
+              if (callback) callback(false);
+            }
+          }
         });
-      });
-    });
+      }
+    );
   }
 
   processOrder() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    if (!this.direccionValida) {
-      alert('Por favor, selecciona una dirección válida.');
-      document.getElementById('txtDireccion')?.focus();
+    if (this.calculandoEnvio) {
+      alert('Estamos calculando el costo de tu envío. Por favor espera un segundo.');
       return;
     }
 
+    const inputDireccion = document.getElementById('txtDireccion') as HTMLInputElement;
+    const direccionText = inputDireccion?.value?.trim() || '';
+
+    if (!direccionText || direccionText.length < 5) {
+      alert('Por favor, ingresa tu dirección de entrega.');
+      inputDireccion?.focus();
+      return;
+    }
+
+    // Si aún no tenemos coordenadas GPS reales y tampoco se calculó el costo con una localidad manual:
+    if (!this.destinoLat || !this.destinoLng) {
+      const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+      const localidad = selectLocalidad?.value || '';
+
+      this.geocodificarDireccion(direccionText, (success) => {
+        if (success && this.costoEnvio > 0) {
+          this.continuarProcesoOrden();
+        } else if (localidad && this.PRECIOS_ENVIO[localidad]) {
+          this.aplicarTarifaFijaDeLocalidad();
+          this.continuarProcesoOrden();
+        } else {
+          this.mostrarSelectorLocalidad = true;
+          alert('Por favor selecciona tu localidad de la lista para calcular el costo de tu envío.');
+          document.getElementById('checkout_state_select')?.focus();
+        }
+      });
+      return;
+    }
+
+    if (!this.direccionValida || this.costoEnvio <= 0) {
+      alert('Por favor, confirma una dirección válida para calcular el envío.');
+      inputDireccion?.focus();
+      return;
+    }
+
+    this.continuarProcesoOrden();
+  }
+
+  private continuarProcesoOrden() {
     if (!this.telefonoValido || !this.iti) {
       alert('Por favor, ingresa un número celular válido.');
       (document.querySelector('#checkout_phonenumber') as HTMLElement)?.focus();
@@ -410,35 +633,51 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  consultarCostoEnvio(destino: { lat: number; lng: number }) {
+  consultarCostoEnvio(destino: { lat: number; lng: number }, onComplete?: () => void) {
+    this.calculandoEnvio = true;
+    this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
+
     this.deliveryService.calcularEnvio(destino).subscribe({
       next: (res) => {
+        this.calculandoEnvio = false;
         if (res.success) {
           const rawAmount = res.data.deliveries[0].estimation.price.amount;
           this.costoEnvio = this.isMixedDelivery ? rawAmount * 2 : rawAmount;
           this.calculateTotal();
           this.direccionValida = true;
-          this.mensajeDireccion = this.isMixedDelivery ? 'Dirección válida (Envío dividido) ✔' : 'Dirección válida ✔';
+          this.mensajeDireccion = this.isMixedDelivery
+            ? 'Dirección válida (Envío dividido calculado con Cabify) ✔'
+            : 'Dirección y costo de envío verificados ✔';
         } else {
           // Fallback en caso de que la API de Cabify responda sin éxito
+          this.mostrarSelectorLocalidad = true;
           this.aplicarTarifaFijaDeLocalidad();
         }
+        if (onComplete) onComplete();
       },
       error: (err) => {
         console.error('Error al calcular envío:', err);
+        this.calculandoEnvio = false;
         // Fallback en caso de fallo de conexión o caída de Cabify
+        this.mostrarSelectorLocalidad = true;
         this.aplicarTarifaFijaDeLocalidad();
+        if (onComplete) onComplete();
       },
     });
   }
 
   aplicarTarifaFijaDeLocalidad() {
     const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
-    const localidad = selectLocalidad?.value || 'DEFAULT';
-    const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+    const localidad = selectLocalidad?.value || '';
+    const baseCost = localidad && this.PRECIOS_ENVIO[localidad]
+      ? this.PRECIOS_ENVIO[localidad]
+      : this.PRECIOS_ENVIO['DEFAULT'];
+
     this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
     this.direccionValida = true;
-    this.mensajeDireccion = this.isMixedDelivery ? 'Dirección válida (Envío dividido de contingencia) ✔' : 'Dirección válida (Tarifa fija de contingencia aplicada) ✔';
+    this.mensajeDireccion = this.isMixedDelivery
+      ? 'Dirección válida (Envío dividido de contingencia aplicado) ✔'
+      : (localidad ? `Tarifa fija de contingencia (${localidad}) aplicada ✔` : 'Tarifa estándar aplicada ✔');
     this.calculateTotal();
   }
 
@@ -456,11 +695,17 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (localidad) {
-      const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
-      this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
-      this.direccionValida = true;
-      this.mensajeDireccion = this.isMixedDelivery ? 'Dirección y localidad válidas (Envío dividido) ✔' : 'Dirección y localidad válidas ✔';
-      this.calculateTotal();
+      // Si no tenemos coordenadas GPS aún, aplicamos la tarifa fija de esa localidad
+      if (!this.destinoLat || !this.destinoLng) {
+        this.zonaDetectada = localidad;
+        const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
+        this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
+        this.direccionValida = true;
+        this.mensajeDireccion = this.isMixedDelivery
+          ? `Localidad ${localidad} (Envío dividido) ✔`
+          : `Localidad ${localidad} seleccionada ✔`;
+        this.calculateTotal();
+      }
     }
   }
 
