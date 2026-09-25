@@ -14,7 +14,7 @@ export class RecipeService {
   constructor(private http: HttpClient) { }
 
   getRecipes(): Observable<any[]> {
-    const finalUrl = `${this.apiUrl}/recipes?populate=*`;
+    const finalUrl = `${this.apiUrl}/recipes?filters[position][$notNull]=true&populate=*`;
     return this.http.get<any>(finalUrl).pipe(
       map(response => {
         if (!response || !response.data) return [];
@@ -75,14 +75,14 @@ getRecipesBySlug(slug: string): Observable<any> {
 }
 
   getRecipesByCategory(categorySlug: string): Observable<any[]> {
-    const filterUrl = `${this.apiUrl}/recipes?filters[categories][slug][$eq]=${categorySlug}&populate=*`;
+    const filterUrl = `${this.apiUrl}/recipes?filters[position][$notNull]=true&filters[categories][slug][$eq]=${categorySlug}&populate=*`;
     return this.http.get<any>(filterUrl).pipe(
       map(res => res.data.map((item: any) => this.mapListItem(item)))
     );
   }
 
   searchRecipes(term: string): Observable<any[]> {
-    const url = `${this.apiUrl}/recipes?filters[titulo][$containsi]=${term}&populate=*`;
+    const url = `${this.apiUrl}/recipes?filters[position][$notNull]=true&filters[titulo][$containsi]=${term}&populate=*`;
     return this.http.get<any>(url).pipe(
       map(res => res.data.map((item: any) => this.mapListItem(item)))
     );

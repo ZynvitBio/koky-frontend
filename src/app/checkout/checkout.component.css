@@ -77,4 +77,409 @@
   margin-bottom: 0;
   letter-spacing: 0.2px;
 }
+
+/* --- TARJETAS INTERACTIVAS DE DESPACHO (HOY / MAÑANA) --- */
+.delivery-batches-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delivery-batch-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.delivery-batch-card.batch-disabled {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  opacity: 0.65;
+}
+
+.batch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.batch-title strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #03262c;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.batch-sub {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  color: #64748b;
+  display: block;
+}
+
+/* Switch estilo Koky en verde corporativo */
+.batch-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.koky-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  margin: 0;
+}
+
+.koky-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.koky-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+}
+
+.koky-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.koky-switch input:checked + .koky-slider {
+  background-color: #1d8007; /* Verde Koky */
+}
+
+.koky-switch input:checked + .koky-slider:before {
+  transform: translateX(20px);
+}
+
+.batch-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.batch-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+
+.batch-items-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #334155;
+  padding: 3px 0;
+}
+
+.batch-items-list .item-price {
+  font-weight: 600;
+  color: #03262c;
+}
+
+.batch-shipping-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12.5px;
+  color: #64748b;
+  padding-top: 6px;
+  border-top: 1px dashed #f1f5f9;
+}
+
+.batch-shipping-row .shipping-amount {
+  font-weight: 700;
+  color: #1d8007;
+}
+
+.batch-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tooltip emergente en Hover y Focus */
+.info-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #1d8007;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.info-tooltip-wrapper:hover .info-icon,
+.info-tooltip-wrapper:focus .info-icon {
+  background-color: #1d8007;
+  color: #ffffff;
+  border-color: #1d8007;
+}
+
+.tooltip-popover {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -8px;
+  z-index: 1000;
+  width: 250px;
+  background-color: #03262c;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px -5px rgba(3, 38, 44, 0.45);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-4px);
+  pointer-events: none;
+  text-align: left;
+}
+
+.tooltip-popover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  right: 12px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #03262c transparent;
+}
+
+.tooltip-popover strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  color: #bbf7d0;
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+
+.tooltip-popover p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  color: #f1f5f9;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.info-tooltip-wrapper:hover .tooltip-popover,
+.info-tooltip-wrapper:focus .tooltip-popover {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Aviso de Despacho Inactivo / Unificado */
+.batch-inactive-notice {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.inactive-badge {
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1d8007;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  letter-spacing: 0.4px;
+}
+
+.inactive-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.batch-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.btn-koky-action {
+  background-color: #1d8007;
+  color: #ffffff;
+  border: 1px solid #1d8007;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.btn-koky-action:hover {
+  background-color: #03262c;
+  border-color: #03262c;
+  color: #ffffff;
+}
+
+.batch-action-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 170px;
+}
+
+.info-tag {
+  font-family: 'Roboto', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: #1d8007;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+}
+
+.info-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  color: #475569;
+  line-height: 1.25;
+}
+
+.btn-koky-outline-action {
+  width: 100%;
+  background-color: #f0fdf4;
+  color: #1d8007;
+  border: 1px solid #bbf7d0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.btn-koky-outline-action:hover {
+  background-color: #1d8007;
+  color: #ffffff;
+  border-color: #1d8007;
+}
+
+.badge-fresh-night {
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #1d8007;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 1px 6px;
+  border-radius: 3px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+.consolidated-notice-box {
+  background-color: #f4f8f4;
+  border: 1px solid #d5e8d6;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.consolidated-notice-box p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  color: #03262c;
+  margin: 0 0 6px 0;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.undo-action-link {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  color: #1d8007;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.undo-action-link:hover {
+  color: #03262c;
+}
+
+.freshness-guarantee-box {
+  background-color: #f0fdf4;
+  border: 1px solid #dcfce7;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+
+.freshness-guarantee-box p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  color: #166534;
+  margin: 0;
+  line-height: 1.4;
+}
+
+
 

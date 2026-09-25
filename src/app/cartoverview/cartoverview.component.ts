@@ -44,7 +44,8 @@ export class CartoverviewComponent implements OnInit {
             slug: item.slug || '',
             image: item.image ? (item.image.startsWith('http') ? item.image : `${strapiUrl}${item.image}`) : 'assets/img/placeholder.png',
             contentPerUnit: item.contentPerUnit,
-            unitAbbreviation: item.unitAbbreviation
+            unitAbbreviation: item.unitAbbreviation,
+            availableToday: item.availableToday
           };
         });
 
@@ -52,6 +53,12 @@ export class CartoverviewComponent implements OnInit {
         this.cdr.detectChanges(); 
       });
     }
+  }
+
+  get isMixedCart(): boolean {
+    const hasToday = this.cartItems.some(item => item.availableToday === true);
+    const hasTomorrow = this.cartItems.some(item => !item.availableToday);
+    return hasToday && hasTomorrow;
   }
 
   calculateTotal(): void {
@@ -68,11 +75,11 @@ export class CartoverviewComponent implements OnInit {
 
   decreaseQuantity(item: CartItem): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.cartService.decreaseQuantity(item.id);
+      this.cartService.decreaseQuantity(item.id, item.availableToday);
     }
   }
 
-  async removeItem(productId: number) {
+  async removeItem(item: CartItem) {
     if (isPlatformBrowser(this.platformId)) {
       const confirmado = await this.notify.confirmAction(
         '¿Quitar del carrito?',
@@ -80,7 +87,7 @@ export class CartoverviewComponent implements OnInit {
       );
 
       if (confirmado) {
-        this.cartService.removeFromCart(productId);
+        this.cartService.removeFromCart(item.id, item.availableToday);
         this.notify.showSuccess('Producto eliminado');
       }
     }

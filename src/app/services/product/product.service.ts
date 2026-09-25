@@ -92,9 +92,9 @@ export class ProductService {
     stock: attrs.stock,
     metaTitle: attrs.metaTitle,
     metaDescription: attrs.metaDescription,
-    availableToday: attrs.availableToday,
+    availableToday: attrs.availableToday === true && (attrs.immediateDeliveryStock === undefined || attrs.immediateDeliveryStock === null || attrs.immediateDeliveryStock > 0),
     active: attrs.active,
-    immediateDeliveryStock: attrs.immediateDeliveryStock,
+    immediateDeliveryStock: attrs.immediateDeliveryStock !== undefined && attrs.immediateDeliveryStock !== null ? Number(attrs.immediateDeliveryStock) : 0,
     
     // 3. MAPEO DE BANNERS (Usando la lógica de Railway)
     bannerImage: bannerUrl 

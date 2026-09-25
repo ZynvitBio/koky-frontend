@@ -72,6 +72,24 @@
                       <span class="badge bg-light text-dark border p-2" style="font-weight: 500; font-size: 13px;"><i class="icofont-location-pin text-danger me-1"></i> Venta Directa en Bogotá</span>
                     </div>
 
+                    <!-- Selector de Lote / Entrega cuando availableToday es true -->
+                    <div class="delivery-batch-choice mb-3" *ngIf="product.availableToday">
+                      <div class="choice-card" [class.selected]="selectedDeliveryMode === 'today'" (click)="selectedDeliveryMode = 'today'">
+                        <input type="radio" name="deliveryChoice" [checked]="selectedDeliveryMode === 'today'" />
+                        <div class="choice-text">
+                          <strong>Producción fresca de hoy</strong>
+                          <span>Entrega hoy mismo</span>
+                        </div>
+                      </div>
+                      <div class="choice-card mt-2" [class.selected]="selectedDeliveryMode === 'tomorrow'" (click)="selectedDeliveryMode = 'tomorrow'">
+                        <input type="radio" name="deliveryChoice" [checked]="selectedDeliveryMode === 'tomorrow'" />
+                        <div class="choice-text">
+                          <strong>Lote recién elaborado para mañana</strong>
+                          <span>Elaborado fresco esta noche</span>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="add_to_cart d-flex" *ngIf="product.stock > 0">
                         <div class="quantity d-flex">
                             <div class="left_arrow"><button type="button"><i class="icofont-arrow-left"></i></button></div>

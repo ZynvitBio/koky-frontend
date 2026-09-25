@@ -104,20 +104,26 @@ export class HeaderComponent implements OnInit {
     this.cartService.closeCart();
   }
 
-  removeFromCart(id: number) {
-    this.cartService.removeFromCart(id);
+  removeFromCart(item: CartItem) {
+    this.cartService.removeFromCart(item.id, item.availableToday);
   }
 
   incrementQuantity(item: CartItem) {
     this.cartService.addToCart({ ...item, quantity: 1 });
   }
 
-  decrementQuantity(id: number) {
-    this.cartService.decreaseQuantity(id);
+  decrementQuantity(item: CartItem) {
+    this.cartService.decreaseQuantity(item.id, item.availableToday);
   }
 
   getTotalPrice(): number {
     return this.cartService.getTotal();
+  }
+
+  get isMixedCart(): boolean {
+    const hasToday = this.cartItems.some(item => item.availableToday === true);
+    const hasTomorrow = this.cartItems.some(item => !item.availableToday);
+    return hasToday && hasTomorrow;
   }
 
   goToCheckout() {

@@ -121,8 +121,8 @@ loadBlogHero() {
   });
 }
 loadRecipes(): void {
-  // Añadimos &pagination[pageSize]=6 al final de la ruta
-  this.http.get<{ data: Recipe[] }>(`${this.STRAPI_URL}/api/recipes?populate=*&pagination[pageSize]=6`)
+  // Solo cargamos las recetas oficiales de la web (con position left/right asignada)
+  this.http.get<{ data: Recipe[] }>(`${this.STRAPI_URL}/api/recipes?filters[position][$notNull]=true&populate=*&pagination[pageSize]=6`)
     .subscribe({
       next: (response) => {
         this.recipes = response.data;

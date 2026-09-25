@@ -23,6 +23,7 @@ const bogotaBounds = {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './checkout.component.html',
+  styleUrl: './checkout.component.css',
   host: {
     'ngSkipHydration': 'true'
   }
@@ -43,7 +44,6 @@ export class CheckoutComponent implements OnInit {
   destinoLat: number = 0;
   destinoLng: number = 0;
   orderSaved: boolean = false;
-  isMixedDelivery: boolean = false;
   calculandoEnvio: boolean = false;
   mostrarSelectorLocalidad: boolean = false;
   zonaDetectada: string = '';
@@ -51,6 +51,58 @@ export class CheckoutComponent implements OnInit {
   sessionToken: any = null;
   debounceTimer: any = null;
   geocoder: any = null;
+
+  // Lógica de Doble Despacho y Fusión / Omitir Lotes
+  consolidarEnManana: boolean = false;
+  omitirManana: boolean = false;
+  baseDeliveryPrice: number = 0;
+
+  get itemsToday(): CartItem[] {
+    return this.cartItems.filter(item => item.availableToday === true);
+  }
+
+  get itemsTomorrow(): CartItem[] {
+    return this.cartItems.filter(item => !item.availableToday);
+  }
+
+  get hasTodayItems(): boolean {
+    return this.itemsToday.length > 0;
+  }
+
+  get hasTomorrowItems(): boolean {
+    return this.itemsTomorrow.length > 0;
+  }
+
+  get isMixedDelivery(): boolean {
+    return this.hasTodayItems && this.hasTomorrowItems;
+  }
+
+  get isDoubleDeliveryActive(): boolean {
+    return this.isMixedDelivery && !this.consolidarEnManana && !this.omitirManana;
+  }
+
+  get activeCartItems(): CartItem[] {
+    if (!this.isMixedDelivery) {
+      return this.cartItems;
+    }
+    if (this.omitirManana) {
+      return this.itemsToday;
+    }
+    return this.cartItems;
+  }
+
+  get subtotalHoy(): number {
+    return this.itemsToday.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  }
+
+  get subtotalManana(): number {
+    return this.itemsTomorrow.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  }
+
+  get costoEnvioUnitario(): number {
+    if (this.baseDeliveryPrice > 0) return this.baseDeliveryPrice;
+    return this.isDoubleDeliveryActive ? Math.round(this.costoEnvio / 2) : this.costoEnvio;
+  }
 
   readonly PRECIOS_ENVIO: { [key: string]: number } = {
     // SUBA
@@ -129,7 +181,6 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.cartService.cart$.subscribe((items) => {
       this.cartItems = items;
-      this.checkMixedDelivery();
       this.calculateTotal();
     });
 
@@ -191,21 +242,73 @@ export class CheckoutComponent implements OnInit {
   }
 
   calculateTotal() {
-    this.subtotal = this.cartItems.reduce(
+    this.subtotal = this.activeCartItems.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0,
     );
     this.totalFinal = this.subtotal + this.costoEnvio - this.discount;
   }
 
-  checkMixedDelivery() {
-    if (!this.cartItems || this.cartItems.length === 0) {
-      this.isMixedDelivery = false;
-      return;
+  despachoHoyActivo: boolean = true;
+  despachoMananaActivo: boolean = true;
+
+  consolidarTodoEnManana() {
+    this.despachoHoyActivo = false;
+    this.despachoMananaActivo = true;
+    this.consolidarEnManana = true;
+    this.omitirManana = false;
+    this.recalcularEnvioYTotal();
+  }
+
+  omitirEntregaManana() {
+    this.despachoHoyActivo = true;
+    this.despachoMananaActivo = false;
+    this.omitirManana = true;
+    this.consolidarEnManana = false;
+    this.recalcularEnvioYTotal();
+  }
+
+  restaurarDobleDespacho() {
+    this.despachoHoyActivo = true;
+    this.despachoMananaActivo = true;
+    this.consolidarEnManana = false;
+    this.omitirManana = false;
+    this.recalcularEnvioYTotal();
+  }
+
+  toggleDespachoHoy() {
+    this.despachoHoyActivo = !this.despachoHoyActivo;
+    if (!this.despachoHoyActivo) {
+      this.despachoMananaActivo = true;
+      this.consolidarEnManana = true;
+      this.omitirManana = false;
+    } else {
+      this.consolidarEnManana = false;
+      this.omitirManana = false;
     }
-    const hasExpress = this.cartItems.some(item => item.availableToday === true);
-    const hasRegular = this.cartItems.some(item => !item.availableToday);
-    this.isMixedDelivery = hasExpress && hasRegular;
+    this.recalcularEnvioYTotal();
+  }
+
+  toggleDespachoManana() {
+    this.despachoMananaActivo = !this.despachoMananaActivo;
+    if (!this.despachoMananaActivo) {
+      this.despachoHoyActivo = true;
+      this.omitirManana = true;
+      this.consolidarEnManana = false;
+    } else {
+      this.consolidarEnManana = false;
+      this.omitirManana = false;
+    }
+    this.recalcularEnvioYTotal();
+  }
+
+  recalcularEnvioYTotal() {
+    if (this.baseDeliveryPrice > 0) {
+      this.costoEnvio = this.isDoubleDeliveryActive
+        ? this.baseDeliveryPrice * 2
+        : this.baseDeliveryPrice;
+    }
+    this.calculateTotal();
   }
 
   async initAutocomplete() {
@@ -520,7 +623,7 @@ export class CheckoutComponent implements OnInit {
           (document.getElementById('checkout_notes') as HTMLTextAreaElement)
             ?.value || '',
       },
-      productos: this.cartItems,
+      productos: this.activeCartItems,
       pago: {
         subtotal: this.subtotal,
         envio: this.costoEnvio,
@@ -544,22 +647,37 @@ export class CheckoutComponent implements OnInit {
     ) as HTMLInputElement;
     const nombreParaStrapi = inputNombre
       ? inputNombre.value.trim()
-      : 'Jonathan Barrios';
+      : 'Cliente Koky';
+
+    let deliveryWindowTag = 'MAÑANA';
+    let notesPrefix = '';
+
+    if (this.isDoubleDeliveryActive) {
+      deliveryWindowTag = 'DOBLE_DESPACHO_HOY_MANANA';
+      notesPrefix = '[DOBLE DESPACHO: 1 Hoy + 1 Mañana] ';
+    } else if (this.isMixedDelivery && this.consolidarEnManana) {
+      deliveryWindowTag = 'MAÑANA_CONSOLIDADA';
+      notesPrefix = '[ENTREGA CONSOLIDADA MAÑANA (Tofu Semiduro elaborado fresco esta noche)] ';
+    } else if (this.isMixedDelivery && this.omitirManana) {
+      deliveryWindowTag = 'HOY';
+      notesPrefix = '[DESPACHO HOY (Lote de mañana omitido por cliente)] ';
+    } else if (this.hasTodayItems && !this.hasTomorrowItems) {
+      deliveryWindowTag = 'HOY';
+    }
 
     const orderData = {
       whatsapp_id: String(orden.cliente.telefono),
       customer_name: nombreParaStrapi,
       total_amount: Number(orden.pago.total),
-      wompi_reference: String(referencia), // ✅ Guardamos la referencia correcta
+      wompi_reference: String(referencia),
       source: String(this.detectedSource || 'whatsapp'),
       items: orden.productos,
-      payment_method: 'PENDING', // Empieza como pendiente
+      payment_method: 'PENDING',
+      delivery_window: deliveryWindowTag,
       shipping_address: String(orden.cliente.direccion),
       shipping_latitude: Number(this.destinoLat),
       shipping_longitude: Number(this.destinoLng),
-      shipping_notes: this.isMixedDelivery
-        ? `[ENVÍO DIVIDIDO] ${orden.cliente.notes || ''}`.trim()
-        : String(orden.cliente.notes),
+      shipping_notes: `${notesPrefix}${orden.cliente.notes || ''}`.trim(),
     };
 
     console.log('🚀 Pre-creando orden en Strapi:', orderData);
@@ -567,7 +685,6 @@ export class CheckoutComponent implements OnInit {
     this.orderService.createOrder(orderData).subscribe({
       next: (orderRes: any) => {
         console.log('✅ Orden pre-creada con éxito en Strapi:', orderRes);
-        // Solicitamos la firma de integridad de forma segura a nuestro backend en Railway
         this.orderService.getWompiSignature(referencia, amountInCents, 'COP').subscribe({
           next: (res: any) => {
             const signatureHex = res.signature;
@@ -575,7 +692,6 @@ export class CheckoutComponent implements OnInit {
           },
           error: (err) => {
             console.error('❌ Error al obtener la firma de Wompi desde el backend:', err);
-            // Si hay un error, abrimos Wompi sin firma (como fallback)
             this.iniciarWompiWidget(orden, referencia, amountInCents, '');
           }
         });
@@ -616,7 +732,6 @@ export class CheckoutComponent implements OnInit {
             status: result.transaction.status,
           });
 
-          // Guardamos la información en localStorage para la vista de confirmación
           localStorage.setItem('last_koky_order', JSON.stringify({
             productos: orden.productos,
             pago: orden.pago,
@@ -642,14 +757,14 @@ export class CheckoutComponent implements OnInit {
         this.calculandoEnvio = false;
         if (res.success) {
           const rawAmount = res.data.deliveries[0].estimation.price.amount;
-          this.costoEnvio = this.isMixedDelivery ? rawAmount * 2 : rawAmount;
+          this.baseDeliveryPrice = rawAmount;
+          this.costoEnvio = this.isDoubleDeliveryActive ? rawAmount * 2 : rawAmount;
           this.calculateTotal();
           this.direccionValida = true;
-          this.mensajeDireccion = this.isMixedDelivery
-            ? 'Dirección válida (Envío dividido calculado con Cabify) ✔'
+          this.mensajeDireccion = this.isDoubleDeliveryActive
+            ? 'Dirección válida (Doble despacho calculado con Cabify) ✔'
             : 'Dirección y costo de envío verificados ✔';
         } else {
-          // Fallback en caso de que la API de Cabify responda sin éxito
           this.mostrarSelectorLocalidad = true;
           this.aplicarTarifaFijaDeLocalidad();
         }
@@ -658,7 +773,6 @@ export class CheckoutComponent implements OnInit {
       error: (err) => {
         console.error('Error al calcular envío:', err);
         this.calculandoEnvio = false;
-        // Fallback en caso de fallo de conexión o caída de Cabify
         this.mostrarSelectorLocalidad = true;
         this.aplicarTarifaFijaDeLocalidad();
         if (onComplete) onComplete();
@@ -673,11 +787,12 @@ export class CheckoutComponent implements OnInit {
       ? this.PRECIOS_ENVIO[localidad]
       : this.PRECIOS_ENVIO['DEFAULT'];
 
-    this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
+    this.baseDeliveryPrice = baseCost;
+    this.costoEnvio = this.isDoubleDeliveryActive ? baseCost * 2 : baseCost;
     this.direccionValida = true;
-    this.mensajeDireccion = this.isMixedDelivery
-      ? 'Dirección válida (Envío dividido de contingencia aplicado) ✔'
-      : (localidad ? `Tarifa fija de contingencia (${localidad}) aplicada ✔` : 'Tarifa estándar aplicada ✔');
+    this.mensajeDireccion = this.isDoubleDeliveryActive
+      ? 'Dirección válida (Doble despacho de contingencia aplicado) ✔'
+      : (localidad ? `Tarifa fija (${localidad}) aplicada ✔` : 'Tarifa estándar aplicada ✔');
     this.calculateTotal();
   }
 
@@ -695,14 +810,14 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (localidad) {
-      // Si no tenemos coordenadas GPS aún, aplicamos la tarifa fija de esa localidad
       if (!this.destinoLat || !this.destinoLng) {
         this.zonaDetectada = localidad;
         const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
-        this.costoEnvio = this.isMixedDelivery ? baseCost * 2 : baseCost;
+        this.baseDeliveryPrice = baseCost;
+        this.costoEnvio = this.isDoubleDeliveryActive ? baseCost * 2 : baseCost;
         this.direccionValida = true;
-        this.mensajeDireccion = this.isMixedDelivery
-          ? `Localidad ${localidad} (Envío dividido) ✔`
+        this.mensajeDireccion = this.isDoubleDeliveryActive
+          ? `Localidad ${localidad} (Doble despacho) ✔`
           : `Localidad ${localidad} seleccionada ✔`;
         this.calculateTotal();
       }

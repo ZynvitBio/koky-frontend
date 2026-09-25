@@ -453,3 +453,41 @@
 .cart-floating-tab:hover .tab-badge {
   color: #03262c;
 }
+
+/* Badges y Alerta de Doble Despacho en Mini-Cart Drawer */
+.cart-item-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge-delivery-today,
+.badge-delivery-tomorrow {
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #1d8007;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1.2;
+}
+
+.mixed-cart-drawer-alert {
+  display: flex;
+  align-items: center;
+  background-color: #f4f8f4;
+  border: 1px solid #d5e8d6;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.mixed-cart-drawer-alert .alert-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #03262c;
+}

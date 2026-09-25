@@ -386,28 +386,30 @@ private inicializarSlickNativo() {
     this.activeImage = url;
   }
 
- addToCart(product: any) {
-  if (!product) return;
+  selectedDeliveryMode: 'today' | 'tomorrow' = 'today';
 
-  // 1. Extraemos la URL de la imagen de forma segura
-  // Strapi a veces envía el objeto { url: '...' } y otras solo el string
-  const imageUrl = typeof product.image === 'string' 
-    ? product.image 
-    : (product.image?.url || 'assets/img/no-image.png'); // Imagen por defecto si falla
+  addToCart(product: any) {
+    if (!product) return;
 
-  const itemToCart: CartItem = {
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    quantity: 1,
-    image: imageUrl, // <-- Usamos la URL limpia aquí
-    slug: product.slug,
-    contentPerUnit: product.contentPerUnit,
-    unitAbbreviation: product.unitAbbreviation,
-    availableToday: product.availableToday
-  };
+    const imageUrl = typeof product.image === 'string' 
+      ? product.image 
+      : (product.image?.url || 'assets/img/no-image.png');
 
-  this.cartService.addToCart(itemToCart);
-  this.notify.showSuccess(`¡${itemToCart.name} añadido al carrito!`, 'KOKY');
-}
+    const isAvailableToday = product.availableToday === true && this.selectedDeliveryMode === 'today';
+
+    const itemToCart: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: imageUrl,
+      slug: product.slug,
+      contentPerUnit: product.contentPerUnit,
+      unitAbbreviation: product.unitAbbreviation,
+      availableToday: isAvailableToday
+    };
+
+    this.cartService.addToCart(itemToCart);
+    this.notify.showSuccess(`¡${itemToCart.name} añadido al carrito!`, 'KOKY');
+  }
 }

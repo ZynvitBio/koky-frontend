@@ -50,7 +50,9 @@ export class CartService {
   }
 
   addToCart(product: CartItem) {
-    const index = this.cartItems.findIndex(i => i.id === product.id);
+    const index = this.cartItems.findIndex(
+      i => i.id === product.id && !!i.availableToday === !!product.availableToday
+    );
     if (index > -1) {
       this.cartItems[index].quantity += product.quantity;
     } else {
@@ -61,20 +63,28 @@ export class CartService {
   }
 
   /** Elimina completamente un producto del carrito (Botón "X") */
-  removeFromCart(productId: number) {
-    this.cartItems = this.cartItems.filter(item => item.id !== productId);
+  removeFromCart(productId: number, availableToday?: boolean) {
+    if (availableToday !== undefined) {
+      this.cartItems = this.cartItems.filter(
+        item => !(item.id === productId && !!item.availableToday === !!availableToday)
+      );
+    } else {
+      this.cartItems = this.cartItems.filter(item => item.id !== productId);
+    }
     this.updateCart();
   }
 
   /** Reduce la cantidad en 1. Si llega a 0, lo elimina. */
-  decreaseQuantity(productId: number) {
-    const index = this.cartItems.findIndex(item => item.id === productId);
+  decreaseQuantity(productId: number, availableToday?: boolean) {
+    const index = this.cartItems.findIndex(
+      item => item.id === productId && (availableToday === undefined || !!item.availableToday === !!availableToday)
+    );
     
     if (index > -1) {
       if (this.cartItems[index].quantity > 1) {
         this.cartItems[index].quantity--;
       } else {
-        this.cartItems = this.cartItems.filter(item => item.id !== productId);
+        this.cartItems.splice(index, 1);
       }
       this.updateCart();
     }
