@@ -331,7 +331,7 @@
                 <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
                   Agotado
                 </span>
-              } @else if (product.availableToday) {
+              } @else if (isBrowser && product.availableToday && (product.immediateDeliveryStock || 0) > 0) {
                 <span class="sold-out-tag position-top-right">
                   Disponible Hoy
                 </span>

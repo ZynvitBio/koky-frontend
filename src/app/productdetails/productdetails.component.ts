@@ -388,6 +388,12 @@ private inicializarSlickNativo() {
 
   selectedDeliveryMode: 'today' | 'tomorrow' = 'today';
 
+  get isAvailableTodayLive(): boolean {
+    return isPlatformBrowser(this.platformId) && 
+           this.product?.availableToday === true && 
+           (Number(this.product?.immediateDeliveryStock) > 0);
+  }
+
   addToCart(product: any) {
     if (!product) return;
 
@@ -395,7 +401,7 @@ private inicializarSlickNativo() {
       ? product.image 
       : (product.image?.url || 'assets/img/no-image.png');
 
-    const isAvailableToday = product.availableToday === true && this.selectedDeliveryMode === 'today';
+    const isAvailableToday = this.isAvailableTodayLive && this.selectedDeliveryMode === 'today';
 
     const itemToCart: CartItem = {
       id: product.id,

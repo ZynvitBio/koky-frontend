@@ -73,7 +73,7 @@
                     </div>
 
                     <!-- Selector de Lote / Entrega cuando availableToday es true -->
-                    <div class="delivery-batch-choice mb-3" *ngIf="product.availableToday">
+                    <div class="delivery-batch-choice mb-3" *ngIf="isAvailableTodayLive">
                       <div class="choice-card" [class.selected]="selectedDeliveryMode === 'today'" (click)="selectedDeliveryMode = 'today'">
                         <input type="radio" name="deliveryChoice" [checked]="selectedDeliveryMode === 'today'" />
                         <div class="choice-text">
