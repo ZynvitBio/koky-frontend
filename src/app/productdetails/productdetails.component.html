@@ -98,7 +98,7 @@
                         </div>
                         <a (click)="addToCart(product)" class="btn border-transparent ml-5">Añadir</a>
                     </div>
-                    <div *ngIf="product.stock === 0" class="mt-3">
+                    <div *ngIf="isBrowser && (product.stock || 0) === 0" class="mt-3">
                         <span class="badge bg-danger p-2" style="font-size: 15px; font-weight: 600;">⚠️ Producto Temporalmente Agotado</span>
                     </div>
                 </div>
@@ -239,7 +239,7 @@
                         </div>
 
                         <div class="buttons">
-                            <span class="sold-out-tag position-top-right" *ngIf="item.stock === 0">Agotado</span>
+                            <span class="sold-out-tag position-top-right" *ngIf="isBrowser && (item.stock || 0) === 0">Agotado</span>
                             
                             <button 
                                 (click)="addToCart(item)" 

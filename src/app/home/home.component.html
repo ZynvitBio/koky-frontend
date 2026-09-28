@@ -327,7 +327,7 @@
             </div>
 
             <div class="buttons">
-              @if (product.stock === 0) {
+              @if (isBrowser && (product.stock || 0) === 0) {
                 <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
                   Agotado
                 </span>
@@ -337,7 +337,7 @@
                 </span>
               }
 
-              @if (product.stock > 0) {
+              @if ((product.stock || 0) > 0) {
                 <button
                   (click)="addToCart(product)"
                   class="btn custom-btn position-bottom-right"

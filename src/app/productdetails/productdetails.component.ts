@@ -23,6 +23,7 @@ export class ProductdetailsComponent implements OnInit, AfterViewChecked {
   productItems: any[] = [];
   activeImage: string = '';
   private slickInicializado = false;
+  isBrowser = false;
 
   constructor(
     private cartService: CartService,
@@ -36,7 +37,9 @@ export class ProductdetailsComponent implements OnInit, AfterViewChecked {
     private metaService: Meta,   // 3. INYECTA AQUÍ
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
     this.cargarEstilosSlick();
