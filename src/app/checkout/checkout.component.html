@@ -214,7 +214,7 @@
                     <span class="info-icon">i</span>
                     <div class="tooltip-popover">
                       <strong>¿Cómo funciona?</strong>
-                      <p>Al desactivar esta entrega, elaboramos tu Tofu Semiduro fresco esta noche y despachamos todo junto mañana en una sola entrega (Pagas 1 solo domicilio).</p>
+                      <p>Al desactivar esta entrega, elaboramos tu Tofu Semiduro fresco para tu entrega de {{ estimatedDeliveryDay }} (Pagas 1 solo domicilio).</p>
                     </div>
                   </div>
 
@@ -241,20 +241,20 @@
                   </div>
                 </ng-container>
 
-                <!-- Cuando se desactiva hoy (se unifica en mañana) -->
+                <!-- Cuando se desactiva hoy (se unifica en entrega programada) -->
                 <div *ngIf="!despachoHoyActivo" class="batch-inactive-notice">
-                  <span class="inactive-badge">Unido a la entrega de mañana</span>
-                  <p class="inactive-text">Tu Tofu Semiduro se elaborará fresco esta noche con tu pedido de mañana (1 solo domicilio).</p>
+                  <span class="inactive-badge">Unido a la entrega de {{ estimatedDeliveryDay }}</span>
+                  <p class="inactive-text">Tu Tofu Semiduro se elaborará fresco para entregarse con tu pedido de {{ estimatedDeliveryDay }} (1 solo domicilio).</p>
                 </div>
               </div>
             </div>
 
-            <!-- TARJETA 2: ENTREGA MAÑANA -->
+            <!-- TARJETA 2: ENTREGA PROGRAMADA -->
             <div class="delivery-batch-card mt-3" [class.batch-disabled]="!despachoMananaActivo">
               <div class="batch-header">
                 <div class="batch-title">
-                  <strong>ENTREGA 2: MAÑANA</strong>
-                  <span class="batch-sub">Lote recién elaborado para mañana</span>
+                  <strong>ENTREGA 2: {{ estimatedDeliveryDay | uppercase }}</strong>
+                  <span class="batch-sub">Lote recién elaborado para {{ estimatedDeliveryDay }}</span>
                 </div>
 
                 <div class="batch-controls">
@@ -263,12 +263,12 @@
                     <span class="info-icon">i</span>
                     <div class="tooltip-popover">
                       <strong>¿Cómo funciona?</strong>
-                      <p>Al desactivar esta entrega, se omite el lote de preparación nocturna y recibirás únicamente tus productos disponibles hoy (Pagas 1 solo domicilio).</p>
+                      <p>Al desactivar esta entrega, se omite el lote de preparación programado y recibirás únicamente tus productos disponibles hoy (Pagas 1 solo domicilio).</p>
                     </div>
                   </div>
 
                   <!-- Switch Koky -->
-                  <label class="koky-switch" title="Activar o desactivar entrega de mañana">
+                  <label class="koky-switch" title="Activar o desactivar entrega programada">
                     <input type="checkbox" [checked]="despachoMananaActivo" (change)="toggleDespachoManana()" />
                     <span class="koky-slider"></span>
                   </label>
@@ -276,7 +276,7 @@
               </div>
 
               <div class="batch-body">
-                <!-- Cuando está activa la entrega de mañana -->
+                <!-- Cuando está activa la entrega programada -->
                 <ng-container *ngIf="despachoMananaActivo">
                   <ul class="batch-items-list">
                     <li *ngFor="let item of itemsTomorrow">
@@ -288,14 +288,14 @@
                       <li *ngFor="let item of itemsToday">
                         <div class="d-flex flex-column">
                           <span class="item-name">{{ item.quantity }}x {{ item.name }} <small class="text-muted">({{ item.contentPerUnit }}{{ item.unitAbbreviation }})</small></span>
-                          <small class="badge-fresh-night">Elaboración fresca de esta noche</small>
+                          <small class="badge-fresh-night">Elaboración fresca programada</small>
                         </div>
                         <span class="item-price">${{ (item.price * item.quantity) | number }}</span>
                       </li>
                     </ng-container>
                   </ul>
                   <div *ngIf="costoEnvio > 0" class="batch-shipping-row">
-                    <span>Domicilio Mañana:</span>
+                    <span>Domicilio ({{ estimatedDeliveryDay }}):</span>
                     <span class="shipping-amount">{{ costoEnvioUnitario | currency: "COP" : "symbol" : "1.0-0" }}</span>
                   </div>
                 </ng-container>
@@ -322,9 +322,9 @@
             <div class="batch-header">
               <div class="batch-title">
                 <strong *ngIf="hasTodayItems">ENTREGA: HOY MISMO</strong>
-                <strong *ngIf="!hasTodayItems">ENTREGA: MAÑANA</strong>
+                <strong *ngIf="!hasTodayItems">ENTREGA: {{ estimatedDeliveryDay | uppercase }}</strong>
                 <span class="batch-sub" *ngIf="hasTodayItems">Producción fresca de hoy</span>
-                <span class="batch-sub" *ngIf="!hasTodayItems">Lote recién elaborado para mañana</span>
+                <span class="batch-sub" *ngIf="!hasTodayItems">Lote recién elaborado para {{ estimatedDeliveryDay }}</span>
               </div>
             </div>
 

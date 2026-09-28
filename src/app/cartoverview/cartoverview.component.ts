@@ -4,6 +4,7 @@ import { CartService, CartItem } from '../services/cart/cart.service';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../services/notification/notification.service'; 
+import { getEstimatedDeliveryDayName } from '../utils/delivery-helper'; 
 
 @Component({
   selector: 'app-cartoverview',
@@ -59,6 +60,10 @@ export class CartoverviewComponent implements OnInit {
     const hasToday = this.cartItems.some(item => item.availableToday === true);
     const hasTomorrow = this.cartItems.some(item => !item.availableToday);
     return hasToday && hasTomorrow;
+  }
+
+  get estimatedDeliveryDay(): string {
+    return getEstimatedDeliveryDayName(new Date());
   }
 
   calculateTotal(): void {

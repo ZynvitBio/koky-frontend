@@ -84,8 +84,8 @@
                       <div class="choice-card mt-2" [class.selected]="selectedDeliveryMode === 'tomorrow'" (click)="selectedDeliveryMode = 'tomorrow'">
                         <input type="radio" name="deliveryChoice" [checked]="selectedDeliveryMode === 'tomorrow'" />
                         <div class="choice-text">
-                          <strong>Lote recién elaborado para mañana</strong>
-                          <span>Elaborado fresco esta noche</span>
+                          <strong>Lote recién elaborado para {{ estimatedDeliveryDay }}</strong>
+                          <span>Elaboración fresca programada</span>
                         </div>
                       </div>
                     </div>

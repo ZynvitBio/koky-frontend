@@ -8,6 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DeliveryService } from '../services/delivery/delivery.service';
 import { environment } from '../../environments/environment';
+import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 
 declare var google: any;
 
@@ -247,6 +248,10 @@ export class CheckoutComponent implements OnInit {
       0,
     );
     this.totalFinal = this.subtotal + this.costoEnvio - this.discount;
+  }
+
+  get estimatedDeliveryDay(): string {
+    return getEstimatedDeliveryDayName(new Date());
   }
 
   despachoHoyActivo: boolean = true;

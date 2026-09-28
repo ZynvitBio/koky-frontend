@@ -6,6 +6,7 @@ import { CartService, CartItem} from '../services/cart/cart.service';
 import { NotificationService } from '../services/notification/notification.service';
 import { Title, Meta } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
+import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 
 declare var $: any;
 
@@ -395,6 +396,10 @@ private inicializarSlickNativo() {
     return isPlatformBrowser(this.platformId) && 
            this.product?.availableToday === true && 
            (Number(this.product?.immediateDeliveryStock) > 0);
+  }
+
+  get estimatedDeliveryDay(): string {
+    return getEstimatedDeliveryDayName(new Date());
   }
 
   addToCart(product: any) {

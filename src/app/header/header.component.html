@@ -108,7 +108,7 @@
 										@if (item.availableToday) {
 											<span class="badge-delivery-today">Entrega Hoy</span>
 										} @else {
-											<span class="badge-delivery-tomorrow">Entrega Mañana</span>
+											<span class="badge-delivery-tomorrow">Entrega {{ estimatedDeliveryDay }}</span>
 										}
 									</div>
 									<div class="cart-item-price-qty">
@@ -133,7 +133,7 @@
 				<div class="cart-drawer-footer">
 					@if (isMixedCart) {
 						<div class="mixed-cart-drawer-alert">
-							<span class="alert-text"><strong>2 Entregas:</strong> Tu pedido combina la producción fresca de hoy con el lote recién elaborado para mañana.</span>
+							<span class="alert-text"><strong>2 Entregas:</strong> Tu pedido combina la producción fresca de hoy con el lote elaborado para {{ estimatedDeliveryDay }}.</span>
 						</div>
 					}
 					<div class="subtotal-row">

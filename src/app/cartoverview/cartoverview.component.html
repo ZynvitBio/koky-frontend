@@ -21,7 +21,7 @@
             <div class="alert mb-4 p-3" style="background-color: #f4f8f4; border: 1px solid #d5e8d6; color: #03262c; border-radius: 6px;">
                 <div style="font-size: 13.5px; line-height: 1.4;">
                     <strong>2 Entregas:</strong> 
-                    Tu pedido combina la producción fresca de hoy con el lote recién elaborado para mañana.
+                    Tu pedido combina la producción fresca de hoy con el lote elaborado para {{ estimatedDeliveryDay }}.
                 </div>
             </div>
         }
@@ -52,12 +52,12 @@
                                     <b>{{ item.name }}</b>
                                     <div class="d-flex align-items-center mt-1" style="gap: 6px;">
                                         <span class="text-muted" style="font-size: 0.8em;">
-                                            {{ item.contentPerUnit }}{{ item.unitAbbreviation }}
+                                             {{ item.contentPerUnit }}{{ item.unitAbbreviation }}
                                         </span>
                                         @if (item.availableToday) {
                                             <span style="font-size: 10px; font-weight: 600; color: #1d8007; background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 6px; border-radius: 4px;">Entrega Hoy</span>
                                         } @else {
-                                            <span style="font-size: 10px; font-weight: 600; color: #1d8007; background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 6px; border-radius: 4px;">Entrega Mañana</span>
+                                            <span style="font-size: 10px; font-weight: 600; color: #1d8007; background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 6px; border-radius: 4px;">Entrega {{ estimatedDeliveryDay }}</span>
                                         }
                                     </div>
                                 </td>

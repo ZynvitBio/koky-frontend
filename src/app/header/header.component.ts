@@ -4,7 +4,7 @@ import { CartService, CartItem } from '../services/cart/cart.service';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { getDynamicAnnouncementText } from '../utils/delivery-helper';
+import { getDynamicAnnouncementText, getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +22,10 @@ export class HeaderComponent implements OnInit {
 
   getAnnouncementText(): string {
     return getDynamicAnnouncementText();
+  }
+
+  get estimatedDeliveryDay(): string {
+    return getEstimatedDeliveryDayName(new Date());
   }
 
   constructor(
