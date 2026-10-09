@@ -9,7 +9,25 @@
     color: #25D366 !important; /* El verde de WhatsApp */
 }
 #full-about, #product, #full-testimonial {
-  scroll-margin-top: 100px; 
+  scroll-margin-top: 110px; 
+}
+
+/* Aumento del 10% del Navbar y del Logo */
+.navbar-brand {
+  width: 94px !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 94px !important;
+}
+
+.navbar {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
 }
 /* Cápsula de Anuncio Estilo Amazon (Flotante Izquierda) */
 .announcement-capsule {

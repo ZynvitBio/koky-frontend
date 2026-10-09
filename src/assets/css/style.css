@@ -239,14 +239,14 @@ button:hover {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    padding: 10px 50px;
+    padding: 12px 50px;
 }
 
 .navbar-brand {
     padding-top: 0;
     padding-bottom: 0;
     margin-right: 0rem;
-    width: 85px;
+    width: 94px;
     margin-bottom: 0px;
     margin-top: 0px;
 }
