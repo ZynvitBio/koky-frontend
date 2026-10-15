@@ -33,7 +33,11 @@
     </ng-container>
 </div>
 
-    <div class="big_img" style="flex: 1; margin-left: 15px;">
+    <div class="big_img" style="flex: 1; margin-left: 15px; position: relative;">
+        <span *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')" 
+              class="promo-detail-badge">
+          🎉 +100g GRATIS · Ahora 600g
+        </span>
         <img [src]="activeImage" 
              class="w-100 img-fluid" 
              style="height: 320px; object-fit: cover;" 
@@ -58,7 +62,17 @@
                      <strong><del>{{product.oldPrice | currency:'COP':'symbol-narrow':'1.0-0' }} </del></strong>
                      {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
                     
-                    
+                    <!-- BANNER PROMO TOFU SEMIDURO -->
+                    <div *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')" 
+                         class="promo-detail-box my-3 p-3 rounded">
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="promo-box-icon">🎉</span>
+                        <div>
+                          <strong class="d-block promo-box-title">¡Nuevo tamaño: 600g al mismo precio!</strong>
+                          <span class="promo-box-text">Aumentamos de 500g a 600g (+100g adicionales gratis) manteniendo los $16.800 COP habituales. ¡Más tofu fresco para tus recetas!</span>
+                        </div>
+                      </div>
+                    </div>
                     
                     <p>{{ product.shortDescription }}</p>
 

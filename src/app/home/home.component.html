@@ -327,6 +327,13 @@
             </div>
 
             <div class="buttons">
+              <span
+                *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
+                class="promo-weight-badge position-top-left"
+              >
+                🎉 +100g GRATIS · 600g
+              </span>
+
               @if (isBrowser && (product.stock || 0) === 0) {
                 <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
                   Agotado
