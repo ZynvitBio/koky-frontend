@@ -13,10 +13,10 @@ import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 declare var google: any;
 
 const bogotaBounds = {
-  north: 4.8800,
-  south: 4.4400,
-  west: -74.2600,
-  east: -74.0000,
+  north: 4.9500, // Cubre Bogotá, Chía, Cota y Cajicá
+  south: 4.4400, // Cubre Usme, Ciudad Bolívar y Soacha
+  west: -74.2600, // Cubre Fontibón, Bosa, Mosquera y Funza
+  east: -73.9800, // Cerros orientales y borde oriental de Chía/La Calera
 };
 
 @Component({
@@ -219,7 +219,14 @@ export class CheckoutComponent implements OnInit {
     'Ciudad Bolívar - Meissen / San Francisco / Arborizadora': 22000,
     'Usme - Usme Pueblo / Yomasa / Santa Librada': 24000,
 
-    DEFAULT: 11000,
+    // MUNICIPIOS SATÉLITE Y SABANA DE BOGOTÁ
+    'Chía - Centro / Fontanar / Bazar': 26000,
+    'Chía - Yerbabuena / La Valvanera / Fagua': 29000,
+    'Cajicá - Centro / Manas / Capellanía': 29000,
+    'Cota - Centro / Siberia / Parcelaciones': 24000,
+    'Soacha - San Mateo / León XIII / Compartir': 22000,
+    'Mosquera / Funza - Centro / Parque Industrial': 24000,
+    'La Calera - Perímetro Urbano': 26000
   };
 
   constructor(
@@ -952,6 +959,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   getLocalidades(): string[] {
-    return Object.keys(this.PRECIOS_ENVIO).filter(k => k !== 'DEFAULT');
+    return Object.keys(this.PRECIOS_ENVIO);
   }
 }
