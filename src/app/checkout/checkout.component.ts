@@ -393,6 +393,51 @@ export class CheckoutComponent implements OnInit {
     this.calculateTotal();
   }
 
+  validarCompletitudDireccion(direccion: string): { valida: boolean; mensaje?: string } {
+    if (!direccion || direccion.trim().length < 5) {
+      return { valida: false, mensaje: 'Por favor escribe tu dirección completa.' };
+    }
+    const texto = direccion.trim().toLowerCase();
+
+    // Vías urbanas colombianas comunes
+    const regexVia = /\b(cl|calle|cll|cra|cr|kr|carrera|dg|diag|diagonal|tv|trans|transv|transversal|ak|ac|av|ave|avenida|autopista|auto|circ|circular)\b/i;
+    const contieneVia = regexVia.test(texto);
+    const numeros = texto.match(/\d+/g) || [];
+
+    if (!contieneVia) {
+      // Lugares con nombre propio o conjuntos (ej: "Centro Comercial Unicentro", "Hacienda Santa Bárbara")
+      return { valida: true };
+    }
+
+    // Detectar si la vía principal es numerada (ej: "cl 100", "cra 15", "cr 90a", "carrera 5 este")
+    const regexViaNumerada = /\b(cl|calle|cll|cra|cr|kr|carrera|dg|diag|diagonal|tv|trans|transv|transversal|ak|ac|av|ave|avenida|autopista|auto|circ|circular)\.?\s*([a-z]?\s*|\b(sur|este|oeste|norte|bis)\b\s*)*(\d+)/i;
+    const esViaNumerada = regexViaNumerada.test(texto);
+
+    if (esViaNumerada) {
+      // Regla de los 3 números: Vía principal + Vía secundaria/cruce + Placa/inmueble
+      // Ej: Calle 97 21 62 (3 números) -> Pasa
+      // Ej: Calle 97a # 89-45 (3 números) -> Pasa
+      // Ej: Cr 90a 98 (2 números) -> Se frena (falta número de casa/placa)
+      if (numeros.length < 3) {
+        return {
+          valida: false,
+          mensaje: '⚠️ Falta el número de casa o edificio. Por favor agrega la placa completa (Ej: Calle 97 21 62 o Calle 97A # 89-45).'
+        };
+      }
+    } else {
+      // Vía no numerada (ej: "Avenida Boyacá # 127-10", "Autopista Norte # 170-50")
+      // Requiere al menos 2 números (cruce y placa)
+      if (numeros.length < 2) {
+        return {
+          valida: false,
+          mensaje: '⚠️ Falta el número de cruce o casa. Por favor escribe tu dirección completa (Ej: Av. Boyacá # 127-10).'
+        };
+      }
+    }
+
+    return { valida: true };
+  }
+
   async initAutocomplete() {
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -430,7 +475,12 @@ export class CheckoutComponent implements OnInit {
           this.calculateTotal();
         } else {
           this.direccionValida = false;
-          this.mensajeDireccion = 'Selecciona tu dirección de las sugerencias o elige tu sector.';
+          const check = this.validarCompletitudDireccion(val);
+          if (!check.valida && val.length >= 5) {
+            this.mensajeDireccion = check.mensaje || 'Por favor completa tu dirección.';
+          } else {
+            this.mensajeDireccion = 'Selecciona tu dirección de las sugerencias o elige tu sector.';
+          }
           this.debounceTimer = setTimeout(() => {
             this.buscarSugerencias(val);
           }, 250);
@@ -500,6 +550,17 @@ export class CheckoutComponent implements OnInit {
     }
     this.suggestionsList = [];
     this.mostrarSelectorLocalidad = false;
+
+    // Validación de completitud (Regla de los 3 números)
+    const validacion = this.validarCompletitudDireccion(sug.text);
+    if (!validacion.valida) {
+      this.calculandoEnvio = false;
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.mensajeDireccion = validacion.mensaje || 'Dirección incompleta.';
+      this.calculateTotal();
+      return;
+    }
 
     this.calculandoEnvio = true;
     this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
@@ -587,6 +648,18 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
+    // Validación de completitud (Regla de los 3 números)
+    const validacion = this.validarCompletitudDireccion(direccion);
+    if (!validacion.valida) {
+      this.calculandoEnvio = false;
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.mensajeDireccion = validacion.mensaje || 'Dirección incompleta.';
+      this.calculateTotal();
+      if (callback) callback(false);
+      return;
+    }
+
     if (!this.geocoder) {
       this.geocoder = new google.maps.Geocoder();
     }
@@ -663,6 +736,17 @@ export class CheckoutComponent implements OnInit {
 
     if (!direccionText || direccionText.length < 5) {
       alert('Por favor, ingresa tu dirección de entrega.');
+      inputDireccion?.focus();
+      return;
+    }
+
+    const checkCompleta = this.validarCompletitudDireccion(direccionText);
+    if (!checkCompleta.valida) {
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.mensajeDireccion = checkCompleta.mensaje || 'Dirección incompleta.';
+      this.calculateTotal();
+      alert(checkCompleta.mensaje || 'Por favor ingresa tu dirección completa (Ej: Calle 97 21 62 o Calle 97A # 89-45).');
       inputDireccion?.focus();
       return;
     }
@@ -937,6 +1021,15 @@ export class CheckoutComponent implements OnInit {
       this.direccionValida = false;
       this.mensajeDireccion = 'Por favor escribe tu dirección antes de seleccionar la localidad.';
       this.costoEnvio = 0;
+      this.calculateTotal();
+      return;
+    }
+
+    const checkCompleta = this.validarCompletitudDireccion(direccionText);
+    if (!checkCompleta.valida) {
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.mensajeDireccion = checkCompleta.mensaje || 'Dirección incompleta.';
       this.calculateTotal();
       return;
     }

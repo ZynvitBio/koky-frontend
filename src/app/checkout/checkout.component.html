@@ -75,7 +75,7 @@
                     class="form-control border-radius-0"
                     id="txtDireccion"
                     name="checkout_address"
-                    placeholder="Escribe tu dirección en Bogotá (Ej: Calle 119a 58-40)*"
+                    placeholder="Escribe tu dirección completa (Ej: Calle 97 21 62 o Calle 97A # 89-45)*"
                     autocomplete="off"
                   />
 
@@ -114,9 +114,11 @@
                   </div>
 
                   <div
-                    *ngIf="mensajeDireccion && !calculandoEnvio && !zonaDetectada"
-                    class="mt-1 small"
-                    [ngClass]="direccionValida ? 'text-success' : 'text-muted'"
+                    *ngIf="mensajeDireccion && !calculandoEnvio && (!zonaDetectada || !direccionValida)"
+                    class="mt-2 p-2 rounded small"
+                    [style.background-color]="direccionValida ? '#f0fdf4' : '#fff7ed'"
+                    [style.border]="direccionValida ? '1px solid #bbf7d0' : '1px solid #fed7aa'"
+                    [style.color]="direccionValida ? '#166534' : '#9a3412'"
                   >
                     {{ mensajeDireccion }}
                   </div>
