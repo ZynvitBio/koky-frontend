@@ -220,13 +220,13 @@ export class CheckoutComponent implements OnInit {
     'Usme - Usme Pueblo / Yomasa / Santa Librada': 24000,
 
     // MUNICIPIOS SATÉLITE Y SABANA DE BOGOTÁ
-    'Chía - Centro / Fontanar / Bazar': 26000,
-    'Chía - Yerbabuena / La Valvanera / Fagua': 29000,
-    'Cajicá - Centro / Manas / Capellanía': 29000,
-    'Cota - Centro / Siberia / Parcelaciones': 24000,
-    'Soacha - San Mateo / León XIII / Compartir': 22000,
-    'Mosquera / Funza - Centro / Parque Industrial': 24000,
-    'La Calera - Perímetro Urbano': 26000
+    'Chía - Centro / Fontanar / Saucedal': 35000,
+    'Chía - Yerbabuena / La Valvanera / Fagua': 39000,
+    'Cajicá - Centro / Manas / Capellanía': 39000,
+    'Cota - Centro / Siberia / Parcelaciones': 30000,
+    'Soacha - San Mateo / León XIII / Compartir': 28000,
+    'Mosquera / Funza - Centro / Parque Industrial': 28000,
+    'La Calera - Perímetro Urbano': 34000
   };
 
   constructor(
