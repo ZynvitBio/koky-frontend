@@ -13,10 +13,10 @@ import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 declare var google: any;
 
 const bogotaBounds = {
-  north: 4.8367,
-  south: 4.4711,
-  west: -74.2473,
-  east: -74.0102,
+  north: 4.8800,
+  south: 4.4400,
+  west: -74.2600,
+  east: -74.0000,
 };
 
 @Component({
@@ -30,6 +30,60 @@ const bogotaBounds = {
   }
 })
 export class CheckoutComponent implements OnInit {
+
+  estaEnZonaCoberturaBogota(lat: number, lng: number): boolean {
+    if (!lat || !lng) return false;
+    return (
+      lat >= bogotaBounds.south &&
+      lat <= bogotaBounds.north &&
+      lng >= bogotaBounds.west &&
+      lng <= bogotaBounds.east
+    );
+  }
+
+  esCiudadBogota(components: any[]): boolean {
+    if (!components || components.length === 0) return true;
+    for (const comp of components) {
+      const name = (comp.longText || comp.long_name || comp.text || '').toLowerCase();
+      const types = comp.types || [];
+      if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+        const fueraBogota = [
+          'villavicencio', 'medellín', 'medellin', 'cali', 'barranquilla', 'bucaramanga',
+          'cartagena', 'pereira', 'manizales', 'cúcuta', 'cucuta', 'ibagué', 'ibague',
+          'pasto', 'neiva', 'armenia', 'santa marta', 'valledupar', 'montería', 'monteria',
+          'popayán', 'popayan', 'sincelejo', 'tunja', 'florencia', 'riohacha', 'quibdó',
+          'quibdo', 'yopal', 'acacías', 'acacias', 'restrepo', 'cumaral'
+        ];
+        if (fueraBogota.some(c => name.includes(c))) {
+          return false;
+        }
+      }
+      if (types.includes('administrative_area_level_1')) {
+        const deptsFuera = [
+          'meta', 'antioquia', 'valle del cauca', 'atlántico', 'atlantico', 'santander',
+          'bolívar', 'bolivar', 'risaralda', 'caldas', 'quindío', 'quindio', 'huila',
+          'tolima', 'cauca', 'nariño', 'narino', 'magdalena', 'cesar', 'córdoba',
+          'cordoba', 'sucre', 'norte de santander', 'boyacá', 'boyaca', 'arauca', 'casanare'
+        ];
+        if (deptsFuera.some(d => name.includes(d))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  marcarDireccionFueraDeCobertura() {
+    this.calculandoEnvio = false;
+    this.direccionValida = false;
+    this.costoEnvio = 0;
+    this.baseDeliveryPrice = 0;
+    this.zonaDetectada = '';
+    this.mostrarSelectorLocalidad = false;
+    this.mensajeDireccion = '❌ Lo sentimos, actualmente solo realizamos entregas en Bogotá D.C. Tu dirección se encuentra fuera de nuestra zona de cobertura.';
+    this.calculateTotal();
+  }
+
   cartItems: CartItem[] = [];
   subtotal: number = 0;
   discount: number = 0;
@@ -188,6 +242,22 @@ export class CheckoutComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       if (params['source']) {
         this.detectedSource = params['source'];
+      }
+      if (params['ref'] && isPlatformBrowser(this.platformId)) {
+        const ref = params['ref'];
+        this.http.get<any>(`${environment.apiUrl}/api/orders/payment-link/${ref}`).subscribe({
+          next: (res) => {
+            if (res && res.payment_url && res.payment_status === 'PENDING') {
+              console.log('🔄 Redirigiendo a pasarela Wompi para orden pendiente:', ref);
+              window.location.href = res.payment_url;
+            } else if (res && res.payment_status === 'APPROVED') {
+              this.router.navigate(['/orderconfirmation'], { queryParams: { reference: ref } });
+            }
+          },
+          error: (err) => {
+            console.warn('Aviso al consultar link de pago para referencia:', ref, err);
+          }
+        });
       }
     });
 
@@ -385,7 +455,7 @@ export class CheckoutComponent implements OnInit {
       const request: any = {
         input: query,
         includedRegionCodes: ['co'],
-        locationBias: {
+        locationRestriction: {
           north: bogotaBounds.north,
           south: bogotaBounds.south,
           west: bogotaBounds.west,
@@ -439,11 +509,20 @@ export class CheckoutComponent implements OnInit {
 
         this.sessionToken = null;
 
+        if (place.addressComponents && !this.esCiudadBogota(place.addressComponents)) {
+          this.marcarDireccionFueraDeCobertura();
+          return;
+        }
+
         if (place.addressComponents) {
           this.sincronizarSectorDesdeGoogle(place.addressComponents);
         }
 
         if (lat && lng) {
+          if (!this.estaEnZonaCoberturaBogota(lat, lng)) {
+            this.marcarDireccionFueraDeCobertura();
+            return;
+          }
           this.destinoLat = lat;
           this.destinoLng = lng;
           this.consultarCostoEnvio({ lat, lng });
@@ -519,16 +598,30 @@ export class CheckoutComponent implements OnInit {
       (results: any, status: any) => {
         this.ngZone.run(() => {
           if (status === 'OK' && results && results.length > 0) {
-            const loc = results[0].geometry.location;
+            const firstResult = results[0];
+            if (firstResult.address_components && !this.esCiudadBogota(firstResult.address_components)) {
+              this.marcarDireccionFueraDeCobertura();
+              if (callback) callback(false);
+              return;
+            }
+
+            const loc = firstResult.geometry.location;
             const lat = loc.lat();
             const lng = loc.lng();
+
+            if (!this.estaEnZonaCoberturaBogota(lat, lng)) {
+              this.marcarDireccionFueraDeCobertura();
+              if (callback) callback(false);
+              return;
+            }
+
             this.destinoLat = lat;
             this.destinoLng = lng;
 
-            this.sincronizarSectorDesdeGoogle(results[0].address_components);
+            this.sincronizarSectorDesdeGoogle(firstResult.address_components);
 
             this.consultarCostoEnvio({ lat, lng }, () => {
-              if (callback) callback(true);
+              if (callback) callback(this.direccionValida);
             });
           } else {
             console.warn('⚠️ Google Geocoder no pudo ubicar la dirección exacta:', status);
@@ -588,7 +681,7 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (!this.direccionValida || this.costoEnvio <= 0) {
-      alert('Por favor, confirma una dirección válida para calcular el envío.');
+      alert('Lo sentimos, actualmente solo realizamos entregas en Bogotá D.C. Por favor ingresa una dirección dentro de nuestra zona de cobertura para continuar.');
       inputDireccion?.focus();
       return;
     }
@@ -754,50 +847,77 @@ export class CheckoutComponent implements OnInit {
   }
 
   consultarCostoEnvio(destino: { lat: number; lng: number }, onComplete?: () => void) {
+    if (!this.estaEnZonaCoberturaBogota(destino.lat, destino.lng)) {
+      this.marcarDireccionFueraDeCobertura();
+      if (onComplete) onComplete();
+      return;
+    }
+
     this.calculandoEnvio = true;
     this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
 
     this.deliveryService.calcularEnvio(destino).subscribe({
       next: (res) => {
         this.calculandoEnvio = false;
-        if (res.success) {
+        if (res.success && res.data?.deliveries?.[0]?.estimation?.price?.amount) {
           const rawAmount = res.data.deliveries[0].estimation.price.amount;
           this.baseDeliveryPrice = rawAmount;
           this.costoEnvio = this.isDoubleDeliveryActive ? rawAmount * 2 : rawAmount;
           this.calculateTotal();
           this.direccionValida = true;
           this.mensajeDireccion = this.isDoubleDeliveryActive
-            ? 'Dirección válida (Doble despacho calculado con Cabify) ✔'
+            ? 'Dirección válida (Doble despacho calculado) ✔'
             : 'Dirección y costo de envío verificados ✔';
         } else {
-          this.mostrarSelectorLocalidad = true;
-          this.aplicarTarifaFijaDeLocalidad();
+          this.manejarFalloCotizacionCabify();
         }
         if (onComplete) onComplete();
       },
       error: (err) => {
-        console.error('Error al calcular envío:', err);
+        console.warn('Cabify error al calcular envío:', err);
         this.calculandoEnvio = false;
-        this.mostrarSelectorLocalidad = true;
-        this.aplicarTarifaFijaDeLocalidad();
+        this.manejarFalloCotizacionCabify();
         if (onComplete) onComplete();
       },
     });
   }
 
+  private manejarFalloCotizacionCabify() {
+    this.mostrarSelectorLocalidad = true;
+    const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
+    const localidad = selectLocalidad?.value || '';
+    if (localidad && this.PRECIOS_ENVIO[localidad] && localidad !== 'DEFAULT') {
+      this.aplicarTarifaFijaDeLocalidad();
+    } else {
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.baseDeliveryPrice = 0;
+      this.mensajeDireccion = '📍 Por favor selecciona tu localidad de Bogotá en la lista para calcular el costo de tu envío.';
+      this.calculateTotal();
+    }
+  }
+
   aplicarTarifaFijaDeLocalidad() {
     const selectLocalidad = document.getElementById('checkout_state_select') as HTMLSelectElement;
     const localidad = selectLocalidad?.value || '';
-    const baseCost = localidad && this.PRECIOS_ENVIO[localidad]
-      ? this.PRECIOS_ENVIO[localidad]
-      : this.PRECIOS_ENVIO['DEFAULT'];
 
+    if (!localidad || !this.PRECIOS_ENVIO[localidad] || localidad === 'DEFAULT') {
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.baseDeliveryPrice = 0;
+      this.mensajeDireccion = '📍 Por favor selecciona tu localidad de Bogotá en la lista para calcular el costo de tu envío.';
+      this.calculateTotal();
+      return;
+    }
+
+    const baseCost = this.PRECIOS_ENVIO[localidad];
     this.baseDeliveryPrice = baseCost;
     this.costoEnvio = this.isDoubleDeliveryActive ? baseCost * 2 : baseCost;
     this.direccionValida = true;
+    this.zonaDetectada = localidad;
     this.mensajeDireccion = this.isDoubleDeliveryActive
-      ? 'Dirección válida (Doble despacho de contingencia aplicado) ✔'
-      : (localidad ? `Tarifa fija (${localidad}) aplicada ✔` : 'Tarifa estándar aplicada ✔');
+      ? `Localidad ${localidad} (Doble despacho) ✔`
+      : `Tarifa fija (${localidad}) verificada ✔`;
     this.calculateTotal();
   }
 
@@ -814,18 +934,20 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    if (localidad) {
-      if (!this.destinoLat || !this.destinoLng) {
-        this.zonaDetectada = localidad;
-        const baseCost = this.PRECIOS_ENVIO[localidad] || this.PRECIOS_ENVIO['DEFAULT'];
-        this.baseDeliveryPrice = baseCost;
-        this.costoEnvio = this.isDoubleDeliveryActive ? baseCost * 2 : baseCost;
-        this.direccionValida = true;
-        this.mensajeDireccion = this.isDoubleDeliveryActive
-          ? `Localidad ${localidad} (Doble despacho) ✔`
-          : `Localidad ${localidad} seleccionada ✔`;
-        this.calculateTotal();
-      }
+    if (localidad && this.PRECIOS_ENVIO[localidad] && localidad !== 'DEFAULT') {
+      this.zonaDetectada = localidad;
+      const baseCost = this.PRECIOS_ENVIO[localidad];
+      this.baseDeliveryPrice = baseCost;
+      this.costoEnvio = this.isDoubleDeliveryActive ? baseCost * 2 : baseCost;
+      this.direccionValida = true;
+      this.mensajeDireccion = this.isDoubleDeliveryActive
+        ? `Localidad ${localidad} (Doble despacho) ✔`
+        : `Localidad ${localidad} verificada ✔`;
+      this.calculateTotal();
+    } else {
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.calculateTotal();
     }
   }
 
