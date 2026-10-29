@@ -838,6 +838,11 @@ export class CheckoutComponent implements OnInit {
       ? inputNombre.value.trim()
       : 'Cliente Koky';
 
+    const inputEmail = document.getElementById(
+      'checkout_email',
+    ) as HTMLInputElement;
+    const emailCliente = inputEmail?.value?.trim() || null;
+
     let deliveryWindowTag = 'MAÑANA';
     let notesPrefix = '';
 
@@ -857,6 +862,7 @@ export class CheckoutComponent implements OnInit {
     const orderData = {
       whatsapp_id: String(orden.cliente.telefono),
       customer_name: nombreParaStrapi,
+      customer_email: emailCliente,
       total_amount: Number(orden.pago.total),
       wompi_reference: String(referencia),
       source: String(this.detectedSource || 'whatsapp'),
