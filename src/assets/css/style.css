@@ -794,26 +794,88 @@ button:hover {
 }
 
 .promo-detail-box {
-    background: #f0f7f8;
-    border: 1px solid #c2e2e7;
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
     color: #03262c;
+    box-shadow: 0 4px 14px rgba(29, 128, 7, 0.06);
 }
 
 .promo-box-icon {
     font-size: 24px;
     flex-shrink: 0;
+    line-height: 1.2;
 }
 
 .promo-box-title {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    color: #03262c;
+    color: #14532d;
+    margin-bottom: 4px;
 }
 
 .promo-box-text {
-    font-size: 12.5px;
-    color: #084c57;
-    line-height: 1.4;
+    font-size: 13px;
+    color: #03262c;
+    line-height: 1.45;
+    font-family: "Roboto", sans-serif;
+}
+
+.product-gram-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1d8007;
+    margin-left: 4px;
+    font-family: "Roboto", sans-serif;
+    transition: all 0.3s;
+}
+
+.product:hover .product-gram-badge {
+    color: #86efac;
+}
+
+.detail-gram-pill {
+    display: inline-block;
+    background: #ecfdf5;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.seo-value-highlight {
+    max-width: 760px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%);
+    border: 1.5px solid #bbf7d0;
+    border-radius: 14px;
+    padding: 16px 22px;
+    box-shadow: 0 6px 20px rgba(29, 128, 7, 0.06);
+    text-align: center;
+}
+
+.seo-value-badge {
+    display: inline-block;
+    background: #1d8007;
+    color: #ffffff;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+}
+
+.seo-value-text {
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    color: #03262c;
+    line-height: 1.5;
 }
 .icons {
     opacity: 0;

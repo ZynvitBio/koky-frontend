@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://koky.food/</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
     <image:image>
@@ -61,7 +61,7 @@
   </url>
   <url>
     <loc>https://koky.food/productdetails/tofu-semiduro-bogota</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>

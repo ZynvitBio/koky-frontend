@@ -36,7 +36,7 @@
     <div class="big_img" style="flex: 1; margin-left: 15px; position: relative;">
         <span *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')" 
               class="promo-detail-badge">
-          🎉 +100g GRATIS · Ahora 600g
+          🥦 Fresco Contra Pedido · 600g ($28/g)
         </span>
         <img [src]="activeImage" 
              class="w-100 img-fluid" 
@@ -61,15 +61,19 @@
                     <strong>{{ product.price | currency:'COP':'symbol-narrow':'1.0-0' }}</strong>
                      <strong><del>{{product.oldPrice | currency:'COP':'symbol-narrow':'1.0-0' }} </del></strong>
                      {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
+                     <span *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
+                           class="detail-gram-pill">
+                       $28/g · Fresco hecho contra pedido
+                     </span>
                     
                     <!-- BANNER PROMO TOFU SEMIDURO -->
                     <div *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')" 
                          class="promo-detail-box my-3 p-3 rounded">
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="promo-box-icon">🎉</span>
+                      <div class="d-flex align-items-start gap-2">
+                        <span class="promo-box-icon">🥦</span>
                         <div>
-                          <strong class="d-block promo-box-title">¡Nuevo tamaño: 600g al mismo precio!</strong>
-                          <span class="promo-box-text">Aumentamos de 500g a 600g (+100g adicionales gratis) manteniendo los $16.800 COP habituales. ¡Más tofu fresco para tus recetas!</span>
+                          <strong class="d-block promo-box-title">Fresco artesanal hecho contra pedido · El mejor precio por gramo de Bogotá ($28/g)</strong>
+                          <span class="promo-box-text"><strong>600g de tofu fresco artesanal a solo $16.800 COP</strong> rinden <strong>más del doble</strong> que los empaques comunes de 250g. Por un menor precio por gramo llevas un producto recién hecho del día, en lugar de un bloque industrializado de supermercado con semanas de preservación en nevera.</span>
                         </div>
                       </div>
                     </div>

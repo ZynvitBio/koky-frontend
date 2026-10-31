@@ -248,6 +248,7 @@ featureItems = [
 
 mensajeActual: any;
 ngOnInit(): void {
+  this.setSeoData();
   this.dynamicDeliveryText = getDynamicAnnouncementText();
   // 1. Verificación inicial de seguridad
 
@@ -581,30 +582,24 @@ addToCart(product: any) {
   this.notify.showSuccess(`¡${itemToCart.name} añadido!`, 'Sigue comprando');
 }
 setSeoData(): void {
-    const title = 'Koky Food | Tofu Artesanal y Derivados de Soya Frescos';
-    const description = 'Disfruta el tofu más fresco de Bogotá, hecho diariamente. Tofu ahumado, firme, blando y nata de soya 100% natural y orgánica.';
+    const title = 'Comprar Tofu en Bogotá | Tofu Fresco a Domicilio - Koky';
+    const description = 'Tofu semiduro artesanal 600g a solo $16.800 COP ($28/g, la mejor relación cantidad/precio en Bogotá). Elaborado fresco cada noche contra pedido, rinde más del doble que los empaques de 250g y llega mañana a domicilio en Bogotá.';
     const url = 'https://koky.food/';
     const imageUrl = 'https://koky.food/assets/img/512.png';
 
     this.titleService.setTitle(title);
 
-    this.metaService.addTags([
-        { name: 'description', content: description },
-        { name: 'keywords', content: 'tofu bogota, tofu artesanal, comida vegana bogota, nata de soya, tofu ahumado' },
-        
-        // Open Graph (Facebook, WhatsApp)
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: description },
-        { property: 'og:image', content: imageUrl },
-        { property: 'og:url', content: url },
-        { property: 'og:type', content: 'website' },
-
-        // Twitter
-        { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:title', content: title },
-        { name: 'twitter:description', content: description },
-        { name: 'twitter:image', content: imageUrl }
-    ]);
+    this.metaService.updateTag({ name: 'description', content: description });
+    this.metaService.updateTag({ name: 'keywords', content: 'tofu bogota, tofu artesanal, tofu barato bogota, tofu 600g, comida vegana bogota, nata de soya, tofu ahumado' });
+    this.metaService.updateTag({ property: 'og:title', content: 'Koky Food | Tofu Fresco Artesanal 600g a $16.800 COP en Bogotá' });
+    this.metaService.updateTag({ property: 'og:description', content: description });
+    this.metaService.updateTag({ property: 'og:image', content: imageUrl });
+    this.metaService.updateTag({ property: 'og:url', content: url });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary' });
+    this.metaService.updateTag({ name: 'twitter:title', content: 'Koky Food | Tofu Fresco Artesanal 600g a $16.800 COP en Bogotá' });
+    this.metaService.updateTag({ name: 'twitter:description', content: description });
+    this.metaService.updateTag({ name: 'twitter:image', content: imageUrl });
 }
 navigateToProduct(slug: string, event: Event): void {
   if (event) {

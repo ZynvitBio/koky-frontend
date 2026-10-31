@@ -278,11 +278,20 @@
           Nuestros Productos "Calidad Elaborada para Ti"
         </h3>
         <p class="section-subtitle">
-          Haz tu pedido antes de las 4 p.m. para elaboración nocturna y entrega
+          Haz tu pedido antes de las 8:00 p.m. para elaboración nocturna y entrega
           al día siguiente. Explora la variedad de opciones que preparamos
           diariamente, pensando en tu bienestar y el sabor que te encanta.
           ¡Disfruta!
         </p>
+        <div class="seo-value-highlight mt-4 mx-auto">
+          <div class="seo-value-badge">
+            Fresco Artesanal Hecho Contra Pedido · Mejor Relación Cantidad/Precio en Bogotá
+          </div>
+          <p class="seo-value-text mb-0">
+            <strong>Tofu semiduro artesanal 600g a solo $16.800 COP ($28/g):</strong>
+            rinde <strong>más del doble</strong> que los empaques comunes de 250g de supermercado. Pagas menos por gramo por un <strong>tofu fresco del día recién elaborado</strong>, en lugar de un bloque industrializado con semanas de preservación en nevera.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -324,6 +333,12 @@
               <span class="product-price">
                 {{ product.price | currency: "COP" : "symbol" : "1.0-0" }}
               </span>
+              <span
+                *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
+                class="product-gram-badge"
+              >
+                · $28/g
+              </span>
             </div>
 
             <div class="buttons">
@@ -331,7 +346,7 @@
                 *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
                 class="promo-weight-badge position-top-left"
               >
-                🎉 +100g GRATIS · 600g
+                🥦 Fresco · 600g ($28/g)
               </span>
 
               @if (isBrowser && (product.stock || 0) === 0) {
