@@ -298,92 +298,92 @@
     <!-- Esta sección ahora es una cuadrícula de productos dinámica, no un carrusel.
              Utiliza *ngFor para iterar sobre los 'productItems' de tu componente TS. -->
     <div class="row mt-5">
-      <div
-        *ngFor="let product of products"
-        class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4"
-      >
-        <div class="product">
-          <div class="product-img">
-            <a [routerLink]="['/productdetails', product.slug]">
-              <img
-                class="w-100"
-                [src]="product.image"
-                [alt]="product.image?.alternativeText || product.name"
-              />
-            </a>
-          </div>
-
-          <div class="product-content">
-            <div class="product-details position-bottom-left">
-              <h3 class="product-name">
-                <a [routerLink]="['/productdetails', product.slug]">{{
-                  product.name
-                }}</a>
-                <span style="font-size: 0.7em; opacity: 0.6; margin-left: 5px">
-                  {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
-                </span>
-              </h3>
-
-              <span
-                *ngIf="product.oldPrice"
-                class="product-prev-price text-decoration-line-through"
-              >
-                {{ product.oldPrice | currency: "COP" : "symbol" : "1.0-0" }}
-              </span>
-              <span class="product-price">
-                {{ product.price | currency: "COP" : "symbol" : "1.0-0" }}
-              </span>
-              <span
-                *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
-                class="product-gram-badge"
-              >
-                · $28/g
-              </span>
+      @for (product of products; track product.id) {
+        <div
+          class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4"
+        >
+          <div class="product">
+            <div class="product-img">
+              <a [routerLink]="['/productdetails', product.slug]">
+                <img
+                  class="w-100"
+                  [src]="product.image"
+                  [alt]="product.image?.alternativeText || product.name"
+                />
+              </a>
             </div>
 
-            <div class="buttons">
-              <span
-                *ngIf="product.slug?.includes('semiduro') || product.name?.toLowerCase()?.includes('semiduro')"
-                class="promo-weight-badge position-top-left"
-              >
-                🥦 Fresco · 600g ($28/g)
-              </span>
+            <div class="product-content">
+              <div class="product-details position-bottom-left">
+                <h3 class="product-name">
+                  <a [routerLink]="['/productdetails', product.slug]">{{
+                    product.name
+                  }}</a>
+                  <span style="font-size: 0.7em; opacity: 0.6; margin-left: 5px">
+                    {{ product.contentPerUnit }}{{ product.unitAbbreviation }}
+                  </span>
+                </h3>
 
-              @if (isBrowser && (product.stock || 0) === 0) {
-                <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
-                  Agotado
+                @if (product.oldPrice) {
+                  <span
+                    class="product-prev-price text-decoration-line-through"
+                  >
+                    {{ product.oldPrice | currency: "COP" : "symbol" : "1.0-0" }}
+                  </span>
+                }
+                <span class="product-price">
+                  {{ product.price | currency: "COP" : "symbol" : "1.0-0" }}
                 </span>
-              } @else if (isBrowser && product.availableToday && (product.immediateDeliveryStock || 0) > 0) {
-                <span class="sold-out-tag position-top-right">
-                  Entrega Hoy Mismo
-                </span>
-              }
-
-              @if ((product.stock || 0) > 0) {
-                <button
-                  (click)="addToCart(product)"
-                  class="btn custom-btn position-bottom-right"
-                >
-                  Añadir
-                </button>
-              }
-            </div>
-
-            <div class="icons position-center">
-              <div
-                class="rounded-icon"
-                [routerLink]="['/productdetails', product.slug]"
-                style="cursor: pointer"
-              >
-                <i class="icofont-eye"></i>
+                @if (isSemiduro(product)) {
+                  <span class="product-gram-badge">
+                    · $28/g
+                  </span>
+                }
               </div>
-              <div class="rounded-icon">
-                <i class="icofont-heart-alt"></i>
+
+              <div class="buttons">
+                @if (isSemiduro(product)) {
+                  <span class="promo-weight-badge position-top-left">
+                    🎉 +100g GRATIS · 600g
+                  </span>
+                }
+
+                @if (isBrowser && (product.stock || 0) === 0) {
+                  <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
+                    Agotado
+                  </span>
+                } @else if (isBrowser && product.availableToday && (product.immediateDeliveryStock || 0) > 0) {
+                  <span class="sold-out-tag position-top-right">
+                    Entrega Hoy Mismo
+                  </span>
+                }
+
+                @if ((product.stock || 0) > 0) {
+                  <button
+                    (click)="addToCart(product)"
+                    class="btn custom-btn position-bottom-right"
+                  >
+                    Añadir
+                  </button>
+                }
+              </div>
+
+              <div class="icons position-center">
+                <div
+                  class="rounded-icon"
+                  [routerLink]="['/productdetails', product.slug]"
+                  style="cursor: pointer"
+                >
+                  <i class="icofont-eye"></i>
+                </div>
+                <div class="rounded-icon">
+                  <i class="icofont-heart-alt"></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </div>

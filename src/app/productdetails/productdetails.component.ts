@@ -445,4 +445,12 @@ private inicializarSlickNativo() {
     this.cartService.addToCart(itemToCart);
     this.notify.showSuccess(`¡${itemToCart.name} añadido al carrito!`, 'KOKY');
   }
+
+  isSemiduro(product: any): boolean {
+    if (!product) return false;
+    const slug = (product.slug || '').toLowerCase();
+    const sku = (product.sku || '').toUpperCase();
+    if (slug.includes('firme')) return false;
+    return slug === 'tofu-semiduro-bogota' || slug === 'tofu-semiduro' || sku === 'TOFU-BLAN-001' || slug.includes('semiduro');
+  }
 }

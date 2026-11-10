@@ -15,7 +15,7 @@ export class ProductService {
 
   // Obtener lista completa
  getProducts(): Observable<any[]> {
-  return this.http.get<any>(`${this.apiUrl}/products?populate=*`).pipe(
+  return this.http.get<any>(`${this.apiUrl}/products?populate=*&sort=id:asc`).pipe(
     map(res => {
       if (!res || !res.data) return [];
       return res.data
