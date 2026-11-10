@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (item of cartItems; track item.id) {
+                        @for (item of cartItems; track (item.id + '-' + !!item.availableToday)) {
                             <tr>
                                 <th scope="row">
                                     <div class="thamnail_img">

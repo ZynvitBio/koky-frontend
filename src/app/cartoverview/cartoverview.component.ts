@@ -46,7 +46,8 @@ export class CartoverviewComponent implements OnInit {
             image: item.image ? (item.image.startsWith('http') ? item.image : `${strapiUrl}${item.image}`) : 'assets/img/placeholder.png',
             contentPerUnit: item.contentPerUnit,
             unitAbbreviation: item.unitAbbreviation,
-            availableToday: item.availableToday
+            availableToday: item.availableToday,
+            immediateDeliveryStock: item.immediateDeliveryStock
           };
         });
 

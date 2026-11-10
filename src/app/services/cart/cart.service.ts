@@ -12,6 +12,7 @@ export interface CartItem {
   contentPerUnit: number; 
   unitAbbreviation: 'g' | 'kg' | 'und' | 'ml' | 'L';
   availableToday?: boolean;
+  immediateDeliveryStock?: number;
 }
 
 @Injectable({
@@ -50,6 +51,50 @@ export class CartService {
   }
 
   addToCart(product: CartItem) {
+    if (product.availableToday) {
+      const existingTodayIdx = this.cartItems.findIndex(
+        i => i.id === product.id && !!i.availableToday === true
+      );
+
+      const maxToday = product.immediateDeliveryStock !== undefined
+        ? Number(product.immediateDeliveryStock)
+        : (existingTodayIdx > -1 && this.cartItems[existingTodayIdx].immediateDeliveryStock !== undefined
+            ? Number(this.cartItems[existingTodayIdx].immediateDeliveryStock)
+            : undefined);
+
+      if (maxToday !== undefined) {
+        const currentTodayQty = existingTodayIdx > -1 ? this.cartItems[existingTodayIdx].quantity : 0;
+        const canAddToday = Math.max(0, maxToday - currentTodayQty);
+        const qtyForToday = Math.min(product.quantity, canAddToday);
+        const qtyForTomorrow = product.quantity - qtyForToday;
+
+        if (qtyForToday > 0) {
+          if (existingTodayIdx > -1) {
+            this.cartItems[existingTodayIdx].quantity += qtyForToday;
+            this.cartItems[existingTodayIdx].immediateDeliveryStock = maxToday;
+          } else {
+            this.cartItems.push({ ...product, quantity: qtyForToday, availableToday: true, immediateDeliveryStock: maxToday });
+          }
+        }
+
+        if (qtyForTomorrow > 0) {
+          const existingTomorrowIdx = this.cartItems.findIndex(
+            i => i.id === product.id && !i.availableToday
+          );
+          if (existingTomorrowIdx > -1) {
+            this.cartItems[existingTomorrowIdx].quantity += qtyForTomorrow;
+            this.cartItems[existingTomorrowIdx].immediateDeliveryStock = maxToday;
+          } else {
+            this.cartItems.push({ ...product, quantity: qtyForTomorrow, availableToday: false, immediateDeliveryStock: maxToday });
+          }
+        }
+
+        this.updateCart();
+        this.openCart();
+        return;
+      }
+    }
+
     const index = this.cartItems.findIndex(
       i => i.id === product.id && !!i.availableToday === !!product.availableToday
     );
@@ -60,6 +105,76 @@ export class CartService {
     }
     this.updateCart();
     this.openCart(); // 👈 Abre automáticamente el panel lateral al agregar un producto
+  }
+
+  /**
+   * Sincroniza el carrito con el stock express real de Strapi y divide automáticamente
+   * el excedente hacia el lote de mañana si el cliente tenía más unidades que el stock inmediato.
+   */
+  syncImmediateStockWithLiveProducts(liveProducts: any[]): boolean {
+    if (!Array.isArray(liveProducts) || liveProducts.length === 0 || this.cartItems.length === 0) {
+      return false;
+    }
+
+    let modified = false;
+    const newCart: CartItem[] = [];
+
+    const addOrMerge = (item: CartItem) => {
+      const idx = newCart.findIndex(
+        c => c.id === item.id && !!c.availableToday === !!item.availableToday
+      );
+      if (idx > -1) {
+        newCart[idx].quantity += item.quantity;
+        if (item.immediateDeliveryStock !== undefined) {
+          newCart[idx].immediateDeliveryStock = item.immediateDeliveryStock;
+        }
+      } else {
+        newCart.push({ ...item });
+      }
+    };
+
+    for (const item of this.cartItems) {
+      const liveProd = liveProducts.find(
+        p => p.id === item.id || (p.slug && item.slug && p.slug === item.slug)
+      );
+
+      if (!liveProd) {
+        addOrMerge(item);
+        continue;
+      }
+
+      const maxToday = liveProd.availableToday ? Math.max(0, Number(liveProd.immediateDeliveryStock) || 0) : 0;
+
+      if (item.immediateDeliveryStock !== maxToday) {
+        item.immediateDeliveryStock = maxToday;
+        modified = true;
+      }
+
+      if (item.availableToday) {
+        if (maxToday <= 0) {
+          // Ya no hay stock para hoy -> pasa todo a mañana
+          addOrMerge({ ...item, availableToday: false, immediateDeliveryStock: 0 });
+          modified = true;
+        } else if (item.quantity > maxToday) {
+          // Dividir entre lo disponible hoy y el resto para mañana
+          const todayQty = maxToday;
+          const tomorrowQty = item.quantity - maxToday;
+          addOrMerge({ ...item, quantity: todayQty, availableToday: true, immediateDeliveryStock: maxToday });
+          addOrMerge({ ...item, quantity: tomorrowQty, availableToday: false, immediateDeliveryStock: maxToday });
+          modified = true;
+        } else {
+          addOrMerge({ ...item, immediateDeliveryStock: maxToday });
+        }
+      } else {
+        addOrMerge({ ...item, immediateDeliveryStock: maxToday });
+      }
+    }
+
+    if (modified) {
+      this.cartItems = newCart;
+      this.updateCart();
+    }
+    return modified;
   }
 
   /** Elimina completamente un producto del carrito (Botón "X") */

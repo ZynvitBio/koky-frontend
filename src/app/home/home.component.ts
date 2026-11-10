@@ -317,6 +317,9 @@ private loadProducts(): void {
   this.productService.getProducts().subscribe({
     next: (data) => {
       this.products = data;
+      if (this.isBrowser) {
+        this.cartService.syncImmediateStockWithLiveProducts(this.products);
+      }
       console.log('✅ PRODUCTOS CARGADOS:', this.products);
       this.cdr.detectChanges();
     },
@@ -575,7 +578,8 @@ addToCart(product: any) {
     slug: product.slug,
     contentPerUnit: product.contentPerUnit,
     unitAbbreviation: product.unitAbbreviation,
-    availableToday: product.availableToday
+    availableToday: product.availableToday,
+    immediateDeliveryStock: Number(product.immediateDeliveryStock) || 0
   };
 
   this.cartService.addToCart(itemToCart);

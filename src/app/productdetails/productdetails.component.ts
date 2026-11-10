@@ -105,6 +105,9 @@ ngAfterViewChecked(): void {
         this.product = res;
 
         if (this.product) {
+          if (this.isBrowser) {
+            this.cartService.syncImmediateStockWithLiveProducts([this.product]);
+          }
           // Mantenemos la asignación de la imagen activa inicial
           this.activeImage = this.product.image;
 
@@ -439,7 +442,8 @@ private inicializarSlickNativo() {
       slug: product.slug,
       contentPerUnit: product.contentPerUnit,
       unitAbbreviation: product.unitAbbreviation,
-      availableToday: isAvailableToday
+      availableToday: isAvailableToday,
+      immediateDeliveryStock: Number(product.immediateDeliveryStock) || 0
     };
 
     this.cartService.addToCart(itemToCart);

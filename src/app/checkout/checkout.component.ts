@@ -7,6 +7,7 @@ import { OrderService } from '../services/order/order.service';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DeliveryService } from '../services/delivery/delivery.service';
+import { ProductService } from '../services/product/product.service';
 import { environment } from '../../environments/environment';
 import { getEstimatedDeliveryDayName } from '../utils/delivery-helper';
 
@@ -231,6 +232,7 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private deliveryService: DeliveryService,
+    private productService: ProductService,
     private http: HttpClient,
     private cartService: CartService,
     private orderService: OrderService,
@@ -243,8 +245,17 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.cartService.cart$.subscribe((items) => {
       this.cartItems = items;
-      this.calculateTotal();
+      this.recalcularEnvioYTotal();
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.productService.getProducts().subscribe({
+        next: (liveProducts) => {
+          this.cartService.syncImmediateStockWithLiveProducts(liveProducts);
+        },
+        error: (err) => console.warn('Aviso al sincronizar stock inmediato:', err),
+      });
+    }
 
     this.route.queryParams.subscribe((params) => {
       if (params['source']) {
@@ -787,6 +798,30 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
+    if (this.hasTodayItems && this.despachoHoyActivo) {
+      this.productService.getProducts().subscribe({
+        next: (liveProducts) => {
+          const splitOccurred = this.cartService.syncImmediateStockWithLiveProducts(liveProducts);
+          if (splitOccurred) {
+            this.recalcularEnvioYTotal();
+            alert(
+              `Actualizamos tu resumen con la disponibilidad inmediata en tiempo real para hoy. El excedente se programó automáticamente para ${this.estimatedDeliveryDay}. Revisa el resumen y haz clic en PAGAR para continuar.`
+            );
+            return;
+          }
+          this.ejecutarAperturaWompi();
+        },
+        error: () => {
+          this.ejecutarAperturaWompi();
+        },
+      });
+      return;
+    }
+
+    this.ejecutarAperturaWompi();
+  }
+
+  private ejecutarAperturaWompi() {
     this.telefonoFinal = this.iti.getNumber();
     let direccionFinal = (
       document.getElementById('txtDireccion') as HTMLInputElement

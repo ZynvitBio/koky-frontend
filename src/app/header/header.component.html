@@ -96,7 +96,7 @@
 					</div>
 				} @else {
 					<div class="cart-items-list">
-						@for (item of cartItems; track item.id) {
+						@for (item of cartItems; track (item.id + '-' + !!item.availableToday)) {
 							<div class="cart-item-row">
 								<div class="cart-item-img">
 									<img [src]="item.image" [alt]="item.name" />
