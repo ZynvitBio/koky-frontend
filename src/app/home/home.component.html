@@ -334,20 +334,9 @@
                 <span class="product-price">
                   {{ product.price | currency: "COP" : "symbol" : "1.0-0" }}
                 </span>
-                @if (isSemiduro(product)) {
-                  <span class="product-gram-badge">
-                    · $28/g
-                  </span>
-                }
               </div>
 
               <div class="buttons">
-                @if (isSemiduro(product)) {
-                  <span class="promo-weight-badge position-top-left">
-                    🎉 +100g GRATIS · 600g
-                  </span>
-                }
-
                 @if (isBrowser && (product.stock || 0) === 0) {
                   <span class="sold-out-tag position-top-right" style="background-color: #dc3545; color: white;">
                     Agotado
