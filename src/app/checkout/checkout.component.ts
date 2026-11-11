@@ -410,6 +410,13 @@ export class CheckoutComponent implements OnInit {
     }
     const texto = direccion.trim().toLowerCase();
 
+    // Si el texto inicia con el nombre de un comercio, edificio o conjunto antes de mencionar la vía
+    // (ej: "Hortalizas SAS - Tienda orgánica, Carrera 5, Bogotá" o "Edificio Torre Central, Calle 100")
+    const iniciaConVia = /^(cl|calle|cll|cra|cr|kr|carrera|dg|diag|diagonal|tv|trans|transv|transversal|ak|ac|av|ave|avenida|autopista|auto|circ|circular)\b/i.test(texto);
+    if (!iniciaConVia && texto.includes(',')) {
+      return { valida: true };
+    }
+
     // Vías urbanas colombianas comunes
     const regexVia = /\b(cl|calle|cll|cra|cr|kr|carrera|dg|diag|diagonal|tv|trans|transv|transversal|ak|ac|av|ave|avenida|autopista|auto|circ|circular)\b/i;
     const contieneVia = regexVia.test(texto);
@@ -561,18 +568,6 @@ export class CheckoutComponent implements OnInit {
     }
     this.suggestionsList = [];
     this.mostrarSelectorLocalidad = false;
-
-    // Validación de completitud (Regla de los 3 números)
-    const validacion = this.validarCompletitudDireccion(sug.text);
-    if (!validacion.valida) {
-      this.calculandoEnvio = false;
-      this.direccionValida = false;
-      this.costoEnvio = 0;
-      this.mensajeDireccion = validacion.mensaje || 'Dirección incompleta.';
-      this.calculateTotal();
-      return;
-    }
-
     this.calculandoEnvio = true;
     this.mensajeDireccion = 'Calculando costo de envío en tiempo real...';
 
@@ -580,8 +575,34 @@ export class CheckoutComponent implements OnInit {
       if (sug.placePrediction && sug.placePrediction.toPlace) {
         const place = sug.placePrediction.toPlace();
         await place.fetchFields({
-          fields: ['displayName', 'formattedAddress', 'location', 'addressComponents']
+          fields: ['displayName', 'formattedAddress', 'location', 'addressComponents', 'types']
         });
+
+        const placeTypes: string[] = place.types || [];
+        const isOnlyRoute = placeTypes.length > 0 && placeTypes.every((t: string) => t === 'route' || t === 'political' || t === 'geocode');
+        const combinedText = `${sug.text} ${place.formattedAddress || ''}`;
+
+        // Si el usuario seleccionó únicamente una calle/carrera genérica sin placa ni comercio
+        if (isOnlyRoute) {
+          const validacion = this.validarCompletitudDireccion(combinedText);
+          if (!validacion.valida) {
+            this.calculandoEnvio = false;
+            this.direccionValida = false;
+            this.costoEnvio = 0;
+            this.mensajeDireccion = validacion.mensaje || 'Dirección incompleta.';
+            this.calculateTotal();
+            return;
+          }
+        }
+
+        // Si Google tiene la dirección exacta con placa en formattedAddress y no estaba en el texto corto, la agregamos para el mensajero
+        if (input && place.formattedAddress) {
+          const formattedNums = (place.formattedAddress.match(/\d+/g) || []).length;
+          const sugNums = (sug.text.match(/\d+/g) || []).length;
+          if (formattedNums > sugNums && !sug.text.includes(place.formattedAddress)) {
+            input.value = `${sug.text} (${place.formattedAddress})`;
+          }
+        }
 
         const lat = place.location ? (typeof place.location.lat === 'function' ? place.location.lat() : place.location.lat) : 0;
         const lng = place.location ? (typeof place.location.lng === 'function' ? place.location.lng() : place.location.lng) : 0;
@@ -610,6 +631,17 @@ export class CheckoutComponent implements OnInit {
       }
     } catch (err) {
       console.warn('Place fetchFields error, usando geocoder de respaldo:', err);
+    }
+
+    // Validación de respaldo cuando no viene placePrediction
+    const validacionFallback = this.validarCompletitudDireccion(sug.text);
+    if (!validacionFallback.valida) {
+      this.calculandoEnvio = false;
+      this.direccionValida = false;
+      this.costoEnvio = 0;
+      this.mensajeDireccion = validacionFallback.mensaje || 'Dirección incompleta.';
+      this.calculateTotal();
+      return;
     }
 
     this.geocodificarDireccion(sug.text);
