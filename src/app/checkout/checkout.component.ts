@@ -160,7 +160,7 @@ export class CheckoutComponent implements OnInit {
     return this.isDoubleDeliveryActive ? Math.round(this.costoEnvio / 2) : this.costoEnvio;
   }
 
-  readonly PRECIOS_ENVIO: { [key: string]: number } = {
+  PRECIOS_ENVIO: { [key: string]: number } = {
     // SUBA
     'Suba - Niza / Pontevedra / Bulevar': 7500,
     'Suba - Colina / San José de Bavaria / Mazurén': 9500,
@@ -243,6 +243,20 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Cargar lista de zonas unificada desde el backend (sobreescribe el fallback estático)
+    this.http.get<any>(`${environment.apiUrl}/api/cabify-delivery/zones`).subscribe({
+      next: (res) => {
+        if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+          const remoto: { [key: string]: number } = {};
+          for (const z of res.data) {
+            remoto[z.label] = z.price;
+          }
+          this.PRECIOS_ENVIO = remoto;
+        }
+      },
+      error: () => { /* Si falla la carga remota, se conserva el fallback estático local. */ }
+    });
+
     this.cartService.cart$.subscribe((items) => {
       this.cartItems = items;
       this.recalcularEnvioYTotal();
